@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.335">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Bioinformatics Worskshop 2023 – day1</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Bioinformatics Worskshop 2023</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../pages/index.html">
+ <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="../pages/day1.html" aria-current="page">
+ <span class="menu-text">Day 1</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/paganilab"><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/LabPagani"><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#setup" id="toc-setup" class="nav-link active" data-scroll-target="#setup">Setup</a>
+  <ul class="collapse">
+  <li><a href="#using-rstudio-or-posit" id="toc-using-rstudio-or-posit" class="nav-link" data-scroll-target="#using-rstudio-or-posit">Using Rstudio or Posit</a></li>
+  <li><a href="#communicating-with-r" id="toc-communicating-with-r" class="nav-link" data-scroll-target="#communicating-with-r">Communicating with R</a></li>
+  <li><a href="#creating-a-script" id="toc-creating-a-script" class="nav-link" data-scroll-target="#creating-a-script">Creating a script</a></li>
+  <li><a href="#installing-packages" id="toc-installing-packages" class="nav-link" data-scroll-target="#installing-packages">Installing packages</a></li>
+  </ul></li>
+  <li><a href="#introduction-to-bulk-rna-seq" id="toc-introduction-to-bulk-rna-seq" class="nav-link" data-scroll-target="#introduction-to-bulk-rna-seq">Introduction to bulk RNA-seq</a>
+  <ul class="collapse">
+  <li><a href="#next-generation-sequencing" id="toc-next-generation-sequencing" class="nav-link" data-scroll-target="#next-generation-sequencing">Next Generation Sequencing</a></li>
+  <li><a href="#raw-sequencing-output" id="toc-raw-sequencing-output" class="nav-link" data-scroll-target="#raw-sequencing-output">Raw Sequencing Output</a></li>
+  <li><a href="#quality-metrics-inspection" id="toc-quality-metrics-inspection" class="nav-link" data-scroll-target="#quality-metrics-inspection">Quality Metrics Inspection</a></li>
+  <li><a href="#read-alignment" id="toc-read-alignment" class="nav-link" data-scroll-target="#read-alignment">Read Alignment</a></li>
+  <li><a href="#counting-transcripts" id="toc-counting-transcripts" class="nav-link" data-scroll-target="#counting-transcripts">Counting Transcripts</a></li>
+  </ul></li>
+  <li><a href="#data-loading-and-exploratory-analyses" id="toc-data-loading-and-exploratory-analyses" class="nav-link" data-scroll-target="#data-loading-and-exploratory-analyses">Data Loading and Exploratory Analyses</a>
+  <ul class="collapse">
+  <li><a href="#loading-the-data" id="toc-loading-the-data" class="nav-link" data-scroll-target="#loading-the-data">Loading the data</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+
+<section id="setup" class="level1">
+<h1>Setup</h1>
+<section id="using-rstudio-or-posit" class="level2">
+<h2 class="anchored" data-anchor-id="using-rstudio-or-posit">Using Rstudio or Posit</h2>
+<p>If RStudio is not installed on your computer, you can create a free account on <a href="posit.cloud"><em>posit.cloud</em></a>. Create the account with your credentials and follow the instructions to create a new project. Once done, you should see something like this on your screen:</p>
+<div data-align="center">
+<p><img src="../pics/posit_project.png"></p>
+</div>
+</section>
+<section id="communicating-with-r" class="level2">
+<h2 class="anchored" data-anchor-id="communicating-with-r">Communicating with R</h2>
+<p>You should see your cursor on the left-hand side of the screen blinking. That window represents the R <em><em>console</em></em>. It can be used to “talk” with R through commands that it can understand!</p>
+<p>For example, try typing the following in the console and check what comes out (a.k.a. the <em>output</em>):</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Tell R to print out some words on screen with the "print" command</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">'Hello World!'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Hello World!"</code></pre>
+</div>
+</div>
+<p>You have now instructed R to do something for you! We will ask it to do plenty more in the code chunks below!</p>
+</section>
+<section id="creating-a-script" class="level2">
+<h2 class="anchored" data-anchor-id="creating-a-script">Creating a script</h2>
+<p>In the console we can type as many commands as we want and execute them sequentially. Nevertheless, commands are lost the moment they are executed and if we want to execute them again we need to type everything back in the console… this is painful!</p>
+<p>A <strong>script</strong> is just a normal text file which groups a series of commands that R executes sequentially, reading the file line-by-line. This is much better because we can then edit the file and keep save the changes! Follow the movie below to create an R script in Posit, the same applies to Rstudio.</p>
+<center>
+<video controls="controls" width="600" height="400" name="Create a script">
+<source src="../pics/script_creation.mov">
+</video>
+</center>
+<p>The new window that appeared on the upper left represents your R script, you can see it from the <code>.R</code> file extension at the end. In here we can write R code which DOES NOT get executed immediately like in the console before.</p>
+<blockquote class="blockquote">
+<p>💡 In order to execute code from the script, highlight the code line you want to execute (or put your cursor line on it) and press <kbd>⌘</kbd>+<kbd>Enter</kbd> on Mac or <kbd>Ctrl</kbd>+<kbd>Enter</kbd> on Windows.</p>
+</blockquote>
+</section>
+<section id="installing-packages" class="level2">
+<h2 class="anchored" data-anchor-id="installing-packages">Installing packages</h2>
+<p>The analyses that we are going to conduct require specific <strong>packages</strong>. In R, packages are <em>collections of functions</em> which help us perform standardized workflows. In the <strong>code chunk</strong> below, we instruct R to install the packages that we need for the analyses.</p>
+<blockquote class="blockquote">
+<p>💡 Copy and paste <em>code chunks</em> from here to your R script to follow.</p>
+</blockquote>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install packages from CRAN</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"tidyverse"</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Install packages from Bioconductor</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(<span class="st">"BiocManager"</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">install.packages</span>(<span class="st">"BiocManager"</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>BiocManager<span class="sc">::</span><span class="fu">install</span>(<span class="st">"DESeq2"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Hopefully all packages were correctly installed and now we can dive a bit deeper into the theoretical basics of RNA sequencing!</p>
+</section>
+</section>
+<section id="introduction-to-bulk-rna-seq" class="level1">
+<h1>Introduction to bulk RNA-seq</h1>
+<p>With bulk RNA sequencing technologies, the goal is to capture <strong>average gene expression levels</strong> across pooled cell populations of interest. This is achieved by capturing all RNA transcripts from a sample and sequencing them in an automated way to ensure the adequate throughput needed for answering the biological hypotheses behind the experiment. A bulk RNA-seq experiment is articulated in the following steps:</p>
+<div data-align="center" style="display: grid; grid-template-columns: 1fr 1fr; grid-column-gap: 20px; ">
+<div data-align="left">
+<ul>
+<li><p><strong>Experimental design</strong>: sample choice and hypothesis</p></li>
+<li><p><strong>RNA extraction</strong></p></li>
+<li><p><strong>cDNA preparation</strong>: retrotranscription of RNA molecules</p></li>
+<li><p><strong>Library preparation</strong>: fragmentation of cDNA molecules and ligation of adapters</p></li>
+<li><p><strong>Sequencing</strong></p></li>
+<li><p><strong>Data processing</strong>: raw read QC</p></li>
+<li><p><strong>Data analysis</strong>: extract meaningful biological insights</p></li>
+</ul>
+</div>
+<div>
+<p><img src="https://nbisweden.github.io/workshop-ngsintro/2001/data/rnaseq/rnaseq_library_prep.svg" width="250" length="500/"></p>
+</div>
+</div>
+<section id="next-generation-sequencing" class="level2">
+<h2 class="anchored" data-anchor-id="next-generation-sequencing">Next Generation Sequencing</h2>
+<p>Next Generation Sequencing technologies (Illumina/PacBio) allow experimenters to capture the entire genetic information in a sample in a completely unsupervised manner. The process works with an approach called <strong>sequencing-by-synthesis</strong> or SBS for short.</p>
+<blockquote class="blockquote">
+<p>Great info can be found at the <a href="https://knowledge.illumina.com/software/general/software-general-reference_material-list/000002211">Illumina Knowledge page</a></p>
+</blockquote>
+<p>This means that strands are sequenced by re-building them using the natural complementarity principle of DNA with fluorescently labelled bases. On illumina <em>flow-cells</em> this process happens in <strong>clusters</strong>, to allow for proper signal amplification and detection, as shown in the movie below.</p>
+<center>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/fCd6B5HRaZ8" title="Illumina SBS sequencing" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="">
+</iframe>
+</center>
+</section>
+<section id="raw-sequencing-output" class="level2">
+<h2 class="anchored" data-anchor-id="raw-sequencing-output">Raw Sequencing Output</h2>
+<p>The raw output of any sequencing run consists of a series of sequences. These sequences can have varying length based on the run parameters set on the sequencing platform. Nevertheless, they are made available to humans to read under a standardized file format known as FASTQ. This is the universally accepted format used to encode sequences after sequencing. An example of real FASTQ file with only two <strong><em>reads</em></strong> is provided below.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">@Seq1</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">AGTCAGTTAAGCTGGTCCGTAGCTCTGAGGCTGACGAGTCGAGCTCGTACG</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="ex">+</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="ex">BBBEGGGGEGGGFGFGGEFGFGFGGFGGGGGGFGFGFGGGFGFGFGFGFG</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="ex">@Seq2</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="ex">TGCTAAGCTAGCTAGCTAGCTAGCTAGCTAGCTAGCTAGCTAGCTAGC</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="ex">+</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="ex">EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>FASTQ files are an intermediate file in the analysis and are used to assess quality metrics for any given sequence. The quality of each base call is encoded in the line after the <code>+</code> following the standard <a href="https://en.wikipedia.org/wiki/Phred_quality_score"><strong>Phred score</strong></a> system.</p>
+</section>
+<section id="quality-metrics-inspection" class="level2">
+<h2 class="anchored" data-anchor-id="quality-metrics-inspection">Quality Metrics Inspection</h2>
+<p>Computational tools like <a href="https://www.bioinformatics.babraham.ac.uk/projects/fastqc/">FastQC</a> aid with the visual inspection of per-sample quality metrics from NGS experiments. Some of the QC metrics of interest to consider include the ones listed below, on the <strong>left</strong> are optimal metric profiles while on the <strong>right</strong> are sub-optimal ones:</p>
+<div data-align="center">
+<p><strong>Per-base Sequence Quality</strong> <img src="https://nbisweden.github.io/workshop-ngsintro/2001/data/rnaseq/pbsq.jpg" width="700/"></p>
+</div>
+<div data-align="center">
+<p><strong>Per-sequence Quality Scores</strong> <img src="https://nbisweden.github.io/workshop-ngsintro/2001/data/rnaseq/psqs.jpg" width="700/"></p>
+</div>
+<div data-align="center">
+<p><strong>Per-base Sequence Content</strong> <img src="https://nbisweden.github.io/workshop-ngsintro/2001/data/rnaseq/pbsc.jpg" width="700/"></p>
+</div>
+<div data-align="center">
+<p><strong>Per-sequence GC Content</strong> <img src="https://nbisweden.github.io/workshop-ngsintro/2001/data/rnaseq/psgc.jpg" width="700/"></p>
+</div>
+<div data-align="center">
+<p><strong>Sequence Duplication Levels</strong> <img src="https://nbisweden.github.io/workshop-ngsintro/2001/data/rnaseq/sdl.jpg" width="700/"></p>
+</div>
+<div data-align="center">
+<p><strong>Adapter Content</strong></p>
+</div>
+<div data-align="center">
+<p><img src="https://nbisweden.github.io/workshop-ngsintro/2001/data/rnaseq/ac.jpg" width="700/"></p>
+</div>
+</section>
+<section id="read-alignment" class="level2">
+<h2 class="anchored" data-anchor-id="read-alignment">Read Alignment</h2>
+<p>Once we are satisfied with the quality of our pool of sequences, we need to map them back to the transcripts to which they belonged originally when we produced cDNA molecules from RNA. This process of mapping is <strong>needed to understand from which genes were transcripts generated</strong> and therefore is an essential and very important step of data processing!</p>
+<div data-align="center">
+<p><img src="https://nbisweden.github.io/workshop-ngsintro/2001/data/rnaseq/rnaseq_mapping.svg" width="700/"></p>
+</div>
+<div data-align="center">
+<p>Alignment of <em>trimmed reads</em> to a reference genome or transcriptome.</p>
+</div>
+<p>Tools like <a href="https://github.com/alexdobin/STAR">STAR</a> and <a href="https://github.com/lh3/bwa">BWA-MEM</a> are designed to achieve great speed and accuracy for the computationally expensive task of read alignment.</p>
+<p>The results of the alignment procedure is a different set of files in <em>SAM</em> (Standard Alignment Map) format which get compressed into their binary representation, <strong>BAM files</strong>. These are usually one for each analyzed sample and encode the position of all the identified reads along the genome as well as alignment quality metrics for QC, which can be carried out with tools like <a href="https://multiqc.info/">MultiQC</a>.</p>
+</section>
+<section id="counting-transcripts" class="level2">
+<h2 class="anchored" data-anchor-id="counting-transcripts">Counting Transcripts</h2>
+<p>After sequences have been aligned to their respective place on the genome, it is time to actually count how many times a given sequence is found on any given gene (or transcripts, or exons or others..), <strong>this will actually be our gene expression measurement!</strong></p>
+<div data-align="center">
+<p><img src="https://nbisweden.github.io/workshop-ngsintro/2001/data/rnaseq/rnaseq_counts.svg" width="350/"></p>
+</div>
+<p>In the end, for every sample, we will end up with a number for each gene (or transcripts), these are called <strong>gene (transcript) counts</strong>.</p>
+<blockquote class="blockquote">
+<p>💡 What is the difference between a <em>gene</em> and a <em>transcript</em>?</p>
+</blockquote>
+<p>These are usually summarized in a table, called <em>gene expression table</em>, where each sample is a column and each row a different gene. We will now load one and take a closer look, this will be our starting point in the hands-on analysis of bulk RNA-seq data.</p>
+</section>
+</section>
+<section id="data-loading-and-exploratory-analyses" class="level1">
+<h1>Data Loading and Exploratory Analyses</h1>
+<section id="loading-the-data" class="level2">
+<h2 class="anchored" data-anchor-id="loading-the-data">Loading the data</h2>
+<p>We will load a table of data from <a href="https://www.nature.com/articles/s41586-020-03045-2">this study</a> on tumor-infiltrating CD4+ T-regulatory (T<span class="math inline">\(_{reg}\)</span>) cells. The original data supporting the findings of the study has been deposited on the <strong>Gene Expression Omnibus</strong> (GEO) data portal under accession number <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE158801">GSE158801</a>. This is the place where all studies publish the processed data from their analysis in order for other researchers to download it and reproduce their findings or test their own hypotheses.</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+      <div class="nav-footer-center">Copyright 2023, Jacopo Arrigoni &amp; Mattia Toninelli</div>
+  </div>
+</footer>
+
+
+
+</body></html>

@@ -1,0 +1,79 @@
+[
+  {
+    "objectID": "pages/index.html",
+    "href": "pages/index.html",
+    "title": "Bioinformatics Worskshop 2023",
+    "section": "",
+    "text": "The course will give an overview on how to conceptually approach bioinformatics. During the three days of the course we will dive into a bulk RNA-seq experiment and carry out the main analytical steps to try and achieve sensible biological conclusions from the data.\nAll of the code present within this site was developed and is readily implementable in RStudio using RMarkdown.\n\n\n\n\nJacopo Arrigoni (jacopo.arrigoni@ifom.eu)\nMattia Toninelli (mattia.toninelli@ifom.eu)"
+  },
+  {
+    "objectID": "pages/index.html#day-1",
+    "href": "pages/index.html#day-1",
+    "title": "Bioinformatics Worskshop 2023",
+    "section": "Day 1",
+    "text": "Day 1\n\nSetup\nIntroduction to RNA sequencing\nFrom raw reads to expression matrix"
+  },
+  {
+    "objectID": "pages/index.html#day-2",
+    "href": "pages/index.html#day-2",
+    "title": "Bioinformatics Worskshop 2023",
+    "section": "Day 2",
+    "text": "Day 2"
+  },
+  {
+    "objectID": "pages/index.html#day-3",
+    "href": "pages/index.html#day-3",
+    "title": "Bioinformatics Worskshop 2023",
+    "section": "Day 3",
+    "text": "Day 3"
+  },
+  {
+    "objectID": "pages/day1.html",
+    "href": "pages/day1.html",
+    "title": "Bioinformatics Worskshop 2023",
+    "section": "",
+    "text": "If RStudio is not installed on your computer, you can create a free account on posit.cloud. Create the account with your credentials and follow the instructions to create a new project. Once done, you should see something like this on your screen:\n\n\n\n\n\n\nYou should see your cursor on the left-hand side of the screen blinking. That window represents the R console. It can be used to “talk” with R through commands that it can understand!\nFor example, try typing the following in the console and check what comes out (a.k.a. the output):\n\n# Tell R to print out some words on screen with the \"print\" command\nprint('Hello World!')\n\n[1] \"Hello World!\"\n\n\nYou have now instructed R to do something for you! We will ask it to do plenty more in the code chunks below!\n\n\n\nIn the console we can type as many commands as we want and execute them sequentially. Nevertheless, commands are lost the moment they are executed and if we want to execute them again we need to type everything back in the console… this is painful!\nA script is just a normal text file which groups a series of commands that R executes sequentially, reading the file line-by-line. This is much better because we can then edit the file and keep save the changes! Follow the movie below to create an R script in Posit, the same applies to Rstudio.\n\n\n\n\n\nThe new window that appeared on the upper left represents your R script, you can see it from the .R file extension at the end. In here we can write R code which DOES NOT get executed immediately like in the console before.\n\n💡 In order to execute code from the script, highlight the code line you want to execute (or put your cursor line on it) and press ⌘+Enter on Mac or Ctrl+Enter on Windows.\n\n\n\n\nThe analyses that we are going to conduct require specific packages. In R, packages are collections of functions which help us perform standardized workflows. In the code chunk below, we instruct R to install the packages that we need for the analyses.\n\n💡 Copy and paste code chunks from here to your R script to follow.\n\n\n# Install packages from CRAN\ninstall.packages(\"tidyverse\")\n\n# Install packages from Bioconductor\nif (!require(\"BiocManager\", quietly = TRUE))\n    install.packages(\"BiocManager\")\n\nBiocManager::install(\"DESeq2\")\n\nHopefully all packages were correctly installed and now we can dive a bit deeper into the theoretical basics of RNA sequencing!"
+  },
+  {
+    "objectID": "pages/day1.html#next-generation-sequencing",
+    "href": "pages/day1.html#next-generation-sequencing",
+    "title": "Bioinformatics Worskshop 2023",
+    "section": "Next Generation Sequencing",
+    "text": "Next Generation Sequencing\nNext Generation Sequencing technologies (Illumina/PacBio) allow experimenters to capture the entire genetic information in a sample in a completely unsupervised manner. The process works with an approach called sequencing-by-synthesis or SBS for short.\n\nGreat info can be found at the Illumina Knowledge page\n\nThis means that strands are sequenced by re-building them using the natural complementarity principle of DNA with fluorescently labelled bases. On illumina flow-cells this process happens in clusters, to allow for proper signal amplification and detection, as shown in the movie below."
+  },
+  {
+    "objectID": "pages/day1.html#raw-sequencing-output",
+    "href": "pages/day1.html#raw-sequencing-output",
+    "title": "Bioinformatics Worskshop 2023",
+    "section": "Raw Sequencing Output",
+    "text": "Raw Sequencing Output\nThe raw output of any sequencing run consists of a series of sequences. These sequences can have varying length based on the run parameters set on the sequencing platform. Nevertheless, they are made available to humans to read under a standardized file format known as FASTQ. This is the universally accepted format used to encode sequences after sequencing. An example of real FASTQ file with only two reads is provided below.\n\n@Seq1\nAGTCAGTTAAGCTGGTCCGTAGCTCTGAGGCTGACGAGTCGAGCTCGTACG\n+\nBBBEGGGGEGGGFGFGGEFGFGFGGFGGGGGGFGFGFGGGFGFGFGFGFG\n@Seq2\nTGCTAAGCTAGCTAGCTAGCTAGCTAGCTAGCTAGCTAGCTAGCTAGC\n+\nEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE\n\nFASTQ files are an intermediate file in the analysis and are used to assess quality metrics for any given sequence. The quality of each base call is encoded in the line after the + following the standard Phred score system."
+  },
+  {
+    "objectID": "pages/day1.html#quality-metrics-inspection",
+    "href": "pages/day1.html#quality-metrics-inspection",
+    "title": "Bioinformatics Worskshop 2023",
+    "section": "Quality Metrics Inspection",
+    "text": "Quality Metrics Inspection\nComputational tools like FastQC aid with the visual inspection of per-sample quality metrics from NGS experiments. Some of the QC metrics of interest to consider include the ones listed below, on the left are optimal metric profiles while on the right are sub-optimal ones:\n\nPer-base Sequence Quality \n\n\nPer-sequence Quality Scores \n\n\nPer-base Sequence Content \n\n\nPer-sequence GC Content \n\n\nSequence Duplication Levels \n\n\nAdapter Content"
+  },
+  {
+    "objectID": "pages/day1.html#read-alignment",
+    "href": "pages/day1.html#read-alignment",
+    "title": "Bioinformatics Worskshop 2023",
+    "section": "Read Alignment",
+    "text": "Read Alignment\nOnce we are satisfied with the quality of our pool of sequences, we need to map them back to the transcripts to which they belonged originally when we produced cDNA molecules from RNA. This process of mapping is needed to understand from which genes were transcripts generated and therefore is an essential and very important step of data processing!\n\n\n\n\nAlignment of trimmed reads to a reference genome or transcriptome.\n\nTools like STAR and BWA-MEM are designed to achieve great speed and accuracy for the computationally expensive task of read alignment.\nThe results of the alignment procedure is a different set of files in SAM (Standard Alignment Map) format which get compressed into their binary representation, BAM files. These are usually one for each analyzed sample and encode the position of all the identified reads along the genome as well as alignment quality metrics for QC, which can be carried out with tools like MultiQC."
+  },
+  {
+    "objectID": "pages/day1.html#counting-transcripts",
+    "href": "pages/day1.html#counting-transcripts",
+    "title": "Bioinformatics Worskshop 2023",
+    "section": "Counting Transcripts",
+    "text": "Counting Transcripts\nAfter sequences have been aligned to their respective place on the genome, it is time to actually count how many times a given sequence is found on any given gene (or transcripts, or exons or others..), this will actually be our gene expression measurement!\n\n\n\nIn the end, for every sample, we will end up with a number for each gene (or transcripts), these are called gene (transcript) counts.\n\n💡 What is the difference between a gene and a transcript?\n\nThese are usually summarized in a table, called gene expression table, where each sample is a column and each row a different gene. We will now load one and take a closer look, this will be our starting point in the hands-on analysis of bulk RNA-seq data."
+  },
+  {
+    "objectID": "pages/day1.html#loading-the-data",
+    "href": "pages/day1.html#loading-the-data",
+    "title": "Bioinformatics Worskshop 2023",
+    "section": "Loading the data",
+    "text": "Loading the data\nWe will load a table of data from this study on tumor-infiltrating CD4+ T-regulatory (T\\(_{reg}\\)) cells. The original data supporting the findings of the study has been deposited on the Gene Expression Omnibus (GEO) data portal under accession number GSE158801. This is the place where all studies publish the processed data from their analysis in order for other researchers to download it and reproduce their findings or test their own hypotheses."
+  }
+]

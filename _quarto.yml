@@ -1,0 +1,33 @@
+project:
+  type: website
+  output-dir: docs # For pages publishing
+
+# Top navbar
+website:
+  title: "Bioinformatics Worskshop 2023"
+  navbar:
+    left:
+      - href: ./pages/index.Rmd
+        text: Home
+      - href: ./pages/day1.Rmd
+        text: Day 1
+    right: 
+      - icon: github
+        href: https://github.com/paganilab
+      - icon: twitter
+        href: https://twitter.com/LabPagani
+  page-footer: "Copyright 2023, Jacopo Arrigoni & Mattia Toninelli"
+
+# Themes, can be changed with .css files and .scss 
+format:
+  html:
+    theme: 
+      - yeti
+      - sass_styling.scss
+    #css: styles.css
+    toc: true
+    toc_float: true
+    toc_collapsed: true
+
+# Code theme
+highlight-style: ayu
