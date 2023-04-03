@@ -10,11 +10,11 @@ $darkergray: #343a40;
 // Code blocks
 $code-block-bg: #f8f9fa;
 $code-block-bg-alpha: -.4;
-$code-block-border-left-size: 5px;
-$code-color: #fb8b24;
+$code-block-border-left-size: 2px;
+$code-color: #496DDB;
 
 // Link color
-$link-color: #fb8b24;
+$link-color: #496DDB;
 
 // Navbar
 $navbar-bg: #495057;
@@ -36,4 +36,11 @@ h2 {
     font-size: 24;
     font-weight: 200;
     color: $darkergray;
+  }
+
+blockquote {
+    font-size: medium;
+}
+  .p {
+    font-size: small;
   }

@@ -37,3 +37,9 @@ All of the code present within this site was developed and is readily implementa
 ## Day 2
 
 ## Day 3
+
+# Credits
+Some of the images and inspiration came from other tutorials available online, in particular [this work](https://nbisweden.github.io/workshop-ngsintro/2001/slide_rnaseq.html#1) for images and [this work](https://hbctraining.github.io/DGE_workshop/lessons/02_DGE_count_normalization.html) for some of the information relative to data normalization.
+
+# License
+CC-BY

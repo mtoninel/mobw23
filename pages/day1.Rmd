@@ -13,12 +13,18 @@ code-block-border-left: true
 knitr::opts_chunk$set(echo = TRUE, fig.align = 'center', warning = FALSE, message = FALSE)
 ```
 
+## Objectives
+- Setup RStudio or Posit
+- Get familiar with the interface
+- Learn about bulk RNA-seq data processing
+- Download the data needed for the workshop
+
 # Setup
 ## Using Rstudio or Posit
 If RStudio is not installed on your computer, you can create a free account on [_posit.cloud_](posit.cloud). Create the account with your credentials and follow the instructions to create a new project. Once done, you should see something like this on your screen:
 
 ::: {align="center"}
-<img src="../pics/posit_project.png"/>
+<img src="../pics/posit_project.png" width=800/>
 :::
 
 ## Communicating with R
@@ -59,13 +65,23 @@ The analyses that we are going to conduct require specific **packages**. In R, p
 
 ```{r, eval=FALSE}
 # Install packages from CRAN
-install.packages("tidyverse")
+install.packages("tidyverse", type="source")
 
 # Install packages from Bioconductor
 if (!require("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 
 BiocManager::install("DESeq2")
+BiocManager::install("vsn")
+
+# For visualizations
+install.packages("hexbin")
+install.packages("pheatmap")
+install.packages("RColorBrewer")
+install.packages("ggrepel")
+
+# For conversion between gene IDs
+BiocManager::install("org.Hs.eg.db")
 ```
 
 Hopefully all packages were correctly installed and now we can dive a bit deeper into the theoretical basics of RNA sequencing!
@@ -114,7 +130,7 @@ This means that strands are sequenced by re-building them using the natural comp
 ## Raw Sequencing Output
 The raw output of any sequencing run consists of a series of sequences. These sequences can have varying length based on the run parameters set on the sequencing platform. Nevertheless, they are made available to humans to read under a standardized file format known as FASTQ. This is the universally accepted format used to encode sequences after sequencing. An example of real FASTQ file with only two **_reads_** is provided below.
 
-```{bash eval=FALSE}
+```{r eval=FALSE}
 @Seq1
 AGTCAGTTAAGCTGGTCCGTAGCTCTGAGGCTGACGAGTCGAGCTCGTACG
 +
@@ -195,4 +211,64 @@ These are usually summarized in a table, called _gene expression table_, where e
 
 # Data Loading and Exploratory Analyses
 ## Loading the data
-We will load a table of data from [this study](https://www.nature.com/articles/s41586-020-03045-2) on tumor-infiltrating CD4+ T-regulatory (T$_{reg}$) cells. The original data supporting the findings of the study has been deposited on the **Gene Expression Omnibus** (GEO) data portal under accession number [GSE158801](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE158801). This is the place where all studies publish the processed data from their analysis in order for other researchers to download it and reproduce their findings or test their own hypotheses.
+We will load a table of data from [this study](https://www.nature.com/articles/s41467-022-35583-w#Sec53) on tumor-infiltrating CD4+ T-regulatory (T~reg~) cells. The original data supporting the findings of the study has been deposited on the **Gene Expression Omnibus** (GEO) data portal under accession number [GSE120575](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE120575). This is the place where all studies publish the processed data from their analysis in order for other researchers to download it and reproduce their findings or test their own hypotheses.
+
+We have already downloaded the data and inserted it in a Google Drive [folder](https://drive.google.com/drive/folders/18Rqj2hQ_KAjGVtN8fy2wdvbCUI2c6ruE?usp=share_link) organizing it as follows:
+
+- `raw_counts.csv`: the gene by sample matrix containing the number of times each gene is detected in each sample (our gene expression values)
+
+- `samples_info.csv`: the table containing samples information, known as _metadata_, which tells us about the biological meaning of each sample
+
+
+In the following code chunk, we are going to load the data and create three new variables in our R session, one for each table.
+
+```{r}
+# Load nistalled packages with the "library()" function
+library("tidyverse")
+library("googledrive")
+
+# Load files
+files <- drive_find(n_max=30)
+
+# File paths with URL
+counts <- files[files$name == "raw_counts.csv",] %>% drive_read_string() %>% read.csv(text = .) %>% as.tibble()
+rownames(counts) <- counts$X
+counts$X <- NULL
+
+samples <- files[files$name == "samples_info.csv",] %>% drive_read_string() %>% read.csv(text = .) %>% as.tibble()
+rownames(samples) <- samples$X 
+```
+
+We can now explore the data that we have just uploaded in the current R session to familiarize with it.
+
+```{r}
+# Check out the counts
+head(counts, 10)
+```
+
+We can then check the shape of our counts table (i.e. how many different transcripts we are detecting and how many different samples?)
+
+```{r}
+# How many rows and columns does our count table have?
+dim(counts)
+```
+
+We can see that our table contains count information for `r dim(counts)[1]` genes and `r dim(counts)[2]` samples. 
+
+> 💡
+> In R, these table object are called `data.frames`, `tibbles` are just like them but with some improved functionalities provided by the [`tidyverse`](https://www.tidyverse.org/).
+
+We can also inspect the **metadata** from the samples which is stored in the `samples` variable we created above.
+
+```{r}
+# What does the table look like?
+head(samples, 10)
+```
+```{r}
+# What is the shape of this samples table?
+dim(samples)
+```
+
+In this case, this `samples` table has as many rows as there are samples (which in turn is equal to the number of columns in the `counts` table), with columns containing different types of information related to each of the samples in the analysis
+
+Now that we have our objects correctly loaded, we can dive into the actual RNA-seq analysis.
