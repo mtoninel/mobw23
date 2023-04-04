@@ -1,6 +1,8 @@
 ---
+title: "Introduction"
 author: "Mattia Toninelli"
-date: "06/02/23"
+date-modified: 04-04-23 
+date: 04-04-23
 output: html_document
 always_allow_html: yes
 editor_options: 
@@ -12,13 +14,10 @@ editor_options:
 knitr::opts_chunk$set(echo = TRUE, fig.align = 'center', warning = FALSE, message = FALSE)
 ```
 
-# Introduction
 ## What is this workshop about?
-The course will give an overview on how to conceptually approach bioinformatics. During the three days of the course we will dive into a bulk _RNA-seq_ experiment and carry out the main analytical steps to try and achieve sensible biological conclusions from the data.
+The course will give an overview on how to **conceptually approach bioinformatics**. During the three days of the course we will dive into a **bulk _RNA-seq_ experiment** and carry out the main steps of a standard data analysis pipeline.
 
-All of the code present within this site was developed and is readily implementable in [RStudio](https://posit.co/) using [RMarkdown](https://rmarkdown.rstudio.com/).
-
-## Where to reach us
+## How To Reach Us
 
 - `Jacopo Arrigoni` (jacopo.arrigoni@ifom.eu)
 - `Mattia Toninelli` (mattia.toninelli@ifom.eu)
@@ -30,16 +29,26 @@ All of the code present within this site was developed and is readily implementa
 # Program Outline
 
 ## Day 1
-- Setup
-- Introduction to RNA sequencing
-- From raw reads to expression matrix
+- Setup RStudio or Posit
+- Get familiar with the Posit interface
+- Learn about bulk RNA-seq data processing
+- Download the data needed for the workshop
 
 ## Day 2
+- Learn about data normalization
+- Learn about the `DESeq2` package
+- Explore different normalization methods
+- Normalize the data with functions provided by the DESeq2 package
+- Perform diagnostic and exploratory analysis on the data
 
 ## Day 3
+- Learn about the theory behind differential expression analysis
+- Perform differential expression analysis using `DESeq2`
+- Visualize the results
+- Perform further downstream analysis on interesting gene groups
 
 # Credits
-Some of the images and inspiration came from other tutorials available online, in particular [this work](https://nbisweden.github.io/workshop-ngsintro/2001/slide_rnaseq.html#1) for images and [this work](https://hbctraining.github.io/DGE_workshop/lessons/02_DGE_count_normalization.html) for some of the information relative to data normalization.
+Some of the images and inspiration came from other tutorials available online, in particular [this work](https://nbisweden.github.io/workshop-ngsintro/2001/slide_rnaseq.html#1) for images and [this work](https://hbctraining.github.io/DGE_workshop/lessons/02_DGE_count_normalization.html) for some of the information regarding data normalization. All of the code present within this site was developed and is readily implementable in [RStudio](https://posit.co/) using [RMarkdown](https://rmarkdown.rstudio.com/).
 
 # License
-CC-BY
+All of the material in this course is under a [Creative Commons Attribution license](https://creativecommons.org/licenses/by/4.0/) (CC BY 4.0) which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.

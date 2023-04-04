@@ -13,6 +13,8 @@ website:
         text: Day 1
       - href: ./pages/day2.Rmd
         text: Day 2
+      - href: ./pages/day3.Rmd
+        text: Day 3  
     right: 
       - icon: github
         href: https://github.com/paganilab

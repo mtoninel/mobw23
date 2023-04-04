@@ -1,4 +1,5 @@
 ---
+title: "Day 1"
 output: 
   html_document:
     toc: true
@@ -15,7 +16,7 @@ knitr::opts_chunk$set(echo = TRUE, fig.align = 'center', warning = FALSE, messag
 
 ## Objectives
 - Setup RStudio or Posit
-- Get familiar with the interface
+- Get familiar with the Posit interface
 - Learn about bulk RNA-seq data processing
 - Download the data needed for the workshop
 
@@ -82,6 +83,31 @@ install.packages("ggrepel")
 
 # For conversion between gene IDs
 BiocManager::install("org.Hs.eg.db")
+
+# For downstream analyses
+install.packages("msigdbr")
+BiocManager::install("fgsea")
+BiocManager::install("clusterProfiler")
+```
+
+During the installation, you will see many messages being displayed on your _`R` console_, don't pay too much attention to them unless they are red and specify an error!
+
+If you encounter any of these messages during isntallation, follow this procedure here:
+
+```{r, eval=FALSE}
+# R asks for package updates, answer "n" and type enter
+# Question displayed:
+Update all/some/none? [a/s/n]:
+
+# Answer to type:  
+n
+
+# R asks for installation from binary source, answer "no" and type enter
+# Question displayed:
+Do you want to install from sources the packages which need compilation? (Yes/no/cancel)
+
+# Answer to type:
+no
 ```
 
 Hopefully all packages were correctly installed and now we can dive a bit deeper into the theoretical basics of RNA sequencing!
@@ -110,7 +136,7 @@ With bulk RNA sequencing technologies, the goal is to capture **average gene exp
 
 ::: {}
 
-<img src="https://nbisweden.github.io/workshop-ngsintro/2001/data/rnaseq/rnaseq_library_prep.svg" width=250 length=500/>
+<img src="https://nbisweden.github.io/workshop-ngsintro/2001/data/rnaseq/rnaseq_library_prep.svg" width=400 />
 
 :::
 
@@ -119,12 +145,15 @@ With bulk RNA sequencing technologies, the goal is to capture **average gene exp
 ## Next Generation Sequencing
 Next Generation Sequencing technologies (Illumina/PacBio) allow experimenters to capture the entire genetic information in a sample in a completely unsupervised manner. The process works with an approach called **sequencing-by-synthesis** or SBS for short. 
 
+> 💡
 > Great info can be found at the [Illumina Knowledge page](https://knowledge.illumina.com/software/general/software-general-reference_material-list/000002211)
 
 This means that strands are sequenced by re-building them using the natural complementarity principle of DNA with fluorescently labelled bases. On illumina _flow-cells_ this process happens in **clusters**, to allow for proper signal amplification and detection, as shown in the movie below.
 
 <center>
+
 <iframe width="560" height="315" src="https://www.youtube.com/embed/fCd6B5HRaZ8" title="Illumina SBS sequencing" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
 </center>
 
 ## Raw Sequencing Output
