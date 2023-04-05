@@ -15,7 +15,9 @@ knitr::opts_chunk$set(echo = TRUE, fig.align = 'center', warning = FALSE, messag
 ```
 
 ```{r, include=FALSE}
-library(tidyverse)
+library(kableExtra)
+library(tidyr)
+library(dplyr)
 library(DESeq2)
 library(pheatmap)
 
@@ -27,21 +29,32 @@ rownames(samples) <- samples$X
 ```
 
 ## Objectives
--   Learn about the theory behind differential expression analysis
--   Perform differential expression analysis using `DESeq2`
--   Visualize the results
--   Perform further downstream analysis on interesting gene groups
+- _Learn about the theory behind differential expression analysis_
+- _Perform differential expression analysis using `DESeq2`_
+- _Visualize the results_
+- _Perform further downstream analysis on interesting gene groups_
 
 ## Differential Expression Analysis
-The main purpose of the steps we performed above is to get to this point with a fair knowledge of the data at hand, all the steps have to be repeated each time one starts with some fresh new data (no data is the same!!).
+The main purpose of the steps we performed previously is to **get to this point with a fair knowledge of the data at hand**, all the steps have to be repeated each time one starts with some fresh new data (no data is the same!!).
 Now we can start performing **differential expression analysis** with the `DESeq2` package.
-The main concept behind it is to *contrast* two categories of our interest in the data (i.e. CD8+ T~ex~ vs CD8+ T~eff~) and check which genes are predominantly (defined in a *statistical sense*) expressed in one category as opposed to the other.
-As introduced previously, we tell `DESeq2` which comparisons to perform through the **design formula** we specified above when we created our `DESeqDataSet` object `dds`.
-With that design formula we told it we are interested in checking for the gene expression differences happening between the categories present in the `SampleGroup` column of our `samples` table.
-These categories are exactly the ones we have been plotting all along up to this point (the different CD8+ T-cell types).
+The main concept behind it is to *contrast* two categories of our interest in the data (i.e. CD8+ T~ex~ vs CD8+ T~rest~) and check which genes are predominantly (defined in a *statistical sense*) expressed in one category as opposed to the other.
+As introduced previously, we tell `DESeq2` which comparisons to perform through the **design formula** we specified above when we created our `DESeqDataSet` object `dds`. We can recap the design formula that we specified by inspecting it.
 
-> 💡 Given that we have four differences categories (these are also called `levels` in `R`) in our `SampleGroup` column (which can also be called a `factor` in `R`), `DESeq2` could perform different comparisons since these are **pairwise**.
-> We will see a way to set up the analysis *only* for our comparison of interest!
+```{r}
+# Check out the design formula we specified
+design(dds)
+```
+
+With that design formula we told it we are interested in checking for the gene expression differences happening between the categories present in the `SampleGroup` column of our `samples` table **while simultaneously correcting for the possible uninteresting differences that can arise across different donors**, whose information is stored in the `Donor` column of the `samples` table which we can check out below.
+
+```{r, echo=FALSE}
+head(samples) %>% kbl() %>% kable_styling()
+```
+
+The categories are exactly the ones we have been plotting all along up to this point (the different CD8+ T-cell types).
+
+> 💡 **Given that we have four differences categories (these are also called `levels` in `R`) in our `SampleGroup` column (which can also be called a `factor` in `R`), `DESeq2` could perform different comparisons since these are _pairwise_.**
+> **We will see a way to set up the analysis *only* for our comparison of interest!**
 
 ### The `DESeq()` Function
 
@@ -58,22 +71,29 @@ As previously mentioned, the package needs to start from **raw count data** to c
 ### Performing Pairwise Comparisons
 
 After having used the main `DESeq()` function, we can actively explore the results of the analysis for the comparisons of our interest by using the `results` function and specifying the `contrast` argument.
-Let's say that we are very interested in the differences occurring between CD8+ T~eff~ and CD8+ T~ex~ cells.
-For example we might want to check if any gene is *up-regulated* during the process of CD8+ T-cell With the `alpha` parameter we can determine the adjusted *P*-value threshold used to **accept or reject the null hypothesis** ($H_{0}$) of a gene NOT being differentially expressed between the two conditions.
+**Let's say that we are very interested in the differences occurring between CD8+ T~ex~ and CD8+ T~rest~ cells.**
+For example we might want to check if any gene is *up-regulated* during the process of CD8+ T-cell exhaustion. With the `alpha` parameter we can determine the adjusted *P*-value threshold used to **accept or reject the null hypothesis** ($H_{0}$) of a gene NOT being differentially expressed between the two conditions.
 
 ```{r}
 # Specify conditions to compare
-conds <- c("Ttumor","Teff")
+conds <- c("Tex","Trest")
 
-# Perform comparison of interest, in this case we specify the column of interest (SampleGroup) and the two categories we want to compare (Tex, Teff)
+# Perform comparison of interest, in this case we specify the column of interest (SampleGroup) and the two categories we want to compare (Tex, Trest)
 res <- results(dds, contrast=c("SampleGroup",conds[1],conds[2]), alpha=0.05)
+```
 
+We can now **check out our results object**, which will be a `data.frame`, a table, which we decided to call `res`.
+
+```{r, eval=FALSE}
 # Check out results object
 res
 ```
 
-We can see that the results of our analysis are stored inside a table which we assigned to the variable `res`.
-We can additionally print out a summary of the results of the differential analysis results by using the following code:
+```{r, echo=FALSE}
+res %>% as.data.frame() %>% drop_na() %>% kbl() %>% kable_styling() %>% head(15)
+```
+
+We can additionally **print out a summary of the results** of the differential analysis results by using the following code:
 
 ```{r}
 summary(res)
@@ -90,13 +110,18 @@ up_df <- res %>% as.data.frame() %>% filter(padj < 0.05 & log2FoldChange > 1)
 down_df <- res %>% as.data.frame() %>% filter(padj < 0.05 & log2FoldChange < -1)
 ```
 
-If we check the table with the up-regulated genes we can see it has the following structure (we just took some specific rows - *genes* - of the complete results table corresponding to up-regulated genes):
+If we **check the table with the up-regulated genes** we can see it has the following structure (we just took some specific rows - *genes* - of the complete results table corresponding to up-regulated genes):
 
-```{r}
+```{r, eval=FALSE}
 head(up_df, 4)
 ```
 
-> 💡 How would you check if the dimensions of the tables we extracted correspond to the number of differentially expressed genes present in the summary we printed above?
+```{r, echo=FALSE}
+head(up_df, 4) %>% kbl() %>% kable_styling()
+```
+
+> 💡 
+> **How would you check if the dimensions of the tables we extracted correspond to the number of differentially expressed genes present in the summary we printed above?**
 
 ### Visualizing Results With Volcano Plots
 
@@ -272,9 +297,14 @@ immune_gsets <- msigdbr(species = "human", category = "C7", subcategory = "IMMUN
 
 Let's see what's in the `immune_gsets` object:
 
-```{r}
+```{r, eval=FALSE}
 # Take a look at what we fetched from the database
 head(immune_gsets, 5)
+```
+
+```{r, echo=FALSE}
+# Take a look at what we fetched from the database
+head(immune_gsets, 5) %>% kbl() %>% kable_styling()
 ```
 
 We can see that every row is a different gene (the `gene_symbol` colums) with its associated gene set (`gs_name` column).
@@ -310,8 +340,16 @@ fgseaRes <- fgsea(pathways = gset,
                   stats    = vals,
                   eps      = 0.0)
 
+```
+
+```{r, eval=FALSE}
 # Take a look at results
 head(fgseaRes[order(pval), ])
+```
+
+```{r, echo=FALSE}
+# Take a look at results
+head(fgseaRes[order(pval), ]) %>% kbl() %>% kable_styling()
 ```
 
 Unfortunately, we can see that the results do not really match with our expectation, let's plot the enrichment on a standard GSEA results plot.
@@ -327,7 +365,7 @@ From the GSEA results, we can see that **the current gene set we used is mostly 
 Given that the gene set comes from a study carried out in mice in a context of chronic viral infection, this might indicate that our current results reflect a different kind of CD8+ T-cell exhaustion observed in the tumor microenvironment of human tumors as opposed to the process happening during viral infection in mice.
 
 > 💡
-> Whenever we use gene sets when testing for enrichment, we have to be sure of _where_ they were isolated in order to avoid misinterpreting results and/or getting to wrong conclusions, like it could have happened in this case!
+> **Whenever we use gene sets when testing for enrichment, we have to be sure of _where_ they were isolated in order to avoid misinterpreting results and/or getting to wrong conclusions, like it could have happened in this case!**
 
 ### Gene Ontology Enrichment Analysis
 
@@ -351,8 +389,14 @@ ego <- enrichGO(gene         = genes,
                 qvalueCutoff  = 0.05,
                 readable      = TRUE)
 
-# Inspect the results of gene ontology enrichment analysis
+```
+
+```{r, eval=FALSE}
 head(ego)
+```
+
+```{r, echo=FALSE}
+head(ego) %>% kbl() %>% kable_styling()
 ```
 
 Let's now plot the enrichment values that we got with a _graph layout_.
@@ -369,4 +413,4 @@ dotplot(ego, showCategory=20) + ggtitle("Dotplot for GO enrichment")
 ```
 
 > 💡
-> GO analyses might higlight very interesting patterns and generate hypotheses, but are many times quite hard to interpret depending also on the biological system we are studying.
+> **GO analyses might higlight very interesting patterns and generate hypotheses, but are many times quite hard to interpret depending also on the biological system we are studying.**

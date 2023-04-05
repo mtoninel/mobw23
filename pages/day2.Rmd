@@ -15,6 +15,8 @@ knitr::opts_chunk$set(echo = TRUE, fig.align = 'center', warning = FALSE, messag
 ```
 
 ```{r, include=FALSE}
+library(kableExtra)
+
 # Load the data again
 counts <- read.csv("../data/raw_counts.csv")
 samples <- read.csv("../data/samples_info.csv")
@@ -27,40 +29,46 @@ rownames(samples) <- samples$X
 ```
 
 ## Objectives
-- Learn about data normalization
-- Learn about the `DESeq2` package
-- Explore different normalization methods
-- Normalize the data with functions provided by the DESeq2 package
-- Perform diagnostic and exploratory analysis on the data
+- _Learn about data normalization_
+- _Learn about the `DESeq2` package_
+- _Explore different normalization methods_
+- _Normalize the data with functions provided by the `DESeq2` package_
+- _Perform diagnostic and exploratory analysis on the data_
 
 # Data Normalization for bulk RNA-seq
 ## Why Do We Need It?
-Normalization is the process by which we try to conform count data to make it comparable across samples and even across different genes. This is done to ensure that all of the _uninteresting_ differences between genes are minimized in favor of the _interesting_ biological differences that we are interested in.
+Normalization is the process by which we try to **conform count data to make it comparable across samples and even across different genes**. This is done to ensure that all of the _uninteresting_ differences between genes are minimized in favor of the **_interesting_ biological differences** that we want to highlight.
 
 The main factors to take into account when normalizing data are:
 
 + **Sequencing Depth**:
   
 <center>
+
 <img src="https://hbctraining.github.io/DGE_workshop/img/normalization_methods_depth.png" width=500 />
   
-_Differences in sequencing depth (total number of reads in a sample) can cause genes to appear differentially expressed just due to technical reasons._
+_**Differences in sequencing depth** (total number of reads in a sample) can cause genes to appear differentially expressed just due to technical reasons._
+
 </center>
 
 + **Gene Length**:
 
 <center>
+
 <img src="https://hbctraining.github.io/DGE_workshop/img/normalization_methods_length.png" width=400 />
   
-_Differences in gene length means that longer genes are prone to have more reads coming from them, therefore we need to normalize also for this aspect while processing data._
+_Differences in gene length means that **longer genes are prone to have more reads** coming from them, therefore we need to normalize also for this aspect while processing data._
+
 </center>
 
 + **RNA Composition**:
 
 <center>
+
 <img src="https://hbctraining.github.io/DGE_workshop/img/normalization_methods_composition.png" width=500 />
   
-_Differences in RNA composition are also causative of technical artefacts which can skew the analyses. Differences in the number of genes expressed between samples and the number of differentially expressed gene across samples can greatly and negatively impact normalization methods In the example, the majority of counts for sample A is related to the _DE gene_ and therefore this might cause other genes to be normalized by this high number of counts, resulting in them _appearing_ to be expressed at a lower level as opposed to the same genes in sample B._
+_Differences in RNA composition are also causative of technical artefacts which can skew the analyses. **Differences in the number of genes expressed between samples and the number of differentially expressed gene across samples can greatly and negatively impact normalization methods In the example**, the majority of counts for sample A is related to the DE gene and therefore this might cause other genes to be normalized by this high number of counts, resulting in them appearing to be expressed at a lower level as opposed to the same genes in sample B._
+
 </center>
 
 ## Normalization Strategies
@@ -74,23 +82,27 @@ During the years, many approaches to data normalization have been attempted and 
 | _DESeq2_'s median of ratios^[1](https://bioconductor.org/packages/release/bioc/html/DESeq2.html)^ 	| Sequencing depth and RNA composition 	| Counts are divided by a sample-specific size factor 	|
 | _edgeR_'s trimmed mean of M values^[2](https://bioconductor.org/packages/release/bioc/html/edgeR.html)^ 	| Sequencing depth, RNA composition and gene length 	| Weighted trimmed mean of the log ratio of expression between samples 	|
 
-Out of all these, we will use one of the more advanced ones provided in the _DESeq2_ R package which will be now introduced.
+Out of all these, we will use one of the more advanced ones provided in the `DESeq2` package which will be now introduced.
 
-# The DESeq2 Package
+# The `DESeq2` Package
 ## Introduction
-One of the main interests behind performing a bulk RNA experiment is understanding which genes are more or less expressed across a set of conditions of interest, so we will **compare** gene expression levels and **statistically assess** and quantify differences arising between the conditions represented by our categories of samples. In this section we will start getting a feel for what DESeq2 is and how to use it to perform normalization and differential expression analysis on our bulk RNA seq data.
+One of the main interests behind performing a bulk RNA experiment is **understanding which genes are more or less expressed across a set of conditions of interest**, so we will **compare** gene expression levels and **statistically assess** and quantify differences arising between the conditions represented by our categories of samples. In this section we will start getting a feel for what DESeq2 is and how to use it to perform normalization and differential expression analysis on our bulk RNA seq data.
 
 > 💡
-> Detailed explanations of the statistical procedures implemented in the package are available in the package's [_vignette_](http://bioconductor.org/packages/devel/bioc/vignettes/DESeq2/inst/doc/DESeq2.html). 
+> **Detailed explanations of the statistical procedures implemented in the package are available in the package's [_vignette_](http://bioconductor.org/packages/devel/bioc/vignettes/DESeq2/inst/doc/DESeq2.html).** 
 
-We will start by loading the package that we installed in yesterday's initial "setup" section:
+```{r, echo=FALSE}
+library(dplyr)
+```
+
+We will start by **loading the package** that we installed in yesterday's initial "setup" section:
 
 ```{r}
-library(tidyverse)
+# Load the package
 library(DESeq2)
 ```
 
-The package contains many functionalities which are very helpful when dealing with tables of _count data_, we can inspect them all by typing the following command:
+The package **contains many _functions_** which are very helpful when dealing with tables of _count data_, we can inspect them all by typing the following command:
 
 ```{r}
 # This should open a popup window in the lower right part of the screen displaying the functions in the package
@@ -100,9 +112,10 @@ The package contains many functionalities which are very helpful when dealing wi
 In the sections below, we will follow the standard analysis workflow suggested by the DESeq2 developers.
 
 ## Create a `DESeqDataSet` object
-In order for the package to _read_ and _understand_ our data and correctly perform the analysis, we need to organize it in a way that the functions of the package can handle. This new object that we are going to create is called `DESeqDataSet` and there is a utility function to create one starting from the ingredients we currently have, a table of counts (our `matrix`), a table with sample information (our `coldata`) and one last thing that we need to decide in order tell the package what comparisons we value the most, this is called a **design formula**.
+In order for the package to _read_ and _understand_ our data and correctly perform the analysis, we need to **organize our data in a way that the functions of the package can handle**. This new object that we are going to create is called `DESeqDataSet` and there is a utility function to create one starting from the **ingredients** we currently have, (1) a **table of counts** (our `matrix`), (2) a **table with sample information** (our `coldata`) and (3) one last thing that we need to decide in order tell the package what comparisons we value the most, this is called a **design formula**.
 
-The design formula should contain the name of a column of interest in our table of samples which contains the information related to the **_levels_** we want to contrast. Let's say that we have a dataset with two conditions (`condition_1` vs `condition_2`) that we want to compare. The (simplified) samples table will look like this, with three replicates for each of the two conditions:
+### Behind The Design Formula
+The design formula should **contain the name of a column of interest in our table of samples** which stores the information related to the **_levels_** (or _categories_) we want to contrast. Let's say that we have a dataset with two conditions (`condition_1` vs `condition_2`) that we want to compare. The samples table will look like this, with three replicates for each of the two conditions:
 
 | Sample Code 	| Patient 	| Condition 	|
 |---	|---	|---	|
@@ -116,7 +129,7 @@ The design formula should contain the name of a column of interest in our table 
 If we are interested in performing a differential expression analysis comparing `condition_1` versus `condition_2`, then our design formula should specify the `Condition` column.
 
 > 💡
-> What is the column that we are interested in when specifying the design formula using in our `samples` table?
+> **What is the column that we are interested in when specifying the design formula using in our `samples` table?**
 
 Now that we also understand the design formula, we can create the `DESeqDataSet` object with the data that we loaded beforehand, but first we need to check that the columns of the `counts` table are in the same order of the rows of the `sample` table, this is important since we want to be sure that the right levels of expression are associated to the right sample.
 
@@ -141,21 +154,21 @@ Great! You have created a `DESeqDataSet` object which we called `dds`, this cont
 ## Filtering genes
 We can the inspect the size of our `dds` object to check how many genes and samples we have, you can see that this mirrors exactly the `counts` table that we had previously before incorporating it into the object.
 
-```{r, eval=FALSE}
+```{r}
 dim(counts(dds))
 ```
 
 > 💡
-> Notice how we used `DESeq2`'s function `counts()` to access the table of gene counts within the `DESeqDataSet` object. 
+> **Notice how we used `DESeq2`'s function `counts()` to access the table of gene counts within the `DESeqDataSet` object.** 
 
-Now we can start removing some genes which are expressed at low levels. This action is justified both from the biological and the statistical point of view. Biologically, lowly expressed genes are less interesting while statistically, they do not provide enough sampling power to confidently test them for differential expression. In the following chunk we filter our `dds` object by keeping only genes (rows) which have at least 10 detected counts when summing across all samples.
+Now we can **start removing some genes which are expressed at low levels**. This action is justified both from the biological and the statistical points of view. Biologically, lowly expressed genes are less interesting while statistically, they do not provide enough sampling power to confidently test them for differential expression. In the following chunk we filter our `dds` object by **keeping only genes (rows) which have at least 10 detected counts when summing across all samples**.
 
 ```{r}
 dds <- dds[rowSums(counts(dds)) >= 10,]
 ```
 
 > 💡
-> This is somewhat of an "easy" filtering strategy, there are many more complex ones available but sometimes it's best to keep things simple!
+> **This is somewhat of an "easy" filtering strategy, there are many more complex ones available but sometimes it's best to keep things simple!**
 
 Let's check how many genes we're left with after filtering:
 
@@ -163,20 +176,24 @@ Let's check how many genes we're left with after filtering:
 dim(dds)
 ```
 
-You can see that we have cut the number of genes in our dataset by almost half, now we have `r dim(dds)[1]` genes.
+You can see that **we have cut the number of genes in our dataset by almost half**, now we have `r dim(dds)[1]` genes.
 
 ## Normalizing Count Data
-As we have discussed above, normalization is an integral step to the downstream analysis of bulk RNA-seq data. In this section we will normalize our data using the `estimateSizeFactors` function of the package. This function creates a value for every gene (a _pseudovalue_) by taking the geometric mean of expression values across samples for that specific gene and then dividing each value by this new computed _pseudovalue_. This function returns a normalized table of values which is identical in shape to our original `counts` table as we will see.
+As we have discussed above, **normalization is an integral step to the downstream analysis of bulk RNA-seq data**. In this section we will normalize our data using the `estimateSizeFactors` function of the package. This function creates a value for every gene (a _pseudovalue_) by taking the geometric mean of expression values across samples for that specific gene and then dividing each value by this new computed _pseudovalue_. This function returns a **normalized table of values** which is identical in shape to our original `counts` table as we will see.
 
 ```{r}
 # Call the function to normalize count data
 dds <- estimateSizeFactors(dds)
 ```
 
-We can check the values of the computed **size factors** by doing the following, note how there are as many size factors as there are samples:
+We can check the values of the computed **size factors** by doing the following, note how **there are as many size factors as there are samples**:
 
-```{r}
+```{r, eval=FALSE}
 sizeFactors(dds)
+```
+
+```{r, echo=FALSE}
+sizeFactors(dds) %>% as.data.frame() %>% kbl() %>% kable_styling()
 ```
 
 The results of the normalization are accessible by using the following code, we will save the normalized values in a different variable that we will call `normalized_counts`, `normalized = TRUE` tells `DESeq2` to fetch the normalized version of the count table that we have just created above:
@@ -190,7 +207,9 @@ normalized_counts <- counts(dds, normalized = TRUE)
 
 ## Transforming Count Data
 After we have normalized our data, we need to perform a **transformation**. There are many ways to transform count data but all of them achieve the goal of removing the gene-wise **dependence between _variance_ and _mean_ of expression values** across samples (something called [_homoscedasticity_](https://en.wikipedia.org/wiki/Homoscedasticity_and_heteroscedasticity)) in order to highlight interesting and biologically relevant expression trends even for genes expressed at lower values.
-We transform the data using a function provided in the `DESeq2` package called `rlog` which stands for _regularized logarithm_, without getting too much into the details of the workings of the function, we will transform the data and then look at how the gene-wise relationship between the _mean_ and _variance_ in our normalized data changes **before and after** the transformation.
+We transform the data using a function provided in the `DESeq2` package called `rlog` which stands for _regularized logarithm_, without getting too much into the details of the workings of the function, we will **transform the data** and then look at how the gene-wise relationship between the _mean_ and _variance_ in our normalized data changes **before and after** the transformation.
+
+The following code plot the mean/standard deviation relationship **before the transformation**.
 
 ```{r}
 library(vsn)
@@ -204,9 +223,15 @@ Transform the data and then plot the mean/standard deviation relationship **afte
 ```{r}
 # Transform the data (watch how we create a new variable for it)
 rld <- rlog(dds)
+```
 
+```{r, eval=FALSE}
 # Check out the transformed values (notice how we now have floating point values and some are even negative!)
-head(assay(rld), 3)
+head(assay(rld))
+```
+
+```{r, echo=FALSE}
+head(assay(rld), 10) %>% kbl() %>% kable_styling()
 ```
 
 ```{r}
@@ -214,18 +239,22 @@ head(assay(rld), 3)
 meanSdPlot(assay(rld))
 ```
 
+> 💡
+> **It is clear how now genes with high mean expression values (on the right) are comparable in terms of standard deviation to genes with lower mean expression values (on the left).**
+
 ## Data Quality Visual Assessment
-One way to understand trends in our data and the present of poor quality or **_outlier_** samples is to perform exploratory analyses through visualization. In `R` in general, data visualization is aided by the presence of many packages (on top the basic plotting functionality) which can handle diverse kinds of data visualization tasks (from traditional plots to visualizing tabular data through heatmaps). We will encounter two of these packages, one is [`ggplot2`](https://ggplot2.tidyverse.org/) and the other one is [`pheatmap`](https://cran.r-project.org/web/packages/pheatmap/index.html). 
+One way to understand trends in our data and the present of poor quality or **_outlier_** samples is to perform exploratory analyses through visualization. In `R` in general, data visualization is aided by the presence of many packages (on top the basic plotting functionality) which can handle diverse kinds of data visualization tasks (from traditional plots to **visualizing tabular data through heatmaps**). We will encounter two of these packages, one is [`ggplot2`](https://ggplot2.tidyverse.org/) and the other one is [`pheatmap`](https://cran.r-project.org/web/packages/pheatmap/index.html). 
 
 ### Clustering
-One of the main strategies for checking the consistency of our dataset is to cluster samples based on their complete expression profile (which as you might recall consists of `r dim(dds)[1]` genes in our dataset). This will allow us to control for presence of outliers in the data and understand if we see consistent profiles of gene expression across replicates, which we expect. Use the code below to plot a _heatmap_ of normalized expression values for our samples. Since plotting the full expression table can be computationally expensive, we might want to subset it to the 200 top expressed genes in the dataset.
+One of the main strategies for checking the consistency of our dataset is to **cluster samples based on their complete expression profile** (which as you might recall consists of `r dim(dds)[1]` genes in our dataset). This will allow us to **spot the presence of _outliers_ in the data** and understand if we see consistent profiles of gene expression across replicates, which we expect. Use the code below to plot a _heatmap_ of normalized expression values for our samples. Since plotting the full expression table can be computationally expensive, we might want to subset it to the 200 top expressed genes in the dataset.
 
 ```{r}
 library("pheatmap")
 
 # Take the top 200 genes in the dataset
 select <- order(rowMeans(counts(dds,normalized=TRUE)),
-                decreasing=TRUE)[1:200]
+                decreasing=TRUE)[1:200] # Select number of genes
+
 # Create another table for annotating the heatmap with colors
 df <- as.data.frame(colData(dds)[,c("Donor","SampleGroup")])
 
@@ -235,10 +264,10 @@ pheatmap(assay(rld)[select,], cluster_rows=FALSE, show_rownames=FALSE,
 ```
 
 > 💡
-> What type of assessment would you make about the consistency of the samples across these top 200 genes? Do they cluster (a synonim for _similar_) based on the donor or on the biological condition of our interest?
+> **What type of assessment would you make about the consistency of the samples across these top 200 genes? Do they cluster (a synonym for _similar_) based on the donor or on the biological condition of our interest?**
 
 ### Sample-to-sample Distances
-Another way to get a sense of the global relationship between samples is to check for how **distant** samples are between themselves. This analysis of _pairwise_ distances looks at the expression value of all `r nrow(dds)` genes in the dataset and determines which samples have a more or less similar or different expression value for each. We expect biologically similar samples to have very little difference.
+Another way to **get a sense of the global relationship between samples** is to check for how _distant_ samples are between themselves. This analysis of _pairwise_ distances looks at the expression value of all `r nrow(dds)` genes in the dataset and determines which samples have a more or less similar or different expression value for each. **We expect biologically similar samples to have very little difference**.
 
 ```{r}
 library(RColorBrewer)
@@ -260,10 +289,10 @@ pheatmap(sampleDistMatrix,
 ```
 
 > 💡
-> What type of assessment would you make about the heatmap you just produced? Which CD8 T-cell populations are mostly similar in terms of overall gene expression profile? Does a particular population stand out?
+> **What type of assessment would you make about the heatmap you just produced? Which CD8 T-cell populations are mostly similar in terms of overall gene expression profile? Does a particular population stand out?**
 
 ### Principal Component Analysis (PCA)
-Another useful approach for understanding the variability axes in our data is to compute and plot a [PCA](https://en.wikipedia.org/wiki/Principal_component_analysis). Without getting into the details, PCA takes our expression data and outputs its **principal components**, which encode the main sources of variability in the data. Ideally, we want the samples to be variable because of the biological effect of our interest (in this case the differences between CD8 T-cell populations), but this might not be the case. By plotting and coloring the points by different **_covariates_** (i.e. donor or cell type) we are able to understand where the variability comes from. Use the code below to generate two _scatter plots_ of PCA coordinates and color them to understand where the differences in the data are.
+Another useful approach for **understanding the main variability axes in our data** is to compute and plot a **[PCA](https://en.wikipedia.org/wiki/Principal_component_analysis)**. Without getting into the details, PCA takes our expression data and outputs its **principal components**, which encode the main sources of variability in the data. Ideally, **we want the samples have variability caused by the biological effect of our interest** (in this case the differences between CD8 T-cell populations), but this might not be the case. By plotting and coloring the points by different **_covariates_** (i.e. donor or cell type) we are able to understand where the variability comes from and if there is any detectable **[batch effect](https://en.wikipedia.org/wiki/Batch_effect)**. Use the code below to generate two _scatter plots_ of PCA coordinates and color them to understand what causes the variability in the data.
 
 ```{r}
 library(ggplot2)
@@ -282,6 +311,6 @@ ggplot(pcaData, aes(PC1, PC2, color=SampleGroup, shape=Donor)) +
 ```
 
 > 💡
-> What can you say about this PCA? Are the samples positioning themselves based on the donor or their biological condition? What is the most extreme group of samples? How does this information relate to the other plots we produced above?
+> **What can you say about this PCA? Are the samples positioning themselves based on the donor or their biological condition? What is the most extreme group of samples? How does this information relate to the other plots we produced above?**
 
 Now that we have plotted all the main diagnostic information related to the dataset and we have a bit of a grasp of it, we can start thinking about **testing for differentially expressed genes**.

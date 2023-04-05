@@ -33,4 +33,4 @@ format:
     toc_collapsed: true
 
 # Code theme
-highlight-style: ayu
+highlight-style: github

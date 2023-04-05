@@ -122,6 +122,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   }
 }</script>
 
+<script src="../site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="../site_libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+
 
 </head>
 
@@ -188,7 +191,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup">Setup</a>
   <ul class="collapse">
   <li><a href="#using-rstudio-or-posit" id="toc-using-rstudio-or-posit" class="nav-link" data-scroll-target="#using-rstudio-or-posit">Using Rstudio or Posit</a></li>
-  <li><a href="#communicating-with-r" id="toc-communicating-with-r" class="nav-link" data-scroll-target="#communicating-with-r">Communicating with R</a></li>
+  <li><a href="#communicating-with-r" id="toc-communicating-with-r" class="nav-link" data-scroll-target="#communicating-with-r">Communicating with R</a>
+  <ul class="collapse">
+  <li><a href="#printing-text" id="toc-printing-text" class="nav-link" data-scroll-target="#printing-text">Printing Text</a></li>
+  <li><a href="#creating-variables" id="toc-creating-variables" class="nav-link" data-scroll-target="#creating-variables">Creating Variables</a></li>
+  <li><a href="#data-types-tables" id="toc-data-types-tables" class="nav-link" data-scroll-target="#data-types-tables">Data Types: Tables</a></li>
+  </ul></li>
   <li><a href="#creating-a-script" id="toc-creating-a-script" class="nav-link" data-scroll-target="#creating-a-script">Creating a script</a></li>
   <li><a href="#installing-packages" id="toc-installing-packages" class="nav-link" data-scroll-target="#installing-packages">Installing packages</a></li>
   </ul></li>
@@ -230,10 +238,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <section id="objectives" class="level2">
 <h2 class="anchored" data-anchor-id="objectives">Objectives</h2>
 <ul>
-<li>Setup RStudio or Posit</li>
-<li>Get familiar with the Posit interface</li>
-<li>Learn about bulk RNA-seq data processing</li>
-<li>Download the data needed for the workshop</li>
+<li><em>Setup RStudio or Posit</em></li>
+<li><em>Get familiar with the Posit interface</em></li>
+<li><em>Learn about bulk RNA-seq data processing</em></li>
+<li><em>Download the data needed for the workshop</em></li>
 </ul>
 </section>
 <section id="setup" class="level1">
@@ -241,91 +249,128 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <section id="using-rstudio-or-posit" class="level2">
 <h2 class="anchored" data-anchor-id="using-rstudio-or-posit">Using Rstudio or Posit</h2>
 <p>If RStudio is not installed on your computer, you can create a free account on <a href="posit.cloud"><em>posit.cloud</em></a>. Create the account with your credentials and follow the instructions to create a new project. Once done, you should see something like this on your screen:</p>
-<div data-align="center">
-<p><img src="../pics/posit_project.png" width="800/"></p>
-</div>
+<center>
+<p><img src="../pics/posit_project.png" width="800"></p>
+</center>
+<p>This is your working interface, the <strong>bottom right section</strong> shows your computer’s file system which is now pointed to the place where the <code>Rproject</code> you just created lives. The <strong>section on the left</strong> currently displays your console, where you can type code <em>interactively</em>.</p>
 </section>
 <section id="communicating-with-r" class="level2">
 <h2 class="anchored" data-anchor-id="communicating-with-r">Communicating with R</h2>
-<p>You should see your cursor on the left-hand side of the screen blinking. That window represents the R <em><em>console</em></em>. It can be used to “talk” with R through commands that it can understand!</p>
+<p>You should see your cursor on the left-hand side of the screen blinking. That window represents the <strong><em><code>R</code> console</em></strong>. It can be used to “talk” with R through commands that it can understand!</p>
+<section id="printing-text" class="level3">
+<h3 class="anchored" data-anchor-id="printing-text">Printing Text</h3>
 <p>For example, try typing the following in the console and check what comes out (a.k.a. the <em>output</em>):</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Tell R to print out some words on screen with the "print" command</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">'Hello World!'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">"Hello World!"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "Hello World!"</code></pre>
 </div>
 </div>
+</section>
+<section id="creating-variables" class="level3">
+<h3 class="anchored" data-anchor-id="creating-variables">Creating Variables</h3>
+<p>One of the main aspects of any programming language including <code>R</code> is the ability to create <em><strong>variables</strong></em>. You can think of variables as ways to <em>store</em> objects under any given name. Let’s take the previous example and store the <code>Hello World!</code> character (known as a <em>string</em>) in a variable that we call <code>my_variable</code>. The creation of a variable in <code>R</code> is classically done through the <em>assignment operator</em> <code>&lt;-</code>.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Let's assign the statement to a variable (nothing happens when running this code)</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>my_variable <span class="ot">&lt;-</span> <span class="st">"Hello World!"</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Let's display the content of the new variable!</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(my_variable)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Hello World!"</code></pre>
+</div>
+</div>
+<blockquote class="blockquote">
+<p>💡 <strong>What happened in the top right part of your screen when you ran the code lines above? Check out the “environment” section, you should see that <code>my_variable</code> appeared there!</strong></p>
+</blockquote>
+</section>
+<section id="data-types-tables" class="level3">
+<h3 class="anchored" data-anchor-id="data-types-tables">Data Types: Tables</h3>
+<p>Without going too much into the details of all the available objects used to store data in <code>R</code>, one of the most abundantly used is the <code>data.frame</code>. Think of <code>data.frame</code>s as the <code>R</code> equivalent of Excel spreadsheets, so <strong>a way to store <em>tabular</em> data</strong>. As we will see later, pretty much all the data we are going to handle will be in the form of a <code>data.frame</code> or some of its other variations.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Let's create and display a data frame (a table) with four rows and two columns</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="st">"Class"</span><span class="ot">=</span><span class="fu">c</span>(<span class="st">"a"</span>,<span class="st">"b"</span>,<span class="st">"c"</span>,<span class="st">"d"</span>), <span class="co"># First column</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Quantity"</span><span class="ot">=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">10</span>,<span class="dv">4</span>,<span class="dv">6</span>)) <span class="co"># Second column</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Class Quantity
+1     a        1
+2     b       10
+3     c        4
+4     d        6</code></pre>
+</div>
+</div>
 <p>You have now instructed R to do something for you! We will ask it to do plenty more in the code chunks below!</p>
+</section>
 </section>
 <section id="creating-a-script" class="level2">
 <h2 class="anchored" data-anchor-id="creating-a-script">Creating a script</h2>
 <p>In the console we can type as many commands as we want and execute them sequentially. Nevertheless, commands are lost the moment they are executed and if we want to execute them again we need to type everything back in the console… this is painful!</p>
 <p>A <strong>script</strong> is just a normal text file which groups a series of commands that R executes sequentially, reading the file line-by-line. This is much better because we can then edit the file and keep save the changes! Follow the movie below to create an R script in Posit, the same applies to Rstudio.</p>
 <center>
-<video controls="controls" width="600" height="400" name="Create a script">
-<source src="../pics/script_creation.mov">
-</video>
+<p><img width="800" src="../pics/script_creation.gif" img=""></p>
 </center>
 <p>The new window that appeared on the upper left represents your R script, you can see it from the <code>.R</code> file extension at the end. In here we can write R code which DOES NOT get executed immediately like in the console before.</p>
 <blockquote class="blockquote">
-<p>💡 In order to execute code from the script, highlight the code line you want to execute (or put your cursor line on it) and press <kbd>⌘</kbd>+<kbd>Enter</kbd> on Mac or <kbd>Ctrl</kbd>+<kbd>Enter</kbd> on Windows.</p>
+<p>💡 <strong>In order to execute code from the script, highlight the code line you want to execute (or put your cursor line on it) and press <kbd>⌘</kbd>+<kbd>Enter</kbd> on Mac or <kbd>Ctrl</kbd>+<kbd>Enter</kbd> on Windows.</strong></p>
 </blockquote>
 </section>
 <section id="installing-packages" class="level2">
 <h2 class="anchored" data-anchor-id="installing-packages">Installing packages</h2>
-<p>The analyses that we are going to conduct require specific <strong>packages</strong>. In R, packages are <em>collections of functions</em> which help us perform standardized workflows. In the <strong>code chunk</strong> below, we instruct R to install the packages that we need for the analyses.</p>
+<p>The analyses that we are going to conduct require specific <strong>packages</strong>. In R, packages are <em>collections of functions</em> which help us perform standardized workflows. In the <strong>code chunk</strong> below, we instruct R to install the packages that we will need later on throughout the workshop.</p>
 <blockquote class="blockquote">
-<p>💡 Copy and paste <em>code chunks</em> from here to your R script to follow.</p>
+<p>💡 <strong>Copy and paste <em>code chunks</em> from here to your R script to follow.</strong></p>
 </blockquote>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install packages from CRAN</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"tidyverse"</span>, <span class="at">type=</span><span class="st">"source"</span>)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Install packages from Bioconductor</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(<span class="st">"BiocManager"</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>))</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">install.packages</span>(<span class="st">"BiocManager"</span>)</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>BiocManager<span class="sc">::</span><span class="fu">install</span>(<span class="st">"DESeq2"</span>)</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>BiocManager<span class="sc">::</span><span class="fu">install</span>(<span class="st">"vsn"</span>)</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co"># For visualizations</span></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"hexbin"</span>)</span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"pheatmap"</span>)</span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"RColorBrewer"</span>)</span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"ggrepel"</span>)</span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="co"># For conversion between gene IDs</span></span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>BiocManager<span class="sc">::</span><span class="fu">install</span>(<span class="st">"org.Hs.eg.db"</span>)</span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="co"># For downstream analyses</span></span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"msigdbr"</span>)</span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>BiocManager<span class="sc">::</span><span class="fu">install</span>(<span class="st">"fgsea"</span>)</span>
-<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>BiocManager<span class="sc">::</span><span class="fu">install</span>(<span class="st">"clusterProfiler"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install packages from Bioconductor</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(<span class="st">"BiocManager"</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">install.packages</span>(<span class="st">"BiocManager"</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Install packages from CRAN</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"dplyr"</span>)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"googledrive"</span>)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>BiocManager<span class="sc">::</span><span class="fu">install</span>(<span class="st">"vsn"</span>)</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>BiocManager<span class="sc">::</span><span class="fu">install</span>(<span class="st">"DESeq2"</span>, <span class="at">force =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co"># For visualizations</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"hexbin"</span>)</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"pheatmap"</span>)</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"RColorBrewer"</span>)</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"ggrepel"</span>)</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="co"># For conversion between gene IDs</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>BiocManager<span class="sc">::</span><span class="fu">install</span>(<span class="st">"org.Hs.eg.db"</span>)</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a><span class="co"># For downstream analyses</span></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"msigdbr"</span>)</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>BiocManager<span class="sc">::</span><span class="fu">install</span>(<span class="st">"fgsea"</span>)</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>BiocManager<span class="sc">::</span><span class="fu">install</span>(<span class="st">"clusterProfiler"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>During the installation, you will see many messages being displayed on your <em><code>R</code> console</em>, don’t pay too much attention to them unless they are red and specify an error!</p>
-<p>If you encounter any of these messages during isntallation, follow this procedure here:</p>
+<p>If you encounter any of these messages during installation, follow this procedure here:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># R asks for package updates, answer "n" and type enter</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Question displayed:</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>Update all<span class="sc">/</span>some<span class="sc">/</span>none? [a<span class="sc">/</span>s<span class="sc">/</span>n]<span class="sc">:</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Answer to type:  </span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>n</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co"># R asks for installation from binary source, answer "no" and type enter</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Question displayed:</span></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>Do you want to install from sources the packages which need compilation? (Yes<span class="sc">/</span>no<span class="sc">/</span>cancel)</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Answer to type:</span></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>no</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># R asks for package updates, answer "n" and type enter</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Question displayed:</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>Update all<span class="sc">/</span>some<span class="sc">/</span>none? [a<span class="sc">/</span>s<span class="sc">/</span>n]<span class="sc">:</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Answer to type:  </span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>n</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co"># R asks for installation from binary source, answer "no" and type enter</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Question displayed:</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>Do you want to install from sources the packages which need compilation? (Yes<span class="sc">/</span>no<span class="sc">/</span>cancel)</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Answer to type:</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>no</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Hopefully all packages were correctly installed and now we can dive a bit deeper into the theoretical basics of RNA sequencing!</p>
 </section>
 </section>
 <section id="introduction-to-bulk-rna-seq" class="level1">
 <h1>Introduction to bulk RNA-seq</h1>
-<p>With bulk RNA sequencing technologies, the goal is to capture <strong>average gene expression levels</strong> across pooled cell populations of interest. This is achieved by capturing all RNA transcripts from a sample and sequencing them in an automated way to ensure the adequate throughput needed for answering the biological hypotheses behind the experiment. A bulk RNA-seq experiment is articulated in the following steps:</p>
+<p>With bulk RNA sequencing technologies, the goal is to capture <strong>average gene expression levels</strong> across pooled cell populations of interest. This is achieved by capturing all RNA transcripts from a sample and sequencing them in an automated way to ensure the adequate throughput needed for answering the biological hypotheses behind the experiment.</p>
+<p>A bulk RNA-seq experiment is articulated in the following steps:</p>
 <div data-align="center" style="display: grid; grid-template-columns: 1fr 1fr; grid-column-gap: 20px; ">
 <div data-align="left">
 <ul>
@@ -346,7 +391,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2 class="anchored" data-anchor-id="next-generation-sequencing">Next Generation Sequencing</h2>
 <p>Next Generation Sequencing technologies (Illumina/PacBio) allow experimenters to capture the entire genetic information in a sample in a completely unsupervised manner. The process works with an approach called <strong>sequencing-by-synthesis</strong> or SBS for short.</p>
 <blockquote class="blockquote">
-<p>💡 Great info can be found at the <a href="https://knowledge.illumina.com/software/general/software-general-reference_material-list/000002211">Illumina Knowledge page</a></p>
+<p>💡 <strong>Great info can be found at the <a href="https://knowledge.illumina.com/software/general/software-general-reference_material-list/000002211">Illumina Knowledge page</a></strong></p>
 </blockquote>
 <p>This means that strands are sequenced by re-building them using the natural complementarity principle of DNA with fluorescently labelled bases. On illumina <em>flow-cells</em> this process happens in <strong>clusters</strong>, to allow for proper signal amplification and detection, as shown in the movie below.</p>
 <center>
@@ -356,65 +401,60 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </section>
 <section id="raw-sequencing-output" class="level2">
 <h2 class="anchored" data-anchor-id="raw-sequencing-output">Raw Sequencing Output</h2>
-<p>The raw output of any sequencing run consists of a series of sequences. These sequences can have varying length based on the run parameters set on the sequencing platform. Nevertheless, they are made available to humans to read under a standardized file format known as FASTQ. This is the universally accepted format used to encode sequences after sequencing. An example of real FASTQ file with only two <strong><em>reads</em></strong> is provided below.</p>
+<p>The raw output of any sequencing run consists of a series of sequences (called <strong><em>reads</em></strong>). These sequences can have varying length based on the run parameters set on the sequencing platform. Nevertheless, they are made available to humans to read under a standardized file format known as FASTQ. This is the universally accepted format used to encode sequences after sequencing. An example of real FASTQ file with only two <strong><em>reads</em></strong> is provided below.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="sc">@</span>Seq1</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>AGTCAGTTAAGCTGGTCCGTAGCTCTGAGGCTGACGAGTCGAGCTCGTACG</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="sc">+</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>BBBEGGGGEGGGFGFGGEFGFGFGGFGGGGGGFGFGFGGGFGFGFGFGFG</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="sc">@</span>Seq2</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>TGCTAAGCTAGCTAGCTAGCTAGCTAGCTAGCTAGCTAGCTAGCTAGC</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="sc">+</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="sc">@</span>Seq1</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>AGTCAGTTAAGCTGGTCCGTAGCTCTGAGGCTGACGAGTCGAGCTCGTACG</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="sc">+</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>BBBEGGGGEGGGFGFGGEFGFGFGGFGGGGGGFGFGFGGGFGFGFGFGFG</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="sc">@</span>Seq2</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>TGCTAAGCTAGCTAGCTAGCTAGCTAGCTAGCTAGCTAGCTAGCTAGC</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="sc">+</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>FASTQ files are an intermediate file in the analysis and are used to assess quality metrics for any given sequence. The quality of each base call is encoded in the line after the <code>+</code> following the standard <a href="https://en.wikipedia.org/wiki/Phred_quality_score"><strong>Phred score</strong></a> system.</p>
 </section>
 <section id="quality-metrics-inspection" class="level2">
 <h2 class="anchored" data-anchor-id="quality-metrics-inspection">Quality Metrics Inspection</h2>
 <p>Computational tools like <a href="https://www.bioinformatics.babraham.ac.uk/projects/fastqc/">FastQC</a> aid with the visual inspection of per-sample quality metrics from NGS experiments. Some of the QC metrics of interest to consider include the ones listed below, on the <strong>left</strong> are optimal metric profiles while on the <strong>right</strong> are sub-optimal ones:</p>
-<div data-align="center">
-<p><strong>Per-base Sequence Quality</strong> <img src="https://nbisweden.github.io/workshop-ngsintro/2001/data/rnaseq/pbsq.jpg" width="700/"></p>
-</div>
-<div data-align="center">
-<p><strong>Per-sequence Quality Scores</strong> <img src="https://nbisweden.github.io/workshop-ngsintro/2001/data/rnaseq/psqs.jpg" width="700/"></p>
-</div>
-<div data-align="center">
-<p><strong>Per-base Sequence Content</strong> <img src="https://nbisweden.github.io/workshop-ngsintro/2001/data/rnaseq/pbsc.jpg" width="700/"></p>
-</div>
-<div data-align="center">
-<p><strong>Per-sequence GC Content</strong> <img src="https://nbisweden.github.io/workshop-ngsintro/2001/data/rnaseq/psgc.jpg" width="700/"></p>
-</div>
-<div data-align="center">
-<p><strong>Sequence Duplication Levels</strong> <img src="https://nbisweden.github.io/workshop-ngsintro/2001/data/rnaseq/sdl.jpg" width="700/"></p>
-</div>
-<div data-align="center">
-<p><strong>Adapter Content</strong></p>
-</div>
-<div data-align="center">
-<p><img src="https://nbisweden.github.io/workshop-ngsintro/2001/data/rnaseq/ac.jpg" width="700/"></p>
-</div>
+<center>
+<p><strong>Per-base Sequence Quality</strong> <img src="https://nbisweden.github.io/workshop-ngsintro/2001/data/rnaseq/pbsq.jpg" width="800"> <em>This uses <strong>box_plots</strong> to highlight the per-base quality along all <strong>reads in the sequencing experiment, we can notice a physiological drop in quality towards the end part of the read</strong>.</em></p>
+</center>
+<center>
+<p><strong>Per-sequence Quality Scores</strong> <img src="https://nbisweden.github.io/workshop-ngsintro/2001/data/rnaseq/psqs.jpg" width="800"> <em>Here we are plotting the <strong>distribution of Phred scores</strong> across all identified sequences, we can see that the high quality experiment (left) has a peak at higher Phred scores values (28-30).</em></p>
+</center>
+<center>
+<p><strong>Per-base Sequence Content</strong> <img src="https://nbisweden.github.io/workshop-ngsintro/2001/data/rnaseq/pbsc.jpg" width="800"> <em>Here we check the sequence (read) base content, in a normal scenario we do not expect any dramatic variation across the full length of the read since we should see a quasi-balanced ditribution of bases.</em></p>
+</center>
+<center>
+<p><strong>Per-sequence GC Content</strong> <img src="https://nbisweden.github.io/workshop-ngsintro/2001/data/rnaseq/psgc.jpg" width="800"> <em>GC-content referes to the degree at which guanosine and cytosine are present within a sequence, in NGS experiments which also include PCR amplification this aspect is crucial to check since GC-poor sequences may be enriched due to their easier amplification bias. In a normal random library we would expect this to have a bell-shaped distribution such as the one on the left.</em></p>
+</center>
+<center>
+<p><strong>Sequence Duplication Levels</strong> <img src="https://nbisweden.github.io/workshop-ngsintro/2001/data/rnaseq/sdl.jpg" width="800"> <em>This plot shows the degree of sequence duplication levels. In a normal library (left) we expect to have low levels od duplication which can be a positive indicator of high sequencing coverage.</em></p>
+</center>
+<center>
+<p><strong>Adapter Content</strong> <img src="https://nbisweden.github.io/workshop-ngsintro/2001/data/rnaseq/ac.jpg" width="800"> <em>In NGS experiments we use <strong>adapters</strong> to create a library. Sometimes these can get sequenced accidentally and end up being part of a <strong>read</strong>. This phenomenon can be spotted here and corrected later using a computational approach called <strong>adapter trimming</strong>.</em></p>
+</center>
 </section>
 <section id="read-alignment" class="level2">
 <h2 class="anchored" data-anchor-id="read-alignment">Read Alignment</h2>
 <p>Once we are satisfied with the quality of our pool of sequences, we need to map them back to the transcripts to which they belonged originally when we produced cDNA molecules from RNA. This process of mapping is <strong>needed to understand from which genes were transcripts generated</strong> and therefore is an essential and very important step of data processing!</p>
-<div data-align="center">
-<p><img src="https://nbisweden.github.io/workshop-ngsintro/2001/data/rnaseq/rnaseq_mapping.svg" width="700/"></p>
-</div>
-<div data-align="center">
-<p>Alignment of <em>trimmed reads</em> to a reference genome or transcriptome.</p>
-</div>
-<p>Tools like <a href="https://github.com/alexdobin/STAR">STAR</a> and <a href="https://github.com/lh3/bwa">BWA-MEM</a> are designed to achieve great speed and accuracy for the computationally expensive task of read alignment.</p>
-<p>The results of the alignment procedure is a different set of files in <em>SAM</em> (Standard Alignment Map) format which get compressed into their binary representation, <strong>BAM files</strong>. These are usually one for each analyzed sample and encode the position of all the identified reads along the genome as well as alignment quality metrics for QC, which can be carried out with tools like <a href="https://multiqc.info/">MultiQC</a>.</p>
+<center>
+<p><img src="https://nbisweden.github.io/workshop-ngsintro/2001/data/rnaseq/rnaseq_mapping.svg" width="700"></p>
+<p><em>Alignment of <strong>trimmed reads</strong> to a reference genome or transcriptome.</em></p>
+</center>
+<p>Tools like <strong><a href="https://github.com/alexdobin/STAR">STAR</a></strong> and <strong><a href="https://github.com/lh3/bwa">BWA-MEM</a></strong> are designed to achieve great speed and accuracy for the computationally expensive task of read alignment.</p>
+<p>The results of the alignment procedure is a different set of files in <em>SAM</em> (Standard Alignment Map) format which get compressed into their binary representation, <strong>BAM files</strong>. These are usually one for each analyzed sample and encode the position of all the identified reads along the genome as well as alignment quality metrics for QC, which can be carried out with tools like <strong><a href="https://multiqc.info/">MultiQC</a></strong>.</p>
 </section>
 <section id="counting-transcripts" class="level2">
 <h2 class="anchored" data-anchor-id="counting-transcripts">Counting Transcripts</h2>
 <p>After sequences have been aligned to their respective place on the genome, it is time to actually count how many times a given sequence is found on any given gene (or transcripts, or exons or others..), <strong>this will actually be our gene expression measurement!</strong></p>
-<div data-align="center">
-<p><img src="https://nbisweden.github.io/workshop-ngsintro/2001/data/rnaseq/rnaseq_counts.svg" width="350/"></p>
-</div>
+<center>
+<p><img src="https://nbisweden.github.io/workshop-ngsintro/2001/data/rnaseq/rnaseq_counts.svg" width="350"></p>
+</center>
 <p>In the end, for every sample, we will end up with a number for each gene (or transcripts), these are called <strong>gene (transcript) counts</strong>.</p>
 <blockquote class="blockquote">
-<p>💡 What is the difference between a <em>gene</em> and a <em>transcript</em>?</p>
+<p>💡 <strong>What is the difference between a <em>gene</em> and a <em>transcript</em>?</strong></p>
 </blockquote>
 <p>These are usually summarized in a table, called <em>gene expression table</em>, where each sample is a column and each row a different gene. We will now load one and take a closer look, this will be our starting point in the hands-on analysis of bulk RNA-seq data.</p>
 </section>
@@ -423,97 +463,424 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h1>Data Loading and Exploratory Analyses</h1>
 <section id="loading-the-data" class="level2">
 <h2 class="anchored" data-anchor-id="loading-the-data">Loading the data</h2>
-<p>We will load a table of data from <a href="https://www.nature.com/articles/s41467-022-35583-w#Sec53">this study</a> on tumor-infiltrating CD4+ T-regulatory (T<sub>reg</sub>) cells. The original data supporting the findings of the study has been deposited on the <strong>Gene Expression Omnibus</strong> (GEO) data portal under accession number <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE120575">GSE120575</a>. This is the place where all studies publish the processed data from their analysis in order for other researchers to download it and reproduce their findings or test their own hypotheses.</p>
-<p>We have already downloaded the data and inserted it in a Google Drive <a href="https://drive.google.com/drive/folders/18Rqj2hQ_KAjGVtN8fy2wdvbCUI2c6ruE?usp=share_link">folder</a> organizing it as follows:</p>
+<p>We will load a table of data from <a href="https://www.nature.com/articles/s41467-022-35583-w#Sec53">this study</a> on tumor-infiltrating CD8+ T-cells. The original data supporting the findings of the study has been deposited on the <strong>Gene Expression Omnibus</strong> (GEO) data portal under accession number <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE120575">GSE120575</a>. This is the place where all studies publish the processed data from their analysis in order for other researchers to download it and reproduce their findings or test their own hypotheses.</p>
+<p>We have already downloaded the data and inserted it in a Google Drive <a href="https://drive.google.com/drive/folders/18Rqj2hQ_KAjGVtN8fy2wdvbCUI2c6ruE?usp=sharing">folder</a> organizing it as follows:</p>
 <ul>
 <li><p><code>raw_counts.csv</code>: the gene by sample matrix containing the number of times each gene is detected in each sample (our gene expression values)</p></li>
 <li><p><code>samples_info.csv</code>: the table containing samples information, known as <em>metadata</em>, which tells us about the biological meaning of each sample</p></li>
 </ul>
 <p>In the following code chunk, we are going to load the data and create three new variables in our R session, one for each table.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load nistalled packages with the "library()" function</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"tidyverse"</span>)</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"googledrive"</span>)</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Load files</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>files <span class="ot">&lt;-</span> <span class="fu">drive_find</span>(<span class="at">n_max=</span><span class="dv">30</span>)</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co"># File paths with URL</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>counts <span class="ot">&lt;-</span> files[files<span class="sc">$</span>name <span class="sc">==</span> <span class="st">"raw_counts.csv"</span>,] <span class="sc">%&gt;%</span> <span class="fu">drive_read_string</span>() <span class="sc">%&gt;%</span> <span class="fu">read.csv</span>(<span class="at">text =</span> .) <span class="sc">%&gt;%</span> <span class="fu">as.tibble</span>()</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(counts) <span class="ot">&lt;-</span> counts<span class="sc">$</span>X</span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>counts<span class="sc">$</span>X <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>samples <span class="ot">&lt;-</span> files[files<span class="sc">$</span>name <span class="sc">==</span> <span class="st">"samples_info.csv"</span>,] <span class="sc">%&gt;%</span> <span class="fu">drive_read_string</span>() <span class="sc">%&gt;%</span> <span class="fu">read.csv</span>(<span class="at">text =</span> .) <span class="sc">%&gt;%</span> <span class="fu">as.tibble</span>()</span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(samples) <span class="ot">&lt;-</span> samples<span class="sc">$</span>X </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load installed packages with the "library()" function</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"dplyr"</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"googledrive"</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Load files</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>files <span class="ot">&lt;-</span> <span class="fu">drive_ls</span>(<span class="st">"~/MOBW2023/Data"</span>)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co"># File paths with URL</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>counts <span class="ot">&lt;-</span> files[files<span class="sc">$</span>name <span class="sc">==</span> <span class="st">"raw_counts.csv"</span>,] <span class="sc">%&gt;%</span> <span class="fu">drive_read_string</span>() <span class="sc">%&gt;%</span> <span class="fu">read.csv</span>(<span class="at">text =</span> .) <span class="sc">%&gt;%</span> <span class="fu">as.data.frame</span>()</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(counts) <span class="ot">&lt;-</span> counts<span class="sc">$</span>X</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>counts<span class="sc">$</span>X <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>samples <span class="ot">&lt;-</span> files[files<span class="sc">$</span>name <span class="sc">==</span> <span class="st">"samples_info.csv"</span>,] <span class="sc">%&gt;%</span> <span class="fu">drive_read_string</span>() <span class="sc">%&gt;%</span> <span class="fu">read.csv</span>(<span class="at">text =</span> .) <span class="sc">%&gt;%</span> <span class="fu">as.data.frame</span>()</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(samples) <span class="ot">&lt;-</span> samples<span class="sc">$</span>X </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We can now explore the data that we have just uploaded in the current R session to familiarize with it.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check out the counts</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(counts, <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 10 × 16
-   BSSE_QGF_20…¹ BSSE_…² BSSE_…³ BSSE_…⁴ BSSE_…⁵ BSSE_…⁶ BSSE_…⁷ BSSE_…⁸ BSSE_…⁹
-           &lt;int&gt;   &lt;int&gt;   &lt;int&gt;   &lt;int&gt;   &lt;int&gt;   &lt;int&gt;   &lt;int&gt;   &lt;int&gt;   &lt;int&gt;
- 1             0       0       0       0       0       0       0       0       0
- 2             0       0       0       0       0       0       0       0       0
- 3             0       0       0       0       0       0       0       0       0
- 4             0       0       0       0       0       0       0       0       0
- 5             0       0       0       0       0       0       0       0       0
- 6             0       0       0       0       0       0       0       0       0
- 7             0       0       0       0       0       0       0       0       0
- 8             0       0       0       0       0       0       0       0       0
- 9             0       0       0       0       0       0       0       0       0
-10             0       0       0       0       0       0       0       0       0
-# … with 7 more variables: BSSE_QGF_204459 &lt;int&gt;, BSSE_QGF_204460 &lt;int&gt;,
-#   BSSE_QGF_204461 &lt;int&gt;, BSSE_QGF_204462 &lt;int&gt;, BSSE_QGF_204463 &lt;int&gt;,
-#   BSSE_QGF_204464 &lt;int&gt;, BSSE_QGF_204465 &lt;int&gt;, and abbreviated variable
-#   names ¹​BSSE_QGF_204446, ²​BSSE_QGF_204447, ³​BSSE_QGF_204448,
-#   ⁴​BSSE_QGF_204449, ⁵​BSSE_QGF_204450, ⁶​BSSE_QGF_204451, ⁷​BSSE_QGF_204452,
-#   ⁸​BSSE_QGF_204453, ⁹​BSSE_QGF_204458</code></pre>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check out the counts</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(counts, <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+
+<table class="table" style="margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;">   </th>
+   <th style="text-align:right;"> BSSE_QGF_204446 </th>
+   <th style="text-align:right;"> BSSE_QGF_204447 </th>
+   <th style="text-align:right;"> BSSE_QGF_204448 </th>
+   <th style="text-align:right;"> BSSE_QGF_204449 </th>
+   <th style="text-align:right;"> BSSE_QGF_204450 </th>
+   <th style="text-align:right;"> BSSE_QGF_204451 </th>
+   <th style="text-align:right;"> BSSE_QGF_204452 </th>
+   <th style="text-align:right;"> BSSE_QGF_204453 </th>
+   <th style="text-align:right;"> BSSE_QGF_204458 </th>
+   <th style="text-align:right;"> BSSE_QGF_204459 </th>
+   <th style="text-align:right;"> BSSE_QGF_204460 </th>
+   <th style="text-align:right;"> BSSE_QGF_204461 </th>
+   <th style="text-align:right;"> BSSE_QGF_204462 </th>
+   <th style="text-align:right;"> BSSE_QGF_204463 </th>
+   <th style="text-align:right;"> BSSE_QGF_204464 </th>
+   <th style="text-align:right;"> BSSE_QGF_204465 </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> ENSG00000228572 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> ENSG00000182378 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> ENSG00000226179 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> ENSG00000281849 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> ENSG00000280767 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> ENSG00000185960 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> LRG_710 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> ENSG00000237531 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> ENSG00000198223 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> ENSG00000265658 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+  </tr>
+</tbody>
+</table>
+
 </div>
 </div>
 <p>We can then check the shape of our counts table (i.e.&nbsp;how many different transcripts we are detecting and how many different samples?)</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># How many rows and columns does our count table have?</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(counts)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># How many rows and columns does our count table have?</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(counts)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 62854    16</code></pre>
 </div>
 </div>
 <p>We can see that our table contains count information for 62854 genes and 16 samples.</p>
 <blockquote class="blockquote">
-<p>💡 In R, these table object are called <code>data.frames</code>, <code>tibbles</code> are just like them but with some improved functionalities provided by the <a href="https://www.tidyverse.org/"><code>tidyverse</code></a>.</p>
+<p>💡 <strong>In R, these table object are called <code>data.frames</code>, <code>tibbles</code> are just like them but with some improved functionalities provided by the <a href="https://www.tidyverse.org/"><code>tidyverse</code></a> library.</strong></p>
 </blockquote>
 <p>We can also inspect the <strong>metadata</strong> from the samples which is stored in the <code>samples</code> variable we created above.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># What does the table look like?</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(samples, <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 10 × 9
-   X               group lib.size norm.fac…¹ FileN…² Exter…³ Sampl…⁴ Donor sex  
-   &lt;chr&gt;           &lt;int&gt;    &lt;int&gt;      &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;
- 1 BSSE_QGF_204446     1 40969678      1.03  /scico… HD276_… Trest   HD276 Male 
- 2 BSSE_QGF_204447     1 38734896      0.994 /scico… HD276_… Ttumor  HD276 Male 
- 3 BSSE_QGF_204448     1 57149808      0.939 /scico… HD276_… Teff    HD276 Male 
- 4 BSSE_QGF_204449     1 45415276      1.05  /scico… HD276_… Tex     HD276 Male 
- 5 BSSE_QGF_204450     1 51767738      0.992 /scico… HD280_… Trest   HD280 Male 
- 6 BSSE_QGF_204451     1 49277273      0.973 /scico… HD280_… Ttumor  HD280 Male 
- 7 BSSE_QGF_204452     1 50049428      1.01  /scico… HD280_… Teff    HD280 Male 
- 8 BSSE_QGF_204453     1 47970167      1.01  /scico… HD280_… Tex     HD280 Male 
- 9 BSSE_QGF_204458     1 39639302      1.02  /scico… HD286_… Trest   HD286 Male 
-10 BSSE_QGF_204459     1 39564107      1.01  /scico… HD286_… Ttumor  HD286 Male 
-# … with abbreviated variable names ¹​norm.factors, ²​FileName,
-#   ³​ExternalSampleName, ⁴​SampleGroup</code></pre>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># What does the table look like?</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(samples, <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+
+<table class="table" style="margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;">   </th>
+   <th style="text-align:left;"> X </th>
+   <th style="text-align:right;"> group </th>
+   <th style="text-align:right;"> lib.size </th>
+   <th style="text-align:right;"> norm.factors </th>
+   <th style="text-align:left;"> FileName </th>
+   <th style="text-align:left;"> ExternalSampleName </th>
+   <th style="text-align:left;"> SampleGroup </th>
+   <th style="text-align:left;"> Donor </th>
+   <th style="text-align:left;"> sex </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> BSSE_QGF_204446 </td>
+   <td style="text-align:left;"> BSSE_QGF_204446 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 40969678 </td>
+   <td style="text-align:right;"> 1.0297425 </td>
+   <td style="text-align:left;"> /scicore/home/zippeliu/GROUP/bioinfo/common_bam/BSSE_QGF_204446_STAR_hg38_ignoreDuplicates.bam </td>
+   <td style="text-align:left;"> HD276_Trest </td>
+   <td style="text-align:left;"> Trest </td>
+   <td style="text-align:left;"> HD276 </td>
+   <td style="text-align:left;"> Male </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> BSSE_QGF_204447 </td>
+   <td style="text-align:left;"> BSSE_QGF_204447 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 38734896 </td>
+   <td style="text-align:right;"> 0.9940706 </td>
+   <td style="text-align:left;"> /scicore/home/zippeliu/GROUP/bioinfo/common_bam/BSSE_QGF_204447_STAR_hg38_ignoreDuplicates.bam </td>
+   <td style="text-align:left;"> HD276_Ttumor </td>
+   <td style="text-align:left;"> Ttumor </td>
+   <td style="text-align:left;"> HD276 </td>
+   <td style="text-align:left;"> Male </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> BSSE_QGF_204448 </td>
+   <td style="text-align:left;"> BSSE_QGF_204448 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 57149808 </td>
+   <td style="text-align:right;"> 0.9394400 </td>
+   <td style="text-align:left;"> /scicore/home/zippeliu/GROUP/bioinfo/common_bam/BSSE_QGF_204448_STAR_hg38_ignoreDuplicates.bam </td>
+   <td style="text-align:left;"> HD276_Teff </td>
+   <td style="text-align:left;"> Teff </td>
+   <td style="text-align:left;"> HD276 </td>
+   <td style="text-align:left;"> Male </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> BSSE_QGF_204449 </td>
+   <td style="text-align:left;"> BSSE_QGF_204449 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 45415276 </td>
+   <td style="text-align:right;"> 1.0455220 </td>
+   <td style="text-align:left;"> /scicore/home/zippeliu/GROUP/bioinfo/common_bam/BSSE_QGF_204449_STAR_hg38_ignoreDuplicates.bam </td>
+   <td style="text-align:left;"> HD276_Tex </td>
+   <td style="text-align:left;"> Tex </td>
+   <td style="text-align:left;"> HD276 </td>
+   <td style="text-align:left;"> Male </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> BSSE_QGF_204450 </td>
+   <td style="text-align:left;"> BSSE_QGF_204450 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 51767738 </td>
+   <td style="text-align:right;"> 0.9921925 </td>
+   <td style="text-align:left;"> /scicore/home/zippeliu/GROUP/bioinfo/common_bam/BSSE_QGF_204450_STAR_hg38_ignoreDuplicates.bam </td>
+   <td style="text-align:left;"> HD280_Trest </td>
+   <td style="text-align:left;"> Trest </td>
+   <td style="text-align:left;"> HD280 </td>
+   <td style="text-align:left;"> Male </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> BSSE_QGF_204451 </td>
+   <td style="text-align:left;"> BSSE_QGF_204451 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 49277273 </td>
+   <td style="text-align:right;"> 0.9734168 </td>
+   <td style="text-align:left;"> /scicore/home/zippeliu/GROUP/bioinfo/common_bam/BSSE_QGF_204451_STAR_hg38_ignoreDuplicates.bam </td>
+   <td style="text-align:left;"> HD280_Ttumor </td>
+   <td style="text-align:left;"> Ttumor </td>
+   <td style="text-align:left;"> HD280 </td>
+   <td style="text-align:left;"> Male </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> BSSE_QGF_204452 </td>
+   <td style="text-align:left;"> BSSE_QGF_204452 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 50049428 </td>
+   <td style="text-align:right;"> 1.0066331 </td>
+   <td style="text-align:left;"> /scicore/home/zippeliu/GROUP/bioinfo/common_bam/BSSE_QGF_204452_STAR_hg38_ignoreDuplicates.bam </td>
+   <td style="text-align:left;"> HD280_Teff </td>
+   <td style="text-align:left;"> Teff </td>
+   <td style="text-align:left;"> HD280 </td>
+   <td style="text-align:left;"> Male </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> BSSE_QGF_204453 </td>
+   <td style="text-align:left;"> BSSE_QGF_204453 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 47970167 </td>
+   <td style="text-align:right;"> 1.0135948 </td>
+   <td style="text-align:left;"> /scicore/home/zippeliu/GROUP/bioinfo/common_bam/BSSE_QGF_204453_STAR_hg38_ignoreDuplicates.bam </td>
+   <td style="text-align:left;"> HD280_Tex </td>
+   <td style="text-align:left;"> Tex </td>
+   <td style="text-align:left;"> HD280 </td>
+   <td style="text-align:left;"> Male </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> BSSE_QGF_204458 </td>
+   <td style="text-align:left;"> BSSE_QGF_204458 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 39639302 </td>
+   <td style="text-align:right;"> 1.0220929 </td>
+   <td style="text-align:left;"> /scicore/home/zippeliu/GROUP/bioinfo/common_bam/BSSE_QGF_204458_STAR_hg38_ignoreDuplicates.bam </td>
+   <td style="text-align:left;"> HD286_Trest </td>
+   <td style="text-align:left;"> Trest </td>
+   <td style="text-align:left;"> HD286 </td>
+   <td style="text-align:left;"> Male </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> BSSE_QGF_204459 </td>
+   <td style="text-align:left;"> BSSE_QGF_204459 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 39564107 </td>
+   <td style="text-align:right;"> 1.0109904 </td>
+   <td style="text-align:left;"> /scicore/home/zippeliu/GROUP/bioinfo/common_bam/BSSE_QGF_204459_STAR_hg38_ignoreDuplicates.bam </td>
+   <td style="text-align:left;"> HD286_Ttumor </td>
+   <td style="text-align:left;"> Ttumor </td>
+   <td style="text-align:left;"> HD286 </td>
+   <td style="text-align:left;"> Male </td>
+  </tr>
+</tbody>
+</table>
+
 </div>
 </div>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># What is the shape of this samples table?</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(samples)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># What is the shape of this samples table?</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(samples)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 16  9</code></pre>
 </div>
 </div>
-<p>In this case, this <code>samples</code> table has as many rows as there are samples (which in turn is equal to the number of columns in the <code>counts</code> table), with columns containing different types of information related to each of the samples in the analysis</p>
+<p>In this case, this <code>samples</code> table has as many rows (16) as there are samples (which in turn is equal to the number of columns in the <code>counts</code> table), with columns containing different types of information related to each of the samples in the analysis.</p>
 <p>Now that we have our objects correctly loaded, we can dive into the actual RNA-seq analysis.</p>
 
 
