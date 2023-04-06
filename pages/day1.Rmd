@@ -23,7 +23,7 @@ knitr::opts_chunk$set(echo = TRUE, fig.align = 'center', warning = FALSE, messag
 
 # Setup
 ## Using Rstudio or Posit
-If RStudio is not installed on your computer, you can create a free account on [_posit.cloud_](posit.cloud). Create the account with your credentials and follow the instructions to create a new project. Once done, you should see something like this on your screen:
+If RStudio is not installed on your computer, you can create a free account on [_posit.cloud_](posit.cloud). Create the account with your credentials and **follow the instructions to create a new project**. Once done, you should see something like this on your screen:
 
 <center>
 
@@ -31,7 +31,7 @@ If RStudio is not installed on your computer, you can create a free account on [
 
 </center>
 
-This is your working interface, the **bottom right section** shows your computer's file system which is now pointed to the place where the `Rproject` you just created lives. The **section on the left** currently displays your console, where you can type code _interactively_. 
+This is your working interface, the **bottom right section** shows your _current file system_ (on the cloud) which is now pointed to the place where the `Rproject` you just created lives. The **section on the left currently displays your console**, where **you can type `R` code _interactively_**. 
 
 ## Communicating with R
 You should see your cursor on the left-hand side of the screen blinking. That window represents the **_`R` console_**. It can be used to "talk" with R through commands that it can understand!
@@ -70,10 +70,11 @@ data.frame("Class"=c("a","b","c","d"), # First column
 You have now instructed R to do something for you! We will ask it to do plenty more in the code chunks below!
 
 ## Creating a script
-In the console we can type as many commands as we want and execute them sequentially. Nevertheless, commands are lost the moment they are executed and if we want to execute them again we need to type everything back in the console... this is painful!
+In the console we can type as many commands as we want and execute them sequentially. Nevertheless, **commands typed in the console are lost the moment they are executed** and if we want to execute them again we need to type everything back in the console... **this is painful**!
 
-A **script** is just a normal text file which groups a series of commands that R executes sequentially, reading the file line-by-line. This is much better because we can then edit the file and keep save the changes!
-Follow the movie below to create an R script in Posit, the same applies to Rstudio.
+A **_script_ is just a normal text file which groups a series of commands that R can execute sequentially**, reading the file line-by-line. This is much better because we can then **edit the file and save the changes**!
+
+Follow the movie below to create an `R` script in Posit, the same applies to Rstudio, notice the `.R` extension at the end of the file name.
 
 <center>
 
@@ -82,16 +83,16 @@ Follow the movie below to create an R script in Posit, the same applies to Rstud
 </center>
 
 
-The new window that appeared on the upper left represents your R script, you can see it from the `.R` file extension at the end. In here we can write R code which DOES NOT get executed immediately like in the console before. 
+The new window that appeared on the upper left represents your R script. **In here we can write R code which DOES NOT get executed immediately like in the console before**. 
 
 > 💡
 > **In order to execute code from the script, highlight the code line you want to execute (or put your cursor line on it) and press <kbd>⌘</kbd>+<kbd>Enter</kbd> on Mac or <kbd>Ctrl</kbd>+<kbd>Enter</kbd> on Windows.**
 
 ## Installing packages
-The analyses that we are going to conduct require specific **packages**. In R, packages are _collections of functions_ which help us perform standardized workflows. In the **code chunk** below, we instruct R to install the packages that we will need later on throughout the workshop.
+The analyses that we are going to conduct require specific **packages**. In R, **packages are _collections of functions_** which help us perform standardized workflows. In the **code chunk** below, we instruct R to install the packages that we will need later on throughout the workshop.
 
 > 💡
-> **Copy and paste _code chunks_ from here to your R script to follow.**
+> **Copy and paste this and the other _code chunks_ from here to your R script to follow.**
 
 ```{r, eval=FALSE}
 # Install packages from Bioconductor
@@ -99,11 +100,14 @@ if (!require("BiocManager", quietly = TRUE))
   install.packages("BiocManager")
 
 # Install packages from CRAN
+install.packages("tidyr")
 install.packages("dplyr")
 install.packages("googledrive")
 
+# For differential expression
 BiocManager::install("vsn")
-BiocManager::install("DESeq2", force = TRUE)
+BiocManager::install("edgeR")
+install.packages("statmod")
 
 # For visualizations
 install.packages("hexbin")
@@ -118,6 +122,9 @@ BiocManager::install("org.Hs.eg.db")
 install.packages("msigdbr")
 BiocManager::install("fgsea")
 BiocManager::install("clusterProfiler")
+
+# Remove garbage
+gc()
 ```
 
 During the installation, you will see many messages being displayed on your _`R` console_, don't pay too much attention to them unless they are red and specify an error!
@@ -180,7 +187,7 @@ Next Generation Sequencing technologies (Illumina/PacBio) allow experimenters to
 > 💡
 > **Great info can be found at the [Illumina Knowledge page](https://knowledge.illumina.com/software/general/software-general-reference_material-list/000002211)**
 
-This means that strands are sequenced by re-building them using the natural complementarity principle of DNA with fluorescently labelled bases. On illumina _flow-cells_ this process happens in **clusters**, to allow for proper signal amplification and detection, as shown in the movie below.
+This means that **strands are sequenced by re-building them** using the natural complementarity principle of DNA with fluorescently labelled bases which get detected and decoded into sequences. On illumina _flow-cells_ this process happens in **clusters**, to allow for proper signal amplification and detection, as shown in the movie below.
 
 <center>
 
@@ -189,7 +196,7 @@ This means that strands are sequenced by re-building them using the natural comp
 </center>
 
 ## Raw Sequencing Output
-The raw output of any sequencing run consists of a series of sequences (called **_reads_**). These sequences can have varying length based on the run parameters set on the sequencing platform. Nevertheless, they are made available to humans to read under a standardized file format known as FASTQ. This is the universally accepted format used to encode sequences after sequencing. An example of real FASTQ file with only two **_reads_** is provided below.
+The **raw output** of any sequencing run consists of a series of sequences (called **_reads_**). These sequences can have varying length based on the run parameters set on the sequencing platform. Nevertheless, **they are made available to humans to read under a standardized file format known as FASTQ**. This is the universally accepted format used to encode sequences after sequencing. An example of real FASTQ file with only two **_reads_** is provided below.
 
 ```{r eval=FALSE}
 @Seq1
@@ -202,16 +209,16 @@ TGCTAAGCTAGCTAGCTAGCTAGCTAGCTAGCTAGCTAGCTAGCTAGC
 EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
 ```
 
-FASTQ files are an intermediate file in the analysis and are used to assess quality metrics for any given sequence. The quality of each base call is encoded in the line after the `+` following the standard [**Phred score**](https://en.wikipedia.org/wiki/Phred_quality_score) system.
+**FASTQ files are an intermediate file in the analysis** and are used to assess quality metrics for any given sequence. The **quality of each base call** is encoded in the line after the `+` following the standard [**Phred score**](https://en.wikipedia.org/wiki/Phred_quality_score) system.
 
 ## Quality Metrics Inspection
-Computational tools like [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/) aid with the visual inspection of per-sample quality metrics from NGS experiments. Some of the QC metrics of interest to consider include the ones listed below, on the **left** are optimal metric profiles while on the **right** are sub-optimal ones:
+Computational tools like [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/) aid with the **visual inspection of per-sample quality metrics** from NGS experiments. Some of the QC metrics of interest to consider include the ones listed below, on the **left** are optimal metric profiles while on the **right** are sub-optimal ones:
 
 <center>
 
 **Per-base Sequence Quality**
 <img src="https://nbisweden.github.io/workshop-ngsintro/2001/data/rnaseq/pbsq.jpg" width=800 />
-_This uses **box_plots** to highlight the per-base quality along all **reads in the sequencing experiment, we can notice a physiological drop in quality towards the end part of the read**._
+_This uses **box plots** to highlight the per-base quality along all **reads in the sequencing experiment, we can notice a physiological drop in quality towards the end part of the read**._
 
 </center>
 
@@ -219,7 +226,7 @@ _This uses **box_plots** to highlight the per-base quality along all **reads in 
 
 **Per-sequence Quality Scores**
 <img src="https://nbisweden.github.io/workshop-ngsintro/2001/data/rnaseq/psqs.jpg" width=800 />
-_Here we are plotting the **distribution of Phred scores** across all identified sequences, we can see that the high quality experiment (left) has a peak at higher Phred scores values (28-30)._
+_Here we are plotting the **distribution of Phred scores** across all identified sequences, we can see that the high quality experiment (left) has a peak at higher Phred scores values (34-38)._
 
 </center>
 
@@ -227,7 +234,7 @@ _Here we are plotting the **distribution of Phred scores** across all identified
 
 **Per-base Sequence Content**
 <img src="https://nbisweden.github.io/workshop-ngsintro/2001/data/rnaseq/pbsc.jpg" width=800 />
-_Here we check the sequence (read) base content, in a normal scenario we do not expect any dramatic variation across the full length of the read since we should see a quasi-balanced ditribution of bases._
+_Here we check the sequence (read) base content, in a normal scenario we do not expect any dramatic variation across the full length of the read since we should see a quasi-balanced distribution of bases._
 
 </center>
 
@@ -235,7 +242,7 @@ _Here we check the sequence (read) base content, in a normal scenario we do not 
 
 **Per-sequence GC Content**
 <img src="https://nbisweden.github.io/workshop-ngsintro/2001/data/rnaseq/psgc.jpg" width=800 />
-_GC-content referes to the degree at which guanosine and cytosine are present within a sequence, in NGS experiments which also include PCR amplification this aspect is crucial to check since GC-poor sequences may be enriched due to their easier amplification bias. In a normal random library we would expect this to have a bell-shaped distribution such as the one on the left._
+_GC-content referes to the **degree at which guanosine and cytosine are present within a sequence**, in NGS experiments which also include PCR amplification this aspect is crucial to check since GC-poor sequences may be enriched due to their easier **amplification bias**. In a normal random library we would expect this to have a bell-shaped distribution such as the one on the left._
 
 </center>
 
@@ -243,7 +250,7 @@ _GC-content referes to the degree at which guanosine and cytosine are present wi
 
 **Sequence Duplication Levels**
 <img src="https://nbisweden.github.io/workshop-ngsintro/2001/data/rnaseq/sdl.jpg" width=800 />
-_This plot shows the degree of sequence duplication levels. In a normal library (left) we expect to have low levels od duplication which can be a positive indicator of high sequencing coverage._
+_This plot shows the degree of sequence duplication levels. In a normal library (left) we **expect to have low levels of duplication** which can be a positive indicator of high sequencing coverage._
 
 </center>
 
@@ -251,12 +258,12 @@ _This plot shows the degree of sequence duplication levels. In a normal library 
 
 **Adapter Content**
 <img src="https://nbisweden.github.io/workshop-ngsintro/2001/data/rnaseq/ac.jpg" width=800 />
-_In NGS experiments we use **adapters** to create a library. Sometimes these can get sequenced accidentally and end up being part of a **read**. This phenomenon can be spotted here and corrected later using a computational approach called **adapter trimming**._
+_In NGS experiments we use **adapters** to create a library. Sometimes these can get sequenced accidentally and end up being part of a **read**. This phenomenon can be spotted here and corrected later using a computational approach called **adapter trimming**, visible in next section's figure._
 
 </center>
 
 ## Read Alignment
-Once we are satisfied with the quality of our pool of sequences, we need to map them back to the transcripts to which they belonged originally when we produced cDNA molecules from RNA. 
+Once we are satisfied with the quality of our pool of sequences, we need to **map them back to the transcripts to which they belonged originally when we produced cDNA molecules from RNA**. 
 This process of mapping is **needed to understand from which genes were transcripts generated** and therefore is an essential and very important step of data processing!
 
 <center>
@@ -271,6 +278,9 @@ Tools like **[STAR](https://github.com/alexdobin/STAR)** and **[BWA-MEM](https:/
 
 The results of the alignment procedure is a different set of files in _SAM_ (Standard Alignment Map) format which get compressed into their binary representation, **BAM files**. These are usually one for each analyzed sample and encode the position of all the identified reads along the genome as well as alignment quality metrics for QC, which can be carried out with tools like **[MultiQC](https://multiqc.info/)**.
 
+> 💡
+> All of these pre-processing steps, which are _computationally expensive_, are usually integrated in pipelines which **connect inputs and outputs of these difference procedures in a streamlined manner**. An example is the RNA-seq pipeline provided by the [nf-core](https://nf-co.re/rnaseq) community.
+
 ## Counting Transcripts
 After sequences have been aligned to their respective place on the genome, it is time to actually count how many times a given sequence is found on any given gene (or transcripts, or exons or others..), **this will actually be our gene expression measurement!**
 
@@ -280,24 +290,28 @@ After sequences have been aligned to their respective place on the genome, it is
 
 </center>
 
-In the end, for every sample, we will end up with a number for each gene (or transcripts), these are called **gene (transcript) counts**. 
+There are many ways to achieve this task but among the most used is the `[featureCounts](https://subread.sourceforge.net/featureCounts.html)` tool.
+In the end, for every sample, we will end up with a number for each gene (or transcripts), these are called **gene (transcript) counts**.  
+
+These are usually summarized in a table, called _gene expression table_, where each sample is a column and each row a different gene. We will now load one and take a closer look, this will be our starting point in the hands-on analysis of bulk RNA-seq data.
 
 > 💡
 > **What is the difference between a _gene_ and a _transcript_?**
 
-These are usually summarized in a table, called _gene expression table_, where each sample is a column and each row a different gene. We will now load one and take a closer look, this will be our starting point in the hands-on analysis of bulk RNA-seq data.
-
 # Data Loading and Exploratory Analyses
-## Loading the data
-We will load a table of data from [this study](https://www.nature.com/articles/s41467-022-35583-w#Sec53) on tumor-infiltrating CD8+ T-cells. The original data supporting the findings of the study has been deposited on the **Gene Expression Omnibus** (GEO) data portal under accession number [GSE120575](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE120575). This is the place where all studies publish the processed data from their analysis in order for other researchers to download it and reproduce their findings or test their own hypotheses.
+## Loading The Data
+We will load a table of data from [this study](https://www.nature.com/articles/s41467-022-35583-w#Sec53) on tumor-infiltrating CD8+ T-cells. The original data supporting the findings of the study has been deposited on the **Gene Expression Omnibus** (GEO) data portal under accession number [GSE120575](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE120575). This is the **place where all studies publish the _processed_ sequencing data from their analysis** in order for other researchers to download it and reproduce their findings or test their own hypotheses.
 
-We have already downloaded the data and inserted it in a Google Drive [folder](https://drive.google.com/drive/folders/18Rqj2hQ_KAjGVtN8fy2wdvbCUI2c6ruE?usp=sharing) organizing it as follows:
+**We have already downloaded the data and inserted it in a Google Drive [folder](https://drive.google.com/drive/folders/18Rqj2hQ_KAjGVtN8fy2wdvbCUI2c6ruE?usp=sharing) organizing it as follows:**
 
 - `raw_counts.csv`: the gene by sample matrix containing the number of times each gene is detected in each sample (our gene expression values)
 
 - `samples_info.csv`: the table containing samples information, known as _metadata_, which tells us about the biological meaning of each sample
 
-In the following code chunk, we are going to load the data and create three new variables in our R session, one for each table.
+After having opened the Google Drive folder, follow the code chunk below where we are going to load the data and **create two new variables in our `R` session**, one for each table.
+
+> 🚨
+> **NOTE**: After you run the code below, look into your `R` console and check if you are prompted to insert your Google account information. Do so and then follow the instructions to connect to your Google account in order to download the data from the shared MOBW2023 folder!
 
 ```{r}
 # Load installed packages with the "library()" function
@@ -314,9 +328,10 @@ counts$X <- NULL
 
 samples <- files[files$name == "samples_info.csv",] %>% drive_read_string() %>% read.csv(text = .) %>% as.data.frame()
 rownames(samples) <- samples$X 
+samples <- samples[,c("Donor","SampleGroup","sex")]
 ```
 
-We can now explore the data that we have just uploaded in the current R session to familiarize with it.
+We can now **explore the data that we have just loaded in the current R session** to familiarize with it.
 
 ```{r, eval=FALSE}
 # Check out the counts
@@ -357,6 +372,22 @@ head(samples, 10) %>% kbl() %>% kable_styling()
 dim(samples)
 ```
 
-In this case, this `samples` table has as many rows (`r nrow(samples)`) as there are samples (which in turn is equal to the number of columns in the `counts` table), with columns containing different types of information related to each of the samples in the analysis.
+In this case, this `samples` table has as many rows (`r nrow(samples)`) as there are samples (which in turn is equal to the number of columns in the `counts` table), with columns containing different types of information related to each of the samples in the analysis. 
+
+## Saving/Loading Files
+**Let's save this object with samples information in a file on this cloud session**, this might be needed later if we end up in some trouble with the `R` session! This is a file format where columns are separated by commas. You might be familiar with this format if you have worked quite a bit in Excel. In `R`, we can save tabular data with the `write.table()` function specifying the location (the file name) we want. This is **useful in the case our `R` session dies or we decide to interrupt it**. In this case we will not have to run the whole analysis from the beginning and we can just source the file and load it!
+
+```{r, eval=FALSE}
+write.table(samples, "samples_table.csv", sep = ",", quote = FALSE)
+```
+
+We can **load the object back into the current session** by using the following code line:
+
+```{r, eval=FALSE}
+samples <- read.table("samples_table.csv", sep = ",")
+```
+
+> 💡
+> We will also repeat this procedure with the results of the differential expression analysis in order to avoid repeating work we have already done in case of any trouble!
 
 Now that we have our objects correctly loaded, we can dive into the actual RNA-seq analysis.

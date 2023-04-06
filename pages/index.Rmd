@@ -32,14 +32,14 @@ The course will give an overview on how to **conceptually approach bioinformatic
 
 ## Day 2 🧑🏼‍💻
 - Learn about data normalization
-- Learn about the `DESeq2` package
+- Learn about the `edgeR` package
 - Explore different normalization methods
-- Normalize the data with functions provided by the `DESeq2` package
+- Normalize the data with functions provided by the `edgeR` package
 - Perform diagnostic and exploratory analysis on the data
 
 ## Day 3 🧞‍♂️
 - Learn about the theory behind differential expression analysis
-- Perform differential expression analysis using `DESeq2`
+- Perform differential expression analysis using `edgeR`
 - Visualize the results
 - Perform further downstream analysis on interesting gene groups
 
@@ -60,4 +60,4 @@ The course will give an overview on how to **conceptually approach bioinformatic
 Some of the images and inspiration came from other tutorials available online, in particular [this work](https://nbisweden.github.io/workshop-ngsintro/2001/slide_rnaseq.html#1) for images and [this work](https://hbctraining.github.io/DGE_workshop/lessons/02_DGE_count_normalization.html) for some of the information regarding data normalization. All of the code present within this site was developed and is readily implementable in [RStudio](https://posit.co/) using [RMarkdown](https://rmarkdown.rstudio.com/).
 
 # License
-All of the material in this course is under a [Creative Commons Attribution license](https://creativecommons.org/licenses/by/4.0/) (CC BY 4.0) which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.
+All of the material in this course is under a [Creative Commons Attribution license](https://creativecommons.org/licenses/by/4.0/) (_CC BY 4.0_) which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.

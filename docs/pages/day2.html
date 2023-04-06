@@ -193,10 +193,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#why-do-we-need-it" id="toc-why-do-we-need-it" class="nav-link" data-scroll-target="#why-do-we-need-it">Why Do We Need It?</a></li>
   <li><a href="#normalization-strategies" id="toc-normalization-strategies" class="nav-link" data-scroll-target="#normalization-strategies">Normalization Strategies</a></li>
   </ul></li>
-  <li><a href="#the-deseq2-package" id="toc-the-deseq2-package" class="nav-link" data-scroll-target="#the-deseq2-package">The <code>DESeq2</code> Package</a>
+  <li><a href="#the-edger-package" id="toc-the-edger-package" class="nav-link" data-scroll-target="#the-edger-package">The <code>edgeR</code> Package</a>
   <ul class="collapse">
   <li><a href="#introduction" id="toc-introduction" class="nav-link" data-scroll-target="#introduction">Introduction</a></li>
-  <li><a href="#create-a-deseqdataset-object" id="toc-create-a-deseqdataset-object" class="nav-link" data-scroll-target="#create-a-deseqdataset-object">Create a <code>DESeqDataSet</code> object</a>
+  <li><a href="#create-a-dgelist-object" id="toc-create-a-dgelist-object" class="nav-link" data-scroll-target="#create-a-dgelist-object">Create a <code>DGEList</code> object</a>
   <ul class="collapse">
   <li><a href="#behind-the-design-formula" id="toc-behind-the-design-formula" class="nav-link" data-scroll-target="#behind-the-design-formula">Behind The Design Formula</a></li>
   </ul></li>
@@ -237,9 +237,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2 class="anchored" data-anchor-id="objectives">Objectives</h2>
 <ul>
 <li><em>Learn about data normalization</em></li>
-<li><em>Learn about the <code>DESeq2</code> package</em></li>
+<li><em>Learn about the <code>edgeR</code> package</em></li>
 <li><em>Explore different normalization methods</em></li>
-<li><em>Normalize the data with functions provided by the <code>DESeq2</code> package</em></li>
+<li><em>Normalize the data with functions provided by the <code>edgeR</code> package</em></li>
 <li><em>Perform diagnostic and exploratory analysis on the data</em></li>
 </ul>
 </section>
@@ -268,7 +268,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul>
 <center>
 <p><img src="https://hbctraining.github.io/DGE_workshop/img/normalization_methods_composition.png" width="500"></p>
-<p><em>Differences in RNA composition are also causative of technical artefacts which can skew the analyses. <strong>Differences in the number of genes expressed between samples and the number of differentially expressed gene across samples can greatly and negatively impact normalization methods In the example</strong>, the majority of counts for sample A is related to the DE gene and therefore this might cause other genes to be normalized by this high number of counts, resulting in them appearing to be expressed at a lower level as opposed to the same genes in sample B.</em></p>
+<p><em>Differences in RNA composition are also causative of technical artefacts which can skew the analyses. <strong>Differences in the number of genes expressed between samples and the number of differentially expressed gene across samples can greatly and negatively impact normalization methods</strong>. In the example, <strong>the majority of counts for sample A is related to the DE gene and therefore this might cause other genes to be normalized by this high number of counts</strong>, resulting in them appearing to be expressed at a lower level as opposed to the same genes in sample B.</em></p>
 </center>
 </section>
 <section id="normalization-strategies" class="level2">
@@ -310,35 +310,32 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </tr>
 </tbody>
 </table>
-<p>Out of all these, we will use one of the more advanced ones provided in the <code>DESeq2</code> package which will be now introduced.</p>
+<p>Out of all these, we will use one of the more advanced ones provided in the <code>edgeR</code> package which will be now introduced.</p>
 </section>
 </section>
-<section id="the-deseq2-package" class="level1">
-<h1>The <code>DESeq2</code> Package</h1>
+<section id="the-edger-package" class="level1">
+<h1>The <code>edgeR</code> Package</h1>
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
-<p>One of the main interests behind performing a bulk RNA experiment is <strong>understanding which genes are more or less expressed across a set of conditions of interest</strong>, so we will <strong>compare</strong> gene expression levels and <strong>statistically assess</strong> and quantify differences arising between the conditions represented by our categories of samples. In this section we will start getting a feel for what DESeq2 is and how to use it to perform normalization and differential expression analysis on our bulk RNA seq data.</p>
+<p>One of the main interests behind performing a bulk RNA experiment is <strong>understanding which genes are more or less expressed across a set of conditions of interest</strong>, so we will <strong>compare</strong> gene expression levels and <strong>statistically assess</strong> and quantify differences arising between the conditions represented by our categories of samples. In this section we will start getting a feel for what the <code>edgeR</code> package is and <strong>how to use it to perform normalization and differential expression analysis on our bulk RNA seq data</strong>.</p>
 <blockquote class="blockquote">
-<p>💡 <strong>Detailed explanations of the statistical procedures implemented in the package are available in the package’s <a href="http://bioconductor.org/packages/devel/bioc/vignettes/DESeq2/inst/doc/DESeq2.html"><em>vignette</em></a>.</strong></p>
+<p>💡 <strong>Detailed explanations of the statistical procedures implemented in the package are available in the package’s <a href="https://bioconductor.org/packages/release/bioc/html/edgeR.html"><em>vignette</em></a>.</strong></p>
 </blockquote>
-<div class="cell" data-layout-align="center">
-
-</div>
 <p>We will start by <strong>loading the package</strong> that we installed in yesterday’s initial “setup” section:</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the package</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DESeq2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(edgeR)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The package <strong>contains many <em>functions</em></strong> which are very helpful when dealing with tables of <em>count data</em>, we can inspect them all by typing the following command:</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># This should open a popup window in the lower right part of the screen displaying the functions in the package</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>??DESeq</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>??edgeR</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>In the sections below, we will follow the standard analysis workflow suggested by the DESeq2 developers.</p>
+<p>In the sections below, we will <strong>follow the standard analysis workflow</strong> suggested by the <code>edgeR</code> developers.</p>
 </section>
-<section id="create-a-deseqdataset-object" class="level2">
-<h2 class="anchored" data-anchor-id="create-a-deseqdataset-object">Create a <code>DESeqDataSet</code> object</h2>
-<p>In order for the package to <em>read</em> and <em>understand</em> our data and correctly perform the analysis, we need to <strong>organize our data in a way that the functions of the package can handle</strong>. This new object that we are going to create is called <code>DESeqDataSet</code> and there is a utility function to create one starting from the <strong>ingredients</strong> we currently have, (1) a <strong>table of counts</strong> (our <code>matrix</code>), (2) a <strong>table with sample information</strong> (our <code>coldata</code>) and (3) one last thing that we need to decide in order tell the package what comparisons we value the most, this is called a <strong>design formula</strong>.</p>
+<section id="create-a-dgelist-object" class="level2">
+<h2 class="anchored" data-anchor-id="create-a-dgelist-object">Create a <code>DGEList</code> object</h2>
+<p>In order for the package to <em>read</em> and <em>understand</em> our data and correctly perform the analysis, we need to <strong>organize our data in a way that the functions of the package can handle</strong>. This new object that we are going to create is called <code>DGEList</code> and there is a utility function to create one starting from the <strong>ingredients</strong> we currently have, (1) a <strong>table of counts</strong> (our <code>matrix</code>), (2) a <strong>table with sample information</strong> (our <code>coldata</code>). and (3) one last thing that we need to decide in order tell the package what comparisons we value the most, this is called a <strong>design formula</strong>.</p>
 <section id="behind-the-design-formula" class="level3">
 <h3 class="anchored" data-anchor-id="behind-the-design-formula">Behind The Design Formula</h3>
 <p>The design formula should <strong>contain the name of a column of interest in our table of samples</strong> which stores the information related to the <strong><em>levels</em></strong> (or <em>categories</em>) we want to contrast. Let’s say that we have a dataset with two conditions (<code>condition_1</code> vs <code>condition_2</code>) that we want to compare. The samples table will look like this, with three replicates for each of the two conditions:</p>
@@ -368,26 +365,32 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </tr>
 <tr class="even">
 <td>SA4</td>
-<td>Pt4</td>
+<td>Pt1</td>
 <td>Condition_2</td>
 </tr>
 <tr class="odd">
 <td>SA5</td>
-<td>Pt5</td>
+<td>Pt2</td>
 <td>Condition_2</td>
 </tr>
 <tr class="even">
 <td>SA6</td>
-<td>Pt6</td>
+<td>Pt3</td>
 <td>Condition_2</td>
 </tr>
 </tbody>
 </table>
+<section id="paired-analyses" class="level4">
+<h4 class="anchored" data-anchor-id="paired-analyses">Paired Analyses</h4>
+<p>The optimal setting for the analysis (decided experimentally) is to have <strong><em>paired samples</em></strong>. This might be a somewhat difficult concept to grasp, but for our table above this means that <strong>every <code>Patient</code> contributes equally to the two categories in the <code>Condition</code> columns that we are interested in</strong>. In this setting, we are fully capable of exploiting the statistics behind the tools we use for differential analysis by <em>correcting for the uninteresting differences arising between patients</em>. <strong>This aspect greatly helps the analysis and improves the statistical validity of the results.</strong></p>
+<blockquote class="blockquote">
+<p>💡 <strong>Remember, this is something achieved by deciding the experimental setting beforehand! Ideally this should be done through a collaborative effort between bioinformaticians/statisticians and bench scientists!</strong></p>
+</blockquote>
 <p>If we are interested in performing a differential expression analysis comparing <code>condition_1</code> versus <code>condition_2</code>, then our design formula should specify the <code>Condition</code> column.</p>
 <blockquote class="blockquote">
 <p>💡 <strong>What is the column that we are interested in when specifying the design formula using in our <code>samples</code> table?</strong></p>
 </blockquote>
-<p>Now that we also understand the design formula, we can create the <code>DESeqDataSet</code> object with the data that we loaded beforehand, but first we need to check that the columns of the <code>counts</code> table are in the same order of the rows of the <code>sample</code> table, this is important since we want to be sure that the right levels of expression are associated to the right sample.</p>
+<p>Now that we also understand the design formula, we can create the <code>DGEList</code> object with the data that we loaded beforehand, but first we need to check that the columns of the <code>counts</code> table are in the same order of the rows of the <code>sample</code> table, this is important since <strong>we want to be sure that the right levels of expression are associated to the right sample</strong>.</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">all</span>(<span class="fu">rownames</span>(samples) <span class="sc">==</span> <span class="fu">colnames</span>(counts))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -396,55 +399,27 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <p>Now we are sure about that we can actually build the object:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a variable containing the design formula</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>design_formula <span class="ot">&lt;-</span>  <span class="er">~</span> Donor <span class="sc">+</span> SampleGroup </span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a `DESeqDataSet` object and call it dds</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>dds <span class="ot">&lt;-</span> <span class="fu">DESeqDataSetFromMatrix</span>(<span class="at">countData =</span> counts, </span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>                              <span class="at">colData =</span> samples, </span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>                              <span class="at">design =</span> design_formula)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a design formula</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>donor <span class="ot">&lt;-</span> samples<span class="sc">$</span>Donor</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>sample_group <span class="ot">&lt;-</span> <span class="fu">factor</span>(samples<span class="sc">$</span>SampleGroup, <span class="at">levels=</span><span class="fu">c</span>(<span class="st">"Teff"</span>,<span class="st">"Trest"</span>,<span class="st">"Ttumor"</span>,<span class="st">"Tex"</span>)) <span class="co"># Teff becomes our "control" group to which we compare the others</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>design <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> donor <span class="sc">+</span> sample_group)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a `DGEList` object and call it dds</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>dds <span class="ot">&lt;-</span> <span class="fu">DGEList</span>(<span class="at">counts =</span> counts, </span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>                <span class="at">samples =</span> samples, </span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>                              )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Great! You have created a <code>DESeqDataSet</code> object which we called <code>dds</code>, this contains all the information related to the counts table and the sample information table in one spot.</p>
-</section>
-</section>
-<section id="filtering-genes" class="level2">
-<h2 class="anchored" data-anchor-id="filtering-genes">Filtering genes</h2>
-<p>We can the inspect the size of our <code>dds</code> object to check how many genes and samples we have, you can see that this mirrors exactly the <code>counts</code> table that we had previously before incorporating it into the object.</p>
+<p>We can now remove the <code>counts</code> table from our <code>R</code> environment since that information is stored in our <code>DGEList</code> object now. This is useful to save on memory space!</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(<span class="fu">counts</span>(dds))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 62854    16</code></pre>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove original `counts` table to save memory space</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(counts)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">gc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</div>
-<blockquote class="blockquote">
-<p>💡 <strong>Notice how we used <code>DESeq2</code>’s function <code>counts()</code> to access the table of gene counts within the <code>DESeqDataSet</code> object.</strong></p>
-</blockquote>
-<p>Now we can <strong>start removing some genes which are expressed at low levels</strong>. This action is justified both from the biological and the statistical points of view. Biologically, lowly expressed genes are less interesting while statistically, they do not provide enough sampling power to confidently test them for differential expression. In the following chunk we filter our <code>dds</code> object by <strong>keeping only genes (rows) which have at least 10 detected counts when summing across all samples</strong>.</p>
+<p>Great! <strong>You have created a <code>DGEList</code> object which we called <code>dds</code></strong>, this contains all the information related to the counts table and the sample information table in one spot. We can <strong>have a look at the sample information table and the counts table in the <code>dds</code> object like so</strong>:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>dds <span class="ot">&lt;-</span> dds[<span class="fu">rowSums</span>(<span class="fu">counts</span>(dds)) <span class="sc">&gt;=</span> <span class="dv">10</span>,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<blockquote class="blockquote">
-<p>💡 <strong>This is somewhat of an “easy” filtering strategy, there are many more complex ones available but sometimes it’s best to keep things simple!</strong></p>
-</blockquote>
-<p>Let’s check how many genes we’re left with after filtering:</p>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(dds)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 31737    16</code></pre>
-</div>
-</div>
-<p>You can see that <strong>we have cut the number of genes in our dataset by almost half</strong>, now we have 31737 genes.</p>
-</section>
-<section id="normalizing-count-data" class="level2">
-<h2 class="anchored" data-anchor-id="normalizing-count-data">Normalizing Count Data</h2>
-<p>As we have discussed above, <strong>normalization is an integral step to the downstream analysis of bulk RNA-seq data</strong>. In this section we will normalize our data using the <code>estimateSizeFactors</code> function of the package. This function creates a value for every gene (a <em>pseudovalue</em>) by taking the geometric mean of expression values across samples for that specific gene and then dividing each value by this new computed <em>pseudovalue</em>. This function returns a <strong>normalized table of values</strong> which is identical in shape to our original <code>counts</code> table as we will see.</p>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Call the function to normalize count data</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>dds <span class="ot">&lt;-</span> <span class="fu">estimateSizeFactors</span>(dds)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>We can check the values of the computed <strong>size factors</strong> by doing the following, note how <strong>there are as many size factors as there are samples</strong>:</p>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sizeFactors</span>(dds)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Look at the table with sample information</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(dds<span class="sc">$</span>samples)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
@@ -453,112 +428,77 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
  <thead>
   <tr>
    <th style="text-align:left;">   </th>
-   <th style="text-align:right;"> . </th>
+   <th style="text-align:left;"> group </th>
+   <th style="text-align:right;"> lib.size </th>
+   <th style="text-align:right;"> norm.factors </th>
+   <th style="text-align:left;"> Donor </th>
+   <th style="text-align:left;"> SampleGroup </th>
+   <th style="text-align:left;"> sex </th>
   </tr>
  </thead>
 <tbody>
   <tr>
    <td style="text-align:left;"> BSSE_QGF_204446 </td>
-   <td style="text-align:right;"> 0.9679699 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:right;"> 40969678 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:left;"> HD276 </td>
+   <td style="text-align:left;"> Trest </td>
+   <td style="text-align:left;"> Male </td>
   </tr>
   <tr>
    <td style="text-align:left;"> BSSE_QGF_204447 </td>
-   <td style="text-align:right;"> 0.8817713 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:right;"> 38734896 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:left;"> HD276 </td>
+   <td style="text-align:left;"> Ttumor </td>
+   <td style="text-align:left;"> Male </td>
   </tr>
   <tr>
    <td style="text-align:left;"> BSSE_QGF_204448 </td>
-   <td style="text-align:right;"> 1.2034053 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:right;"> 57149808 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:left;"> HD276 </td>
+   <td style="text-align:left;"> Teff </td>
+   <td style="text-align:left;"> Male </td>
   </tr>
   <tr>
    <td style="text-align:left;"> BSSE_QGF_204449 </td>
-   <td style="text-align:right;"> 1.0502422 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:right;"> 45415276 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:left;"> HD276 </td>
+   <td style="text-align:left;"> Tex </td>
+   <td style="text-align:left;"> Male </td>
   </tr>
   <tr>
    <td style="text-align:left;"> BSSE_QGF_204450 </td>
-   <td style="text-align:right;"> 1.2141002 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:right;"> 51767738 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:left;"> HD280 </td>
+   <td style="text-align:left;"> Trest </td>
+   <td style="text-align:left;"> Male </td>
   </tr>
   <tr>
    <td style="text-align:left;"> BSSE_QGF_204451 </td>
-   <td style="text-align:right;"> 1.0913873 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> BSSE_QGF_204452 </td>
-   <td style="text-align:right;"> 1.1474634 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> BSSE_QGF_204453 </td>
-   <td style="text-align:right;"> 1.0950554 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> BSSE_QGF_204458 </td>
-   <td style="text-align:right;"> 0.9270823 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> BSSE_QGF_204459 </td>
-   <td style="text-align:right;"> 0.8959534 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> BSSE_QGF_204460 </td>
-   <td style="text-align:right;"> 0.8036038 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> BSSE_QGF_204461 </td>
-   <td style="text-align:right;"> 0.8165707 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> BSSE_QGF_204462 </td>
-   <td style="text-align:right;"> 0.9341968 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> BSSE_QGF_204463 </td>
-   <td style="text-align:right;"> 1.0681170 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> BSSE_QGF_204464 </td>
-   <td style="text-align:right;"> 1.1779602 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> BSSE_QGF_204465 </td>
-   <td style="text-align:right;"> 1.0230975 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:right;"> 49277273 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:left;"> HD280 </td>
+   <td style="text-align:left;"> Ttumor </td>
+   <td style="text-align:left;"> Male </td>
   </tr>
 </tbody>
 </table>
 
 </div>
 </div>
-<p>The results of the normalization are accessible by using the following code, we will save the normalized values in a different variable that we will call <code>normalized_counts</code>, <code>normalized = TRUE</code> tells <code>DESeq2</code> to fetch the normalized version of the count table that we have just created above:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>normalized_counts <span class="ot">&lt;-</span> <span class="fu">counts</span>(dds, <span class="at">normalized =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<blockquote class="blockquote">
-<p>💡 <strong>NOTE</strong>: Although <code>DESeq2</code> does not use normalized counts as input (the normalization process happens inside automatically), the normalized counts we just generated are definitely useful when plotting results and performing clustering.</p>
-</blockquote>
-</section>
-<section id="transforming-count-data" class="level2">
-<h2 class="anchored" data-anchor-id="transforming-count-data">Transforming Count Data</h2>
-<p>After we have normalized our data, we need to perform a <strong>transformation</strong>. There are many ways to transform count data but all of them achieve the goal of removing the gene-wise <strong>dependence between <em>variance</em> and <em>mean</em> of expression values</strong> across samples (something called <a href="https://en.wikipedia.org/wiki/Homoscedasticity_and_heteroscedasticity"><em>homoscedasticity</em></a>) in order to highlight interesting and biologically relevant expression trends even for genes expressed at lower values. We transform the data using a function provided in the <code>DESeq2</code> package called <code>rlog</code> which stands for <em>regularized logarithm</em>, without getting too much into the details of the workings of the function, we will <strong>transform the data</strong> and then look at how the gene-wise relationship between the <em>mean</em> and <em>variance</em> in our normalized data changes <strong>before and after</strong> the transformation.</p>
-<p>The following code plot the mean/standard deviation relationship <strong>before the transformation</strong>.</p>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(vsn)</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot before data transformation</span></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="fu">meanSdPlot</span>(<span class="fu">assay</span>(dds))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="day2_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>Transform the data and then plot the mean/standard deviation relationship <strong>after the transformation</strong>.</p>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Transform the data (watch how we create a new variable for it)</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>rld <span class="ot">&lt;-</span> <span class="fu">rlog</span>(dds)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check out the transformed values (notice how we now have floating point values and some are even negative!)</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">assay</span>(rld))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Look at the table with count information</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(dds<span class="sc">$</span>counts)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
@@ -587,194 +527,580 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
  </thead>
 <tbody>
   <tr>
-   <td style="text-align:left;"> ENSG00000229851 </td>
-   <td style="text-align:right;"> -0.3526715 </td>
-   <td style="text-align:right;"> -0.2010792 </td>
-   <td style="text-align:right;"> -0.3602817 </td>
-   <td style="text-align:right;"> -0.3555970 </td>
-   <td style="text-align:right;"> -0.2399632 </td>
-   <td style="text-align:right;"> 0.0847179 </td>
-   <td style="text-align:right;"> -0.3586727 </td>
-   <td style="text-align:right;"> -0.2279047 </td>
-   <td style="text-align:right;"> -0.3510900 </td>
-   <td style="text-align:right;"> -0.0739337 </td>
-   <td style="text-align:right;"> -0.1890122 </td>
-   <td style="text-align:right;"> -0.3463143 </td>
-   <td style="text-align:right;"> -0.2084209 </td>
-   <td style="text-align:right;"> -0.3561915 </td>
-   <td style="text-align:right;"> -0.0278781 </td>
-   <td style="text-align:right;"> -0.2197011 </td>
+   <td style="text-align:left;"> ENSG00000228572 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> ENSG00000228459 </td>
-   <td style="text-align:right;"> 0.6365877 </td>
-   <td style="text-align:right;"> 1.0374420 </td>
-   <td style="text-align:right;"> 0.8520685 </td>
-   <td style="text-align:right;"> 0.9875220 </td>
-   <td style="text-align:right;"> 0.8502031 </td>
-   <td style="text-align:right;"> 0.8730573 </td>
-   <td style="text-align:right;"> 0.6243727 </td>
-   <td style="text-align:right;"> 0.8723249 </td>
-   <td style="text-align:right;"> 1.2186542 </td>
-   <td style="text-align:right;"> 0.6423624 </td>
-   <td style="text-align:right;"> 0.6506968 </td>
-   <td style="text-align:right;"> 0.9392950 </td>
-   <td style="text-align:right;"> 1.3012398 </td>
-   <td style="text-align:right;"> 0.6294317 </td>
-   <td style="text-align:right;"> 0.8565987 </td>
-   <td style="text-align:right;"> 0.9948364 </td>
+   <td style="text-align:left;"> ENSG00000182378 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
   </tr>
+  <tr>
+   <td style="text-align:left;"> ENSG00000226179 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> ENSG00000281849 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> ENSG00000280767 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> ENSG00000185960 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> 0 </td>
+  </tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="filtering-genes" class="level2">
+<h2 class="anchored" data-anchor-id="filtering-genes">Filtering genes</h2>
+<p>We can the <strong>inspect the size of our <code>dds</code> object to check how many genes and samples we have</strong>, you can see that this mirrors exactly the <code>counts</code> table that we had previously, before incorporating it into the object.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(dds<span class="sc">$</span>counts)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 62854    16</code></pre>
+</div>
+</div>
+<blockquote class="blockquote">
+<p>💡 <strong>In <code>R</code>, list elements are accessible with the <code>$</code> accessor. Our <code>dds</code> object is indeed a list made up of two elements, the <code>counts</code> table and the <code>samples</code> table, these are accessible using <code>$</code> like we did above.</strong></p>
+</blockquote>
+<p>Now we can <strong>start removing some genes which are expressed at low levels</strong>. This action is justified both from the biological and the statistical points of view. Biologically, lowly expressed genes are less interesting while statistically, they do not provide enough sampling power to confidently test them for differential expression. In the following chunk we filter our <code>dds</code> object by <strong>keeping only genes (rows) which have at least 10 detected counts in each sample</strong> using the <code>filterByExpr()</code> function in the <code>edgeR</code> package.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select which genes to keep</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>keep <span class="ot">&lt;-</span> <span class="fu">filterByExpr</span>(dds, design)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>dds <span class="ot">&lt;-</span> dds[keep, , keep.lib.sizes<span class="ot">=</span><span class="cn">FALSE</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<blockquote class="blockquote">
+<p>💡 <strong>This is somewhat of an “easy” filtering strategy, there are many more complex ones available but sometimes it’s best to keep things simple!</strong></p>
+</blockquote>
+<p>Let’s check how many genes we’re left with <strong>after filtering</strong>:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(dds<span class="sc">$</span>counts)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 22683    16</code></pre>
+</div>
+</div>
+<p>You can see that <strong>we have cut the number of genes in our dataset by more than half</strong>, now we have <strong>22683 remaining genes</strong>.</p>
+</section>
+<section id="normalizing-count-data" class="level2">
+<h2 class="anchored" data-anchor-id="normalizing-count-data">Normalizing Count Data</h2>
+<p>As we have discussed above, <strong>normalization is an integral step to the downstream analysis of bulk RNA-seq data</strong>. In this section we will normalize our data using the <code>calcNormFactors</code> function of the package. As we have previously introduced, <code>edgeR</code> uses the <strong>trimmed mean of M-values (TMM)</strong> method to calculate a <strong>set of size factors</strong> to <em>minimize the log-fold change</em> differences occurring between samples (uninteresting) for the majority of genes. The counts for each sample get then multiplied by the scaling factors to generate what is referred to as <strong><em>effective library size</em></strong>, which will be used for all downstream analyses.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Call the function to normalize count data</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>dds <span class="ot">&lt;-</span> <span class="fu">calcNormFactors</span>(dds)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We can check the values of the computed <strong>size factors</strong> by doing the following, note how <strong>there are as many size factors as there are samples</strong> and they are inserted in a column of the <code>samples</code> table named <code>norm.factors</code> in our <code>DGEList</code> object:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>dds<span class="sc">$</span>samples</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+
+<table class="table" style="margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;">   </th>
+   <th style="text-align:left;"> group </th>
+   <th style="text-align:right;"> lib.size </th>
+   <th style="text-align:right;"> norm.factors </th>
+   <th style="text-align:left;"> Donor </th>
+   <th style="text-align:left;"> SampleGroup </th>
+   <th style="text-align:left;"> sex </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> BSSE_QGF_204446 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:right;"> 40949757 </td>
+   <td style="text-align:right;"> 1.0306089 </td>
+   <td style="text-align:left;"> HD276 </td>
+   <td style="text-align:left;"> Trest </td>
+   <td style="text-align:left;"> Male </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> BSSE_QGF_204447 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:right;"> 38716755 </td>
+   <td style="text-align:right;"> 0.9957071 </td>
+   <td style="text-align:left;"> HD276 </td>
+   <td style="text-align:left;"> Ttumor </td>
+   <td style="text-align:left;"> Male </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> BSSE_QGF_204448 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:right;"> 57115716 </td>
+   <td style="text-align:right;"> 0.9261344 </td>
+   <td style="text-align:left;"> HD276 </td>
+   <td style="text-align:left;"> Teff </td>
+   <td style="text-align:left;"> Male </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> BSSE_QGF_204449 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:right;"> 45387259 </td>
+   <td style="text-align:right;"> 1.0424493 </td>
+   <td style="text-align:left;"> HD276 </td>
+   <td style="text-align:left;"> Tex </td>
+   <td style="text-align:left;"> Male </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> BSSE_QGF_204450 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:right;"> 51743863 </td>
+   <td style="text-align:right;"> 1.0199158 </td>
+   <td style="text-align:left;"> HD280 </td>
+   <td style="text-align:left;"> Trest </td>
+   <td style="text-align:left;"> Male </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> BSSE_QGF_204451 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:right;"> 49255461 </td>
+   <td style="text-align:right;"> 0.9724292 </td>
+   <td style="text-align:left;"> HD280 </td>
+   <td style="text-align:left;"> Ttumor </td>
+   <td style="text-align:left;"> Male </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> BSSE_QGF_204452 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:right;"> 50025518 </td>
+   <td style="text-align:right;"> 0.9978416 </td>
+   <td style="text-align:left;"> HD280 </td>
+   <td style="text-align:left;"> Teff </td>
+   <td style="text-align:left;"> Male </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> BSSE_QGF_204453 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:right;"> 47946651 </td>
+   <td style="text-align:right;"> 1.0157618 </td>
+   <td style="text-align:left;"> HD280 </td>
+   <td style="text-align:left;"> Tex </td>
+   <td style="text-align:left;"> Male </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> BSSE_QGF_204458 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:right;"> 39620524 </td>
+   <td style="text-align:right;"> 1.0178698 </td>
+   <td style="text-align:left;"> HD286 </td>
+   <td style="text-align:left;"> Trest </td>
+   <td style="text-align:left;"> Male </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> BSSE_QGF_204459 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:right;"> 39543464 </td>
+   <td style="text-align:right;"> 1.0039252 </td>
+   <td style="text-align:left;"> HD286 </td>
+   <td style="text-align:left;"> Ttumor </td>
+   <td style="text-align:left;"> Male </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> BSSE_QGF_204460 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:right;"> 36004615 </td>
+   <td style="text-align:right;"> 0.9694099 </td>
+   <td style="text-align:left;"> HD286 </td>
+   <td style="text-align:left;"> Teff </td>
+   <td style="text-align:left;"> Male </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> BSSE_QGF_204461 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:right;"> 36042139 </td>
+   <td style="text-align:right;"> 1.0006105 </td>
+   <td style="text-align:left;"> HD286 </td>
+   <td style="text-align:left;"> Tex </td>
+   <td style="text-align:left;"> Male </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> BSSE_QGF_204462 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:right;"> 40382246 </td>
+   <td style="text-align:right;"> 1.0352586 </td>
+   <td style="text-align:left;"> HD287 </td>
+   <td style="text-align:left;"> Trest </td>
+   <td style="text-align:left;"> Female </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> BSSE_QGF_204463 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:right;"> 48326105 </td>
+   <td style="text-align:right;"> 0.9682855 </td>
+   <td style="text-align:left;"> HD287 </td>
+   <td style="text-align:left;"> Ttumor </td>
+   <td style="text-align:left;"> Female </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> BSSE_QGF_204464 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:right;"> 52039214 </td>
+   <td style="text-align:right;"> 0.9942164 </td>
+   <td style="text-align:left;"> HD287 </td>
+   <td style="text-align:left;"> Teff </td>
+   <td style="text-align:left;"> Female </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> BSSE_QGF_204465 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:right;"> 44687575 </td>
+   <td style="text-align:right;"> 1.0164136 </td>
+   <td style="text-align:left;"> HD287 </td>
+   <td style="text-align:left;"> Tex </td>
+   <td style="text-align:left;"> Female </td>
+  </tr>
+</tbody>
+</table>
+
+</div>
+</div>
+<blockquote class="blockquote">
+<p>💡 <strong>NOTE</strong>: Although <code>edgeR</code> does not use normalized counts as input (the normalization process happens inside automatically), the normalized counts we just generated are definitely useful when plotting results and performing clustering.</p>
+</blockquote>
+</section>
+<section id="transforming-count-data" class="level2">
+<h2 class="anchored" data-anchor-id="transforming-count-data">Transforming Count Data</h2>
+<p>After we have normalized our data, we need to perform a <strong>transformation</strong>. There are many ways to transform count data but all of them achieve the goal of removing the gene-wise <strong>dependence between <em>variance</em> and <em>mean</em> of expression values</strong> across samples (something called <a href="https://en.wikipedia.org/wiki/Homoscedasticity_and_heteroscedasticity"><em>homoscedasticity</em></a>) in order to highlight interesting and biologically relevant expression trends even for genes expressed at lower values. We transform the data using a function provided in the <code>edgeR</code> package called <code>cpm()</code> which also performs a <strong>logarithmic transformation</strong> which has the effect of <em>reshaping</em> the data to achieve gene-wise distributions which resemble a <em>normal</em> distribution. Without getting too much into the details of the workings of the function, <strong>we will transform the data and then look at how the gene-wise relationship between the <em>mean</em> and <em>variance</em> in our normalized data changes before and after the transformation</strong>. The purpose of this procedure is to allow proper data visualization later in the analysis, <strong>the transformed data is NOT used for the differential expression analysis which instead starts from raw counts!</strong></p>
+<p>The following code is used to plot the <em>mean/standard deviation relationship</em> of every gene <strong>before the transformation</strong>.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(vsn)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot before data transformation</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="fu">meanSdPlot</span>(dds<span class="sc">$</span>counts)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="day2_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Transform the data and then plot the mean/standard deviation relationship <strong>after the transformation</strong>.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Transform the data with a log2 transform (watch how we create a new variable for it)</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>log2dds <span class="ot">&lt;-</span> <span class="fu">cpm</span>(dds, <span class="at">log=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check out the transformed values (notice how we now have floating point values and some are even negative!)</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(log2dds)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+
+<table class="table" style="margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;">   </th>
+   <th style="text-align:right;"> BSSE_QGF_204446 </th>
+   <th style="text-align:right;"> BSSE_QGF_204447 </th>
+   <th style="text-align:right;"> BSSE_QGF_204448 </th>
+   <th style="text-align:right;"> BSSE_QGF_204449 </th>
+   <th style="text-align:right;"> BSSE_QGF_204450 </th>
+   <th style="text-align:right;"> BSSE_QGF_204451 </th>
+   <th style="text-align:right;"> BSSE_QGF_204452 </th>
+   <th style="text-align:right;"> BSSE_QGF_204453 </th>
+   <th style="text-align:right;"> BSSE_QGF_204458 </th>
+   <th style="text-align:right;"> BSSE_QGF_204459 </th>
+   <th style="text-align:right;"> BSSE_QGF_204460 </th>
+   <th style="text-align:right;"> BSSE_QGF_204461 </th>
+   <th style="text-align:right;"> BSSE_QGF_204462 </th>
+   <th style="text-align:right;"> BSSE_QGF_204463 </th>
+   <th style="text-align:right;"> BSSE_QGF_204464 </th>
+   <th style="text-align:right;"> BSSE_QGF_204465 </th>
+  </tr>
+ </thead>
+<tbody>
   <tr>
    <td style="text-align:left;"> ENSG00000182888 </td>
-   <td style="text-align:right;"> 4.2882919 </td>
-   <td style="text-align:right;"> 4.3946526 </td>
-   <td style="text-align:right;"> 4.6839023 </td>
-   <td style="text-align:right;"> 3.8792719 </td>
-   <td style="text-align:right;"> 4.2302617 </td>
-   <td style="text-align:right;"> 3.9535142 </td>
-   <td style="text-align:right;"> 4.3661274 </td>
-   <td style="text-align:right;"> 4.0408208 </td>
-   <td style="text-align:right;"> 4.7312951 </td>
-   <td style="text-align:right;"> 4.2639791 </td>
-   <td style="text-align:right;"> 4.3844344 </td>
-   <td style="text-align:right;"> 3.9801799 </td>
-   <td style="text-align:right;"> 4.3140752 </td>
-   <td style="text-align:right;"> 4.2895333 </td>
-   <td style="text-align:right;"> 4.2845088 </td>
-   <td style="text-align:right;"> 4.4216270 </td>
+   <td style="text-align:right;"> -1.0149871 </td>
+   <td style="text-align:right;"> -0.8276939 </td>
+   <td style="text-align:right;"> -0.3549182 </td>
+   <td style="text-align:right;"> -1.8514197 </td>
+   <td style="text-align:right;"> -1.115602 </td>
+   <td style="text-align:right;"> -1.6618073 </td>
+   <td style="text-align:right;"> -0.8744661 </td>
+   <td style="text-align:right;"> -1.5038016 </td>
+   <td style="text-align:right;"> -0.2547841 </td>
+   <td style="text-align:right;"> -1.0805284 </td>
+   <td style="text-align:right;"> -0.8356222 </td>
+   <td style="text-align:right;"> -1.6352550 </td>
+   <td style="text-align:right;"> -1.0025724 </td>
+   <td style="text-align:right;"> -1.0191401 </td>
+   <td style="text-align:right;"> -1.0315768 </td>
+   <td style="text-align:right;"> -0.8033451 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> ENSG00000286431 </td>
-   <td style="text-align:right;"> 4.9014443 </td>
-   <td style="text-align:right;"> 5.1148822 </td>
-   <td style="text-align:right;"> 3.9461274 </td>
-   <td style="text-align:right;"> 5.1565737 </td>
-   <td style="text-align:right;"> 4.5110129 </td>
-   <td style="text-align:right;"> 5.4814516 </td>
-   <td style="text-align:right;"> 4.4043954 </td>
-   <td style="text-align:right;"> 5.0560408 </td>
-   <td style="text-align:right;"> 4.8115883 </td>
-   <td style="text-align:right;"> 5.1016428 </td>
-   <td style="text-align:right;"> 4.0314676 </td>
-   <td style="text-align:right;"> 5.4787837 </td>
-   <td style="text-align:right;"> 5.5748849 </td>
-   <td style="text-align:right;"> 5.4050681 </td>
-   <td style="text-align:right;"> 5.5932858 </td>
-   <td style="text-align:right;"> 5.8469916 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> ENSG00000237490 </td>
-   <td style="text-align:right;"> 0.3883848 </td>
-   <td style="text-align:right;"> 0.5266944 </td>
-   <td style="text-align:right;"> 0.3600419 </td>
-   <td style="text-align:right;"> 0.2513714 </td>
-   <td style="text-align:right;"> 0.3589418 </td>
-   <td style="text-align:right;"> 0.4831765 </td>
-   <td style="text-align:right;"> 0.4733968 </td>
-   <td style="text-align:right;"> 0.3720291 </td>
-   <td style="text-align:right;"> 0.6242683 </td>
-   <td style="text-align:right;"> 0.6332632 </td>
-   <td style="text-align:right;"> 0.6624091 </td>
-   <td style="text-align:right;"> 0.4121075 </td>
-   <td style="text-align:right;"> 0.3932301 </td>
-   <td style="text-align:right;"> 0.2505595 </td>
-   <td style="text-align:right;"> 0.3627161 </td>
-   <td style="text-align:right;"> 0.2526425 </td>
+   <td style="text-align:right;"> -0.5471054 </td>
+   <td style="text-align:right;"> -0.1931254 </td>
+   <td style="text-align:right;"> -2.4984815 </td>
+   <td style="text-align:right;"> -0.1680466 </td>
+   <td style="text-align:right;"> -1.239220 </td>
+   <td style="text-align:right;"> 0.3755188 </td>
+   <td style="text-align:right;"> -1.4534058 </td>
+   <td style="text-align:right;"> -0.3141114 </td>
+   <td style="text-align:right;"> -0.7014695 </td>
+   <td style="text-align:right;"> -0.2332744 </td>
+   <td style="text-align:right;"> -2.4120935 </td>
+   <td style="text-align:right;"> 0.3700598 </td>
+   <td style="text-align:right;"> 0.4937172 </td>
+   <td style="text-align:right;"> 0.2613948 </td>
+   <td style="text-align:right;"> 0.5415924 </td>
+   <td style="text-align:right;"> 0.9045618 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> ENSG00000101846 </td>
-   <td style="text-align:right;"> 7.4157210 </td>
-   <td style="text-align:right;"> 7.0617741 </td>
-   <td style="text-align:right;"> 6.9775835 </td>
-   <td style="text-align:right;"> 6.9710935 </td>
-   <td style="text-align:right;"> 7.2251375 </td>
-   <td style="text-align:right;"> 6.7612170 </td>
-   <td style="text-align:right;"> 6.4012497 </td>
-   <td style="text-align:right;"> 6.8805197 </td>
-   <td style="text-align:right;"> 7.4628180 </td>
-   <td style="text-align:right;"> 7.0709712 </td>
-   <td style="text-align:right;"> 6.7358128 </td>
-   <td style="text-align:right;"> 7.0828085 </td>
-   <td style="text-align:right;"> 7.9416669 </td>
-   <td style="text-align:right;"> 7.5904718 </td>
-   <td style="text-align:right;"> 7.4141406 </td>
-   <td style="text-align:right;"> 7.3517593 </td>
+   <td style="text-align:right;"> 2.1233683 </td>
+   <td style="text-align:right;"> 1.5858211 </td>
+   <td style="text-align:right;"> 1.4484255 </td>
+   <td style="text-align:right;"> 1.4028791 </td>
+   <td style="text-align:right;"> 1.843186 </td>
+   <td style="text-align:right;"> 1.1065503 </td>
+   <td style="text-align:right;"> 0.5128935 </td>
+   <td style="text-align:right;"> 1.2788434 </td>
+   <td style="text-align:right;"> 2.1960905 </td>
+   <td style="text-align:right;"> 1.5810286 </td>
+   <td style="text-align:right;"> 1.0755162 </td>
+   <td style="text-align:right;"> 1.6037361 </td>
+   <td style="text-align:right;"> 2.8425327 </td>
+   <td style="text-align:right;"> 2.3711547 </td>
+   <td style="text-align:right;"> 2.1097388 </td>
+   <td style="text-align:right;"> 2.0027201 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> ENSG00000285679 </td>
-   <td style="text-align:right;"> 3.1807531 </td>
-   <td style="text-align:right;"> 3.0012482 </td>
-   <td style="text-align:right;"> 3.7956542 </td>
-   <td style="text-align:right;"> 3.9582976 </td>
-   <td style="text-align:right;"> 2.5033603 </td>
-   <td style="text-align:right;"> 3.1781599 </td>
-   <td style="text-align:right;"> 3.3659313 </td>
-   <td style="text-align:right;"> 3.3445709 </td>
-   <td style="text-align:right;"> 2.8900663 </td>
-   <td style="text-align:right;"> 3.2236691 </td>
-   <td style="text-align:right;"> 3.0459007 </td>
-   <td style="text-align:right;"> 3.2022524 </td>
-   <td style="text-align:right;"> 3.4436592 </td>
-   <td style="text-align:right;"> 2.9118579 </td>
-   <td style="text-align:right;"> 3.7138348 </td>
-   <td style="text-align:right;"> 3.4876301 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> ENSG00000219870 </td>
-   <td style="text-align:right;"> -0.9180949 </td>
-   <td style="text-align:right;"> -0.7722889 </td>
-   <td style="text-align:right;"> -0.7014739 </td>
-   <td style="text-align:right;"> -0.7917121 </td>
-   <td style="text-align:right;"> -0.7029654 </td>
-   <td style="text-align:right;"> -0.9207645 </td>
-   <td style="text-align:right;"> -0.6933566 </td>
-   <td style="text-align:right;"> -0.9208373 </td>
-   <td style="text-align:right;"> -0.7779793 </td>
-   <td style="text-align:right;"> -0.9137609 </td>
-   <td style="text-align:right;"> -0.9060463 </td>
-   <td style="text-align:right;"> -0.9071815 </td>
-   <td style="text-align:right;"> -0.9167252 </td>
-   <td style="text-align:right;"> -0.9202945 </td>
-   <td style="text-align:right;"> -0.8037739 </td>
-   <td style="text-align:right;"> -0.9193429 </td>
+   <td style="text-align:right;"> -2.0942552 </td>
+   <td style="text-align:right;"> -2.5201103 </td>
+   <td style="text-align:right;"> -0.9510723 </td>
+   <td style="text-align:right;"> -0.7006700 </td>
+   <td style="text-align:right;"> -3.975320 </td>
+   <td style="text-align:right;"> -2.1045036 </td>
+   <td style="text-align:right;"> -1.7128386 </td>
+   <td style="text-align:right;"> -1.7807883 </td>
+   <td style="text-align:right;"> -2.7977125 </td>
+   <td style="text-align:right;"> -2.0224031 </td>
+   <td style="text-align:right;"> -2.4120935 </td>
+   <td style="text-align:right;"> -2.0665580 </td>
+   <td style="text-align:right;"> -1.5921819 </td>
+   <td style="text-align:right;"> -2.7227787 </td>
+   <td style="text-align:right;"> -1.0897366 </td>
+   <td style="text-align:right;"> -1.5028451 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> ENSG00000101849 </td>
-   <td style="text-align:right;"> 11.7260434 </td>
-   <td style="text-align:right;"> 11.9162085 </td>
-   <td style="text-align:right;"> 11.3789329 </td>
-   <td style="text-align:right;"> 11.6056330 </td>
-   <td style="text-align:right;"> 11.7365594 </td>
-   <td style="text-align:right;"> 12.0440052 </td>
-   <td style="text-align:right;"> 11.7093709 </td>
-   <td style="text-align:right;"> 11.8305500 </td>
-   <td style="text-align:right;"> 11.4933369 </td>
-   <td style="text-align:right;"> 11.7031860 </td>
-   <td style="text-align:right;"> 11.5560969 </td>
-   <td style="text-align:right;"> 11.5576538 </td>
-   <td style="text-align:right;"> 11.6527863 </td>
-   <td style="text-align:right;"> 11.9395408 </td>
-   <td style="text-align:right;"> 11.6311480 </td>
-   <td style="text-align:right;"> 11.7118694 </td>
+   <td style="text-align:right;"> 6.2932846 </td>
+   <td style="text-align:right;"> 6.5684439 </td>
+   <td style="text-align:right;"> 5.7528313 </td>
+   <td style="text-align:right;"> 6.0670351 </td>
+   <td style="text-align:right;"> 6.313155 </td>
+   <td style="text-align:right;"> 6.7504778 </td>
+   <td style="text-align:right;"> 6.2718734 </td>
+   <td style="text-align:right;"> 6.4182406 </td>
+   <td style="text-align:right;"> 5.9469254 </td>
+   <td style="text-align:right;"> 6.2362473 </td>
+   <td style="text-align:right;"> 6.0449854 </td>
+   <td style="text-align:right;"> 6.0232538 </td>
+   <td style="text-align:right;"> 6.1471371 </td>
+   <td style="text-align:right;"> 6.5996337 </td>
+   <td style="text-align:right;"> 6.1418289 </td>
+   <td style="text-align:right;"> 6.2462658 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> ENSG00000047644 </td>
-   <td style="text-align:right;"> 12.1678896 </td>
-   <td style="text-align:right;"> 12.2710704 </td>
-   <td style="text-align:right;"> 11.7648111 </td>
-   <td style="text-align:right;"> 12.2494452 </td>
-   <td style="text-align:right;"> 12.2612293 </td>
-   <td style="text-align:right;"> 12.2261545 </td>
-   <td style="text-align:right;"> 12.1440675 </td>
-   <td style="text-align:right;"> 12.3066751 </td>
-   <td style="text-align:right;"> 12.2295272 </td>
-   <td style="text-align:right;"> 12.2089019 </td>
-   <td style="text-align:right;"> 12.1077662 </td>
-   <td style="text-align:right;"> 12.3206846 </td>
-   <td style="text-align:right;"> 12.2239945 </td>
-   <td style="text-align:right;"> 12.3466937 </td>
-   <td style="text-align:right;"> 11.8984296 </td>
-   <td style="text-align:right;"> 12.3830057 </td>
+   <td style="text-align:right;"> 6.7095330 </td>
+   <td style="text-align:right;"> 6.8576121 </td>
+   <td style="text-align:right;"> 6.0848036 </td>
+   <td style="text-align:right;"> 6.7826289 </td>
+   <td style="text-align:right;"> 6.851492 </td>
+   <td style="text-align:right;"> 6.7861213 </td>
+   <td style="text-align:right;"> 6.6774144 </td>
+   <td style="text-align:right;"> 6.8849740 </td>
+   <td style="text-align:right;"> 6.8038382 </td>
+   <td style="text-align:right;"> 6.7468953 </td>
+   <td style="text-align:right;"> 6.6256517 </td>
+   <td style="text-align:right;"> 6.9155029 </td>
+   <td style="text-align:right;"> 6.7548269 </td>
+   <td style="text-align:right;"> 6.9650206 </td>
+   <td style="text-align:right;"> 6.2931482 </td>
+   <td style="text-align:right;"> 6.9985429 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> ENSG00000004961 </td>
+   <td style="text-align:right;"> 3.8196064 </td>
+   <td style="text-align:right;"> 3.4514638 </td>
+   <td style="text-align:right;"> 4.0436716 </td>
+   <td style="text-align:right;"> 3.1400969 </td>
+   <td style="text-align:right;"> 3.981022 </td>
+   <td style="text-align:right;"> 3.5656781 </td>
+   <td style="text-align:right;"> 4.0153569 </td>
+   <td style="text-align:right;"> 3.5366299 </td>
+   <td style="text-align:right;"> 3.9137232 </td>
+   <td style="text-align:right;"> 3.5052341 </td>
+   <td style="text-align:right;"> 3.9041578 </td>
+   <td style="text-align:right;"> 3.4878931 </td>
+   <td style="text-align:right;"> 3.9178339 </td>
+   <td style="text-align:right;"> 3.6855962 </td>
+   <td style="text-align:right;"> 3.9833428 </td>
+   <td style="text-align:right;"> 3.2956981 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> ENSG00000005302 </td>
+   <td style="text-align:right;"> 7.0462220 </td>
+   <td style="text-align:right;"> 7.0755388 </td>
+   <td style="text-align:right;"> 5.5725868 </td>
+   <td style="text-align:right;"> 6.7473035 </td>
+   <td style="text-align:right;"> 6.839845 </td>
+   <td style="text-align:right;"> 6.9951121 </td>
+   <td style="text-align:right;"> 5.8821984 </td>
+   <td style="text-align:right;"> 6.9665842 </td>
+   <td style="text-align:right;"> 6.8417578 </td>
+   <td style="text-align:right;"> 7.0615117 </td>
+   <td style="text-align:right;"> 5.8538203 </td>
+   <td style="text-align:right;"> 7.0057387 </td>
+   <td style="text-align:right;"> 7.1513026 </td>
+   <td style="text-align:right;"> 7.1233253 </td>
+   <td style="text-align:right;"> 6.3282750 </td>
+   <td style="text-align:right;"> 7.0236595 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> ENSG00000101911 </td>
+   <td style="text-align:right;"> 4.7362798 </td>
+   <td style="text-align:right;"> 4.4243203 </td>
+   <td style="text-align:right;"> 5.3979519 </td>
+   <td style="text-align:right;"> 4.8293174 </td>
+   <td style="text-align:right;"> 4.468497 </td>
+   <td style="text-align:right;"> 4.1665467 </td>
+   <td style="text-align:right;"> 5.2938577 </td>
+   <td style="text-align:right;"> 4.1904009 </td>
+   <td style="text-align:right;"> 4.9056304 </td>
+   <td style="text-align:right;"> 4.5910118 </td>
+   <td style="text-align:right;"> 5.5054859 </td>
+   <td style="text-align:right;"> 4.7018879 </td>
+   <td style="text-align:right;"> 4.8114113 </td>
+   <td style="text-align:right;"> 4.4770266 </td>
+   <td style="text-align:right;"> 5.4725700 </td>
+   <td style="text-align:right;"> 4.5377748 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> ENSG00000229083 </td>
+   <td style="text-align:right;"> 1.0417306 </td>
+   <td style="text-align:right;"> -1.5995957 </td>
+   <td style="text-align:right;"> 1.8322453 </td>
+   <td style="text-align:right;"> 0.0241205 </td>
+   <td style="text-align:right;"> 0.955676 </td>
+   <td style="text-align:right;"> 0.0072169 </td>
+   <td style="text-align:right;"> 1.4054066 </td>
+   <td style="text-align:right;"> 0.7370180 </td>
+   <td style="text-align:right;"> 0.8912343 </td>
+   <td style="text-align:right;"> 0.4106746 </td>
+   <td style="text-align:right;"> 1.7146421 </td>
+   <td style="text-align:right;"> 0.7958171 </td>
+   <td style="text-align:right;"> 1.1040597 </td>
+   <td style="text-align:right;"> -2.9421761 </td>
+   <td style="text-align:right;"> 1.7272985 </td>
+   <td style="text-align:right;"> -0.3748886 </td>
   </tr>
 </tbody>
 </table>
@@ -782,100 +1108,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># let's plot the transformed values</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">meanSdPlot</span>(<span class="fu">assay</span>(rld))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="day2_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<blockquote class="blockquote">
-<p>💡 <strong>It is clear how now genes with high mean expression values (on the right) are comparable in terms of standard deviation to genes with lower mean expression values (on the left).</strong></p>
-</blockquote>
-</section>
-<section id="data-quality-visual-assessment" class="level2">
-<h2 class="anchored" data-anchor-id="data-quality-visual-assessment">Data Quality Visual Assessment</h2>
-<p>One way to understand trends in our data and the present of poor quality or <strong><em>outlier</em></strong> samples is to perform exploratory analyses through visualization. In <code>R</code> in general, data visualization is aided by the presence of many packages (on top the basic plotting functionality) which can handle diverse kinds of data visualization tasks (from traditional plots to <strong>visualizing tabular data through heatmaps</strong>). We will encounter two of these packages, one is <a href="https://ggplot2.tidyverse.org/"><code>ggplot2</code></a> and the other one is <a href="https://cran.r-project.org/web/packages/pheatmap/index.html"><code>pheatmap</code></a>.</p>
-<section id="clustering" class="level3">
-<h3 class="anchored" data-anchor-id="clustering">Clustering</h3>
-<p>One of the main strategies for checking the consistency of our dataset is to <strong>cluster samples based on their complete expression profile</strong> (which as you might recall consists of 31737 genes in our dataset). This will allow us to <strong>spot the presence of <em>outliers</em> in the data</strong> and understand if we see consistent profiles of gene expression across replicates, which we expect. Use the code below to plot a <em>heatmap</em> of normalized expression values for our samples. Since plotting the full expression table can be computationally expensive, we might want to subset it to the 200 top expressed genes in the dataset.</p>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"pheatmap"</span>)</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Take the top 200 genes in the dataset</span></span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>select <span class="ot">&lt;-</span> <span class="fu">order</span>(<span class="fu">rowMeans</span>(<span class="fu">counts</span>(dds,<span class="at">normalized=</span><span class="cn">TRUE</span>)),</span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">decreasing=</span><span class="cn">TRUE</span>)[<span class="dv">1</span><span class="sc">:</span><span class="dv">200</span>] <span class="co"># Select number of genes</span></span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Create another table for annotating the heatmap with colors</span></span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">colData</span>(dds)[,<span class="fu">c</span>(<span class="st">"Donor"</span>,<span class="st">"SampleGroup"</span>)])</span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Draw the heatmap using the `pheatmap` package</span></span>
-<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="fu">pheatmap</span>(<span class="fu">assay</span>(rld)[select,], <span class="at">cluster_rows=</span><span class="cn">FALSE</span>, <span class="at">show_rownames=</span><span class="cn">FALSE</span>,</span>
-<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>         <span class="at">cluster_cols=</span><span class="cn">TRUE</span>, <span class="at">annotation_col=</span>df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="day2_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<blockquote class="blockquote">
-<p>💡 <strong>What type of assessment would you make about the consistency of the samples across these top 200 genes? Do they cluster (a synonym for <em>similar</em>) based on the donor or on the biological condition of our interest?</strong></p>
-</blockquote>
-</section>
-<section id="sample-to-sample-distances" class="level3">
-<h3 class="anchored" data-anchor-id="sample-to-sample-distances">Sample-to-sample Distances</h3>
-<p>Another way to <strong>get a sense of the global relationship between samples</strong> is to check for how <em>distant</em> samples are between themselves. This analysis of <em>pairwise</em> distances looks at the expression value of all 31737 genes in the dataset and determines which samples have a more or less similar or different expression value for each. <strong>We expect biologically similar samples to have very little difference</strong>.</p>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RColorBrewer)</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute distances</span></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>sampleDists <span class="ot">&lt;-</span> <span class="fu">dist</span>(<span class="fu">t</span>(<span class="fu">assay</span>(rld)))</span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Organize</span></span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>sampleDistMatrix <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(sampleDists)</span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>colors <span class="ot">&lt;-</span> <span class="fu">colorRampPalette</span>( <span class="fu">rev</span>(<span class="fu">brewer.pal</span>(<span class="dv">9</span>, <span class="st">"Blues"</span>)) )(<span class="dv">255</span>)</span>
-<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot with `pheatmap`</span></span>
-<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a><span class="fu">pheatmap</span>(sampleDistMatrix,</span>
-<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>         <span class="at">clustering_distance_rows=</span>sampleDists,</span>
-<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>         <span class="at">clustering_distance_cols=</span>sampleDists,</span>
-<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>         <span class="at">color =</span> colors,</span>
-<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>         <span class="at">annotation_col =</span> df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="day2_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<blockquote class="blockquote">
-<p>💡 <strong>What type of assessment would you make about the heatmap you just produced? Which CD8 T-cell populations are mostly similar in terms of overall gene expression profile? Does a particular population stand out?</strong></p>
-</blockquote>
-</section>
-<section id="principal-component-analysis-pca" class="level3">
-<h3 class="anchored" data-anchor-id="principal-component-analysis-pca">Principal Component Analysis (PCA)</h3>
-<p>Another useful approach for <strong>understanding the main variability axes in our data</strong> is to compute and plot a <strong><a href="https://en.wikipedia.org/wiki/Principal_component_analysis">PCA</a></strong>. Without getting into the details, PCA takes our expression data and outputs its <strong>principal components</strong>, which encode the main sources of variability in the data. Ideally, <strong>we want the samples have variability caused by the biological effect of our interest</strong> (in this case the differences between CD8 T-cell populations), but this might not be the case. By plotting and coloring the points by different <strong><em>covariates</em></strong> (i.e.&nbsp;donor or cell type) we are able to understand where the variability comes from and if there is any detectable <strong><a href="https://en.wikipedia.org/wiki/Batch_effect">batch effect</a></strong>. Use the code below to generate two <em>scatter plots</em> of PCA coordinates and color them to understand what causes the variability in the data.</p>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate principal components and percentage of variance</span></span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>pcaData <span class="ot">&lt;-</span> <span class="fu">plotPCA</span>(rld, <span class="at">intgroup=</span><span class="fu">c</span>(<span class="st">"Donor"</span>,<span class="st">"SampleGroup"</span>), <span class="at">returnData=</span><span class="cn">TRUE</span>)</span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>percentVar <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="dv">100</span> <span class="sc">*</span> <span class="fu">attr</span>(pcaData, <span class="st">"percentVar"</span>))</span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot (this time with ggplot2!!)</span></span>
-<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(pcaData, <span class="fu">aes</span>(PC1, PC2, <span class="at">color=</span>SampleGroup, <span class="at">shape=</span>Donor)) <span class="sc">+</span></span>
-<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">3</span>) <span class="sc">+</span></span>
-<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="fu">paste0</span>(<span class="st">"PC1: "</span>,percentVar[<span class="dv">1</span>],<span class="st">"% variance"</span>)) <span class="sc">+</span></span>
-<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="fu">paste0</span>(<span class="st">"PC2: "</span>,percentVar[<span class="dv">2</span>],<span class="st">"% variance"</span>)) <span class="sc">+</span> </span>
-<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_fixed</span>() <span class="sc">+</span></span>
-<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># let's plot the transformed values</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">meanSdPlot</span>(log2dds)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -885,8 +1119,112 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 <blockquote class="blockquote">
+<p>💡 <strong>It is clear how genes with high mean expression values (on the right) are now comparable in terms of standard deviation to genes with lower mean expression values (on the left).</strong></p>
+</blockquote>
+</section>
+<section id="data-quality-visual-assessment" class="level2">
+<h2 class="anchored" data-anchor-id="data-quality-visual-assessment">Data Quality Visual Assessment</h2>
+<p>One way to understand trends in our data and the present of poor quality or <strong><em>outlier</em></strong> samples is to perform exploratory analyses through visualization. In <code>R</code> in general, <strong>data visualization is aided by the presence of many packages</strong> (on top the basic plotting functionality) which can handle diverse kinds of data visualization tasks (from traditional plots to <strong>visualizing tabular data through heatmaps</strong>). We will encounter two of these packages, one is <a href="https://ggplot2.tidyverse.org/"><code>ggplot2</code></a> and the other one is <a href="https://cran.r-project.org/web/packages/pheatmap/index.html"><code>pheatmap</code></a>.</p>
+<section id="clustering" class="level3">
+<h3 class="anchored" data-anchor-id="clustering">Clustering</h3>
+<p>One of the main strategies for checking the consistency of our dataset is to <strong>cluster samples based on their complete expression profile</strong> (which as you might recall consists of 22683 genes in our dataset). This will allow us to <strong>spot the presence of <em>outliers</em> in the data</strong> and <strong>look for consistent profiles of gene expression across replicates</strong>, which we expect. Use the code below to <strong>plot a <em>heatmap</em> of normalized (and transformed) expression values</strong> for our samples. Since plotting the full expression table can be computationally expensive, we might want to subset it to the 400 top expressed genes in the dataset.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"pheatmap"</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Take the top 200 genes in the dataset</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>select <span class="ot">&lt;-</span> <span class="fu">order</span>(<span class="fu">rowMeans</span>(log2dds),</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">decreasing=</span><span class="cn">TRUE</span>)[<span class="dv">1</span><span class="sc">:</span><span class="dv">400</span>] <span class="co"># Select number of genes</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Create another table for annotating the heatmap with colors</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(samples[,<span class="fu">c</span>(<span class="st">"Donor"</span>,<span class="st">"SampleGroup"</span>)])</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Draw the heatmap using the `pheatmap` package</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a><span class="fu">pheatmap</span>(log2dds[select,], <span class="at">cluster_rows=</span><span class="cn">FALSE</span>, <span class="at">show_rownames=</span><span class="cn">FALSE</span>,</span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>         <span class="at">cluster_cols=</span><span class="cn">TRUE</span>, <span class="at">annotation_col=</span>df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="day2_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<blockquote class="blockquote">
+<p>💡 <strong>What type of assessment would you make about the consistency of the samples across these top 400 genes? Do they cluster (a synonym for <em>similar</em>) based on the donor or on the biological condition of our interest?</strong></p>
+</blockquote>
+</section>
+<section id="sample-to-sample-distances" class="level3">
+<h3 class="anchored" data-anchor-id="sample-to-sample-distances">Sample-to-sample Distances</h3>
+<p>Another way to <strong>get a sense of the global relationship between samples</strong> is to check for how <em>distant</em> samples are between themselves. This analysis of <strong><em>pairwise</em> distances</strong> looks at the expression value of all 22683 genes in the dataset and determines which samples have a more or less similar or different expression value for each. <strong>We expect biologically similar samples to have very little difference</strong>.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RColorBrewer)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute distances</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>sampleDists <span class="ot">&lt;-</span> <span class="fu">dist</span>(<span class="fu">t</span>(log2dds))</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Organize</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>sampleDistMatrix <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(sampleDists)</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>colors <span class="ot">&lt;-</span> <span class="fu">colorRampPalette</span>( <span class="fu">rev</span>(<span class="fu">brewer.pal</span>(<span class="dv">9</span>, <span class="st">"Blues"</span>)) )(<span class="dv">255</span>)</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot with `pheatmap`</span></span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a><span class="fu">pheatmap</span>(sampleDistMatrix,</span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>         <span class="at">clustering_distance_rows=</span>sampleDists,</span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>         <span class="at">clustering_distance_cols=</span>sampleDists,</span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>         <span class="at">color =</span> colors,</span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>         <span class="at">annotation_col =</span> df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="day2_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Free up memory space</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(sampleDistMatrix)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="fu">gc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<blockquote class="blockquote">
+<p>💡 <strong>What type of assessment would you make about the heatmap you just produced? Which CD8 T-cell populations are mostly similar in terms of overall gene expression profile? Does a particular population stand out?</strong></p>
+</blockquote>
+</section>
+<section id="principal-component-analysis-pca" class="level3">
+<h3 class="anchored" data-anchor-id="principal-component-analysis-pca">Principal Component Analysis (PCA)</h3>
+<p>Another useful approach for <strong>understanding the main variability axes in our data</strong> is to compute and plot a <strong><a href="https://en.wikipedia.org/wiki/Principal_component_analysis">PCA</a></strong>. Without getting into the details, PCA takes our expression data and outputs its <strong>principal components</strong>, which encode the <strong><em>main sources of variability in the data</em></strong>. Ideally, <strong>we want the samples to have variability caused by the biological effect of our interest</strong> (in this case the differences between CD8 T-cell populations), but this might not be the case. By plotting and coloring the points by different <strong><em>covariates</em></strong> (i.e.&nbsp;donor or cell type) we are able to understand where the variability comes from and if there is any detectable <strong><a href="https://en.wikipedia.org/wiki/Batch_effect">batch effect</a></strong>. Use the code below to generate a <em>scatter plot</em> of PCA coordinates and color them to understand what causes the variability in the data.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate principal components and percentage of variance</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>pcs <span class="ot">&lt;-</span> <span class="fu">prcomp</span>(log2dds, <span class="at">scale =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>percentVar <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="dv">100</span> <span class="sc">*</span> <span class="fu">summary</span>(pcs)<span class="sc">$</span>importance[<span class="dv">2</span>,])</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>pcaData <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(pcs<span class="sc">$</span>rotation) <span class="sc">%&gt;%</span> <span class="fu">merge</span>(samples, <span class="at">by=</span><span class="dv">0</span>)</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot (this time with ggplot2!!)</span></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(pcaData, <span class="fu">aes</span>(PC1, PC2, <span class="at">color=</span>SampleGroup, <span class="at">shape=</span>Donor)) <span class="sc">+</span></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="fu">paste0</span>(<span class="st">"PC1: "</span>,percentVar[<span class="dv">1</span>],<span class="st">"% variance"</span>)) <span class="sc">+</span></span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="fu">paste0</span>(<span class="st">"PC2: "</span>,percentVar[<span class="dv">2</span>],<span class="st">"% variance"</span>)) <span class="sc">+</span> </span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="day2_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<blockquote class="blockquote">
 <p>💡 <strong>What can you say about this PCA? Are the samples positioning themselves based on the donor or their biological condition? What is the most extreme group of samples? How does this information relate to the other plots we produced above?</strong></p>
 </blockquote>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Let's clean some space up!</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(pcs)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(pcaData)</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(log2dds)</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="fu">gc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 <p>Now that we have plotted all the main diagnostic information related to the dataset and we have a bit of a grasp of it, we can start thinking about <strong>testing for differentially expressed genes</strong>.</p>
 
 
