@@ -4,8 +4,10 @@ project:
 
 # Top navbar
 website:
-  title: "Bioinformatics Worskshop 2023"
+  favicon: ./pics/net_icon.png
+  title: "2023 Bioinformatics Workshop"
   navbar:
+    logo: ./pics/net_icon.png
     left:
       - href: ./pages/index.Rmd
         text: Home
