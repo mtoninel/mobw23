@@ -106,7 +106,7 @@ design %>% kbl() %>% kable_styling()
 
 ### Exploring Results
 
-After having used the main `edgeR` function, we can actively explore the results of the analysis for the comparisons of our interest by using the `topTags()` function.
+After having used the main `edgeR` function, we can actively explore the results of the analysis for the comparisons of our interest.
 For example we might want to check if any gene is *up-regulated* during the process of CD8+ T-cell exhaustion. We can later filter the results based adjusted *P*-value used to **accept or reject the null hypothesis** ($H_{0}$) of a gene NOT being differentially expressed between the two conditions.
 
 With the code below we can extract a table that we call `res` which contains the results for every single gene, stored in separate rows.
@@ -136,7 +136,7 @@ summary(decideTests(lrt))
 In here we can see the type of comparison we are performing (vs the reference, in our case CD8+ T~eff~ cells), the *P*-value threshold we used and the number of **up-regulated** and **down-regulated** genes at varying [*log*-fold change](https://en.wikipedia.org/wiki/Fold_change) levels, keep in mind that a log-fold change of 1 corresponds to a difference in raw gene expression value of 2 times since the *log* has a base of 2.
 So, to recap, **all of the genes with log-fold change of 1 or more are twice as expressed in one condition compared to the other and we will later filter genes based on the fold-change value**.
 
-### Saving Results
+### Saving Results 
 Let's **save the results object we just generated in a `.csv` file**.  We can then source it back and load it into the session using the code we have seen at the end of the first day of the workshop.
 
 ```{r, eval=FALSE}
@@ -174,7 +174,7 @@ plotMD(lrt)
 abline(h=c(-1, 1), col="gray")
 ```
 
-With the gray line we indicate a fold-change of +/- 1 which, if you recall, stands for an **actual change magnitude of 2**.
+With the gray line we indicate a fold-change of +/- 1 which, if you recall, stands for an **actual magnitude of change of value 2**.
 
 ### Visualizing Results With Volcano Plots
 
@@ -436,7 +436,7 @@ plotEnrichment(gset[[gene_set_name]],
 
 ```
 
-From the GSEA results, we can see that **the current gene set we used is mostly depleted in the differential genes we have in our CD8+ T~tumor~ vs CD8+ T~eff~ comparison**.
+From the GSEA results, we can see that **the current gene set we used is mostly depleted in the differential genes we have in our CD8+ T~ex~ vs CD8+ T~eff~ comparison**.
 Given that the gene set comes from a study carried out in mice in a context of chronic viral infection, this might indicate that our current results reflect a different kind of CD8+ T-cell exhaustion observed in the tumor microenvironment of human tumors as opposed to the process happening during viral infection in mice.
 
 > 💡

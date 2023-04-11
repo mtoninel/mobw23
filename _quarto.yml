@@ -16,7 +16,9 @@ website:
       - href: ./pages/day2.Rmd
         text: Day 2
       - href: ./pages/day3.Rmd
-        text: Day 3  
+        text: Day 3
+      - href: ./pages/help.Rmd
+        text: Help  
     right: 
       - icon: github
         href: https://github.com/paganilab

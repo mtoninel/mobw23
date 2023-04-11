@@ -164,6 +164,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <a class="nav-link" href="../pages/day3.html">
  <span class="menu-text">Day 3</span></a>
   </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../pages/help.html">
+ <span class="menu-text">Help</span></a>
+  </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
@@ -359,7 +363,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove garbage</span></span>
 <span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a><span class="fu">gc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>During the installation, you will see many messages being displayed on your <em><code>R</code> console</em>, don’t pay too much attention to them unless they are red and specify an error!</p>
+<p>During the installation, you will see many messages being displayed on your <em><code>R</code> console</em>, don’t pay too much attention to them unless they are <span style="color: red;">red and specify an error</span>!</p>
 <p>If you encounter any of these messages during installation, follow this procedure here:</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># R asks for package updates, answer "n" and type enter</span></span>
@@ -413,7 +417,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </section>
 <section id="raw-sequencing-output" class="level2">
 <h2 class="anchored" data-anchor-id="raw-sequencing-output">Raw Sequencing Output</h2>
-<p>The <strong>raw output</strong> of any sequencing run consists of a series of sequences (called <strong><em>reads</em></strong>). These sequences can have varying length based on the run parameters set on the sequencing platform. Nevertheless, <strong>they are made available to humans to read under a standardized file format known as FASTQ</strong>. This is the universally accepted format used to encode sequences after sequencing. An example of real FASTQ file with only two <strong><em>reads</em></strong> is provided below.</p>
+<p>The <strong>raw output</strong> of any sequencing run consists of a series of sequences (called <strong><em>reads</em></strong>). These sequences can have varying length based on the run parameters set on the sequencing platform. Nevertheless, <strong>they are made available for humans to read under a standardized file format known as FASTQ</strong>. This is the universally accepted format used to encode sequences after sequencing. An example of real FASTQ file with only two <strong><em>reads</em></strong> is provided below.</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="sc">@</span>Seq1</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>AGTCAGTTAAGCTGGTCCGTAGCTCTGAGGCTGACGAGTCGAGCTCGTACG</span>
@@ -425,6 +429,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><strong>FASTQ files are an intermediate file in the analysis</strong> and are used to assess quality metrics for any given sequence. The <strong>quality of each base call</strong> is encoded in the line after the <code>+</code> following the standard <a href="https://en.wikipedia.org/wiki/Phred_quality_score"><strong>Phred score</strong></a> system.</p>
+<blockquote class="blockquote">
+<p>💡 <strong>Since we now have an initial metric for each sequence, it is mandatory to conduct some standard quality control evaluation of our sequences to eventually spot technical defects in the sequencing run early on in the analysis.</strong></p>
+</blockquote>
 </section>
 <section id="quality-metrics-inspection" class="level2">
 <h2 class="anchored" data-anchor-id="quality-metrics-inspection">Quality Metrics Inspection</h2>
@@ -467,8 +474,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <center>
 <p><img src="https://nbisweden.github.io/workshop-ngsintro/2001/data/rnaseq/rnaseq_counts.svg" width="350"></p>
 </center>
-<p>There are many ways to achieve this task but among the most used is the <code>[featureCounts](https://subread.sourceforge.net/featureCounts.html)</code> tool. In the end, for every sample, we will end up with a number for each gene (or transcripts), these are called <strong>gene (transcript) counts</strong>.</p>
-<p>These are usually summarized in a table, called <em>gene expression table</em>, where each sample is a column and each row a different gene. We will now load one and take a closer look, this will be our starting point in the hands-on analysis of bulk RNA-seq data.</p>
+<p>There are many ways to achieve this task but among the most used is the <a href="https://subread.sourceforge.net/featureCounts.html"><code>featureCounts</code></a> tool. In the end, for every sample, we will end up with a number for each gene (or transcripts), these are called <strong>gene (transcript) counts</strong>.</p>
+<p>These are usually summarized in a table, called <em>gene expression table</em>, where <strong>each sample is a column and each row a different gene</strong>. We will now load one and take a closer look, this will be our starting point in the hands-on analysis of bulk RNA-seq data.</p>
 <blockquote class="blockquote">
 <p>💡 <strong>What is the difference between a <em>gene</em> and a <em>transcript</em>?</strong></p>
 </blockquote>
@@ -484,7 +491,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><p><code>raw_counts.csv</code>: the gene by sample matrix containing the number of times each gene is detected in each sample (our gene expression values)</p></li>
 <li><p><code>samples_info.csv</code>: the table containing samples information, known as <em>metadata</em>, which tells us about the biological meaning of each sample</p></li>
 </ul>
-<p>After having opened the Google Drive folder, follow the code chunk below where we are going to load the data and <strong>create two new variables in our <code>R</code> session</strong>, one for each table.</p>
+<p>Open the folder through your Google Drive (<strong>this step is important</strong>), check the presence of the files in the browser and then only AFTER having done this, run the code below. After having opened the Google Drive folder, follow the code chunk below where we are going to load the data and <strong>create two new variables in our <code>R</code> session</strong>, one for each table.</p>
 <blockquote class="blockquote">
 <p>🚨 <strong>NOTE</strong>: After you run the code below, look into your <code>R</code> console and check if you are prompted to insert your Google account information. Do so and then follow the instructions to connect to your Google account in order to download the data from the shared MOBW2023 folder!</p>
 </blockquote>
@@ -494,7 +501,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"googledrive"</span>)</span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Load files</span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>files <span class="ot">&lt;-</span> <span class="fu">drive_ls</span>(<span class="st">"~/MOBW2023/Data"</span>)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>files <span class="ot">&lt;-</span> <span class="fu">drive_ls</span>(<span class="at">path=</span><span class="st">"MOBW2023"</span>)</span>
 <span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co"># File paths with URL</span></span>
 <span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>counts <span class="ot">&lt;-</span> files[files<span class="sc">$</span>name <span class="sc">==</span> <span class="st">"raw_counts.csv"</span>,] <span class="sc">%&gt;%</span> <span class="fu">drive_read_string</span>() <span class="sc">%&gt;%</span> <span class="fu">read.csv</span>(<span class="at">text =</span> .) <span class="sc">%&gt;%</span> <span class="fu">as.data.frame</span>()</span>
@@ -746,7 +753,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>We can also inspect the <strong>metadata</strong> from the samples which is stored in the <code>samples</code> variable we created above.</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># What does the table look like?</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(samples, <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>samples</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
@@ -821,6 +828,42 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
    <td style="text-align:left;"> Ttumor </td>
    <td style="text-align:left;"> Male </td>
   </tr>
+  <tr>
+   <td style="text-align:left;"> BSSE_QGF_204460 </td>
+   <td style="text-align:left;"> HD286 </td>
+   <td style="text-align:left;"> Teff </td>
+   <td style="text-align:left;"> Male </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> BSSE_QGF_204461 </td>
+   <td style="text-align:left;"> HD286 </td>
+   <td style="text-align:left;"> Tex </td>
+   <td style="text-align:left;"> Male </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> BSSE_QGF_204462 </td>
+   <td style="text-align:left;"> HD287 </td>
+   <td style="text-align:left;"> Trest </td>
+   <td style="text-align:left;"> Female </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> BSSE_QGF_204463 </td>
+   <td style="text-align:left;"> HD287 </td>
+   <td style="text-align:left;"> Ttumor </td>
+   <td style="text-align:left;"> Female </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> BSSE_QGF_204464 </td>
+   <td style="text-align:left;"> HD287 </td>
+   <td style="text-align:left;"> Teff </td>
+   <td style="text-align:left;"> Female </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> BSSE_QGF_204465 </td>
+   <td style="text-align:left;"> HD287 </td>
+   <td style="text-align:left;"> Tex </td>
+   <td style="text-align:left;"> Female </td>
+  </tr>
 </tbody>
 </table>
 
@@ -846,7 +889,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">"samples_table.csv"</span>, <span class="at">sep =</span> <span class="st">","</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <blockquote class="blockquote">
-<p>💡 We will also repeat this procedure with the results of the differential expression analysis in order to avoid repeating work we have already done in case of any trouble!</p>
+<p>💡 <strong>We will also repeat this procedure with the results of the differential expression analysis in order to avoid repeating work we have already done in case of any trouble!</strong></p>
 </blockquote>
 <p>Now that we have our objects correctly loaded, we can dive into the actual RNA-seq analysis.</p>
 

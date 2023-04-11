@@ -6,10 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Mattia Toninelli">
-<meta name="dcterms.date" content="2023-04-11">
 
-<title>2023 Bioinformatics Workshop - Introduction</title>
+<title>2023 Bioinformatics Workshop - Help Page</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -22,6 +20,69 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1.6em;
   vertical-align: middle;
 }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 
@@ -85,7 +146,7 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="../pages/index.html" aria-current="page">
+    <a class="nav-link" href="../pages/index.html">
  <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
@@ -101,7 +162,7 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text">Day 3</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../pages/help.html">
+    <a class="nav-link active" href="../pages/help.html" aria-current="page">
  <span class="menu-text">Help</span></a>
   </li>  
 </ul>
@@ -131,16 +192,8 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#what-is-this-workshop-about" id="toc-what-is-this-workshop-about" class="nav-link active" data-scroll-target="#what-is-this-workshop-about">👋🏻 What is this workshop about?</a></li>
-  <li><a href="#program-outline" id="toc-program-outline" class="nav-link" data-scroll-target="#program-outline">Program Outline</a>
-  <ul class="collapse">
-  <li><a href="#day-1" id="toc-day-1" class="nav-link" data-scroll-target="#day-1">Day 1 🤓</a></li>
-  <li><a href="#day-2" id="toc-day-2" class="nav-link" data-scroll-target="#day-2">Day 2 🧑🏼‍💻</a></li>
-  <li><a href="#day-3" id="toc-day-3" class="nav-link" data-scroll-target="#day-3">Day 3 🧞‍♂️</a></li>
-  <li><a href="#how-to-reach-us" id="toc-how-to-reach-us" class="nav-link" data-scroll-target="#how-to-reach-us">How To Reach Us</a></li>
-  </ul></li>
-  <li><a href="#credits" id="toc-credits" class="nav-link" data-scroll-target="#credits">Credits</a></li>
-  <li><a href="#license" id="toc-license" class="nav-link" data-scroll-target="#license">License</a></li>
+  <li><a href="#the-posit-interface-died" id="toc-the-posit-interface-died" class="nav-link active" data-scroll-target="#the-posit-interface-died">The Posit Interface Died</a></li>
+  <li><a href="#the-posit-ram-is-full" id="toc-the-posit-ram-is-full" class="nav-link" data-scroll-target="#the-posit-ram-is-full">The Posit RAM Is Full</a></li>
   </ul>
 </nav>
     </div>
@@ -149,26 +202,14 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Introduction</h1>
+<h1 class="title">Help Page</h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>Mattia Toninelli </p>
-          </div>
-  </div>
     
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">April 11, 2023</p>
-    </div>
-  </div>
   
     
   </div>
@@ -176,63 +217,28 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<section id="what-is-this-workshop-about" class="level2">
-<h2 class="anchored" data-anchor-id="what-is-this-workshop-about">👋🏻 What is this workshop about?</h2>
-<p>The course will give an overview on how to <strong>conceptually approach bioinformatics</strong>. During the three days of the course we will dive into a <strong>bulk <em>RNA-seq</em> experiment</strong> and carry out the main steps of a standard data analysis pipeline.</p>
-<center>
-<p><img src="../pics/rnaseq_workflow.png" width="800"></p>
-</center>
+<p>In this page you can find some helpful information in case you get lost in the functionality of Posit or <code>R</code>. In any case if you need to troubleshoot anything, please <strong>do not hesitate to raise your hand and ask</strong>!</p>
+<section id="the-posit-interface-died" class="level3">
+<h3 class="anchored" data-anchor-id="the-posit-interface-died">The Posit Interface Died</h3>
+<p>In the case that the Posit interfaces dies, you can follow the instructions on the screen to re-start it. If this happens, <strong>all the variables within your session will disappear therefore functions will break</strong>. If you already saved the results of the analysis in the <code>results.csv</code> file (on day 3) and the samples table in the <code>samples_table.csv</code> file (on day 1) you can run the following <em>directly from your <code>R</code> console</em>:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load existing files for results and samples information</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">"results.csv"</span>, <span class="at">sep =</span> <span class="st">","</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">"samples_table.csv"</span>, <span class="at">sep =</span> <span class="st">","</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>In this way, you should be able to run all the code starting from the <a href="../docs/pages/day3.html#Saving Results">“saving results” section</a>. In the <strong>case you DID NOT have the files saved</strong>, you will have to re-run everything before the point where your <code>R</code> session died, which should not really be a problem if you had <em>all the code written in a script</em> since you can re-run it seamlessly.</p>
 </section>
-<section id="program-outline" class="level1">
-<h1>Program Outline</h1>
-<section id="day-1" class="level2">
-<h2 class="anchored" data-anchor-id="day-1">Day 1 🤓</h2>
-<ul>
-<li>Setup RStudio or Posit</li>
-<li>Get familiar with the Posit interface</li>
-<li>Learn about bulk RNA-seq data processing</li>
-<li>Download the data needed for the workshop</li>
-</ul>
-</section>
-<section id="day-2" class="level2">
-<h2 class="anchored" data-anchor-id="day-2">Day 2 🧑🏼‍💻</h2>
-<ul>
-<li>Learn about data normalization</li>
-<li>Learn about the <code>edgeR</code> package</li>
-<li>Explore different normalization methods</li>
-<li>Normalize the data with functions provided by the <code>edgeR</code> package</li>
-<li>Perform diagnostic and exploratory analysis on the data</li>
-</ul>
-</section>
-<section id="day-3" class="level2">
-<h2 class="anchored" data-anchor-id="day-3">Day 3 🧞‍♂️</h2>
-<ul>
-<li>Learn about the theory behind differential expression analysis</li>
-<li>Perform differential expression analysis using <code>edgeR</code></li>
-<li>Visualize the results</li>
-<li>Perform further downstream analysis on interesting gene groups</li>
-</ul>
-</section>
-<section id="how-to-reach-us" class="level2">
-<h2 class="anchored" data-anchor-id="how-to-reach-us">How To Reach Us</h2>
-<ul>
-<li><code>Jacopo Arrigoni</code> (jacopo.arrigoni@ifom.eu)</li>
-<li><code>Mattia Toninelli</code> (mattia.toninelli@ifom.eu)</li>
-</ul>
-<center>
-<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2799.3904457401086!2d9.203071399999999!3d45.44178759999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4786c43e4304a3f5%3A0x80ca5dcc8bef68!2sIFOM%20%E2%80%A2%20Istituto%20Fondazione%20di%20Oncologia%20Molecolare%20ETS!5e0!3m2!1sit!2sit!4v1680169870014!5m2!1sit!2sit" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
-</iframe>
-<p><strong>Feel free to drop us an e-mail if you have any curiosity or question!</strong></p>
-</center>
-</section>
-</section>
-<section id="credits" class="level1">
-<h1>Credits</h1>
-<p>Some of the images and inspiration came from other tutorials available online, in particular <a href="https://nbisweden.github.io/workshop-ngsintro/2001/slide_rnaseq.html#1">this work</a> for images and <a href="https://hbctraining.github.io/DGE_workshop/lessons/02_DGE_count_normalization.html">this work</a> for some of the information regarding data normalization. All of the code present within this site was developed and is readily implementable in <a href="https://posit.co/">RStudio</a> using <a href="https://rmarkdown.rstudio.com/">RMarkdown</a>.</p>
-</section>
-<section id="license" class="level1">
-<h1>License</h1>
-<p>All of the material in this course is under a <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution license</a> (<em>CC BY 4.0</em>) which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.</p>
+<section id="the-posit-ram-is-full" class="level3">
+<h3 class="anchored" data-anchor-id="the-posit-ram-is-full">The Posit RAM Is Full</h3>
+<p>If you are using Posit and you see the <code>RAM</code> indicator on the upper right part of your screen <span style="color: red;">turning red</span>, you can try to do the following to solve the problem:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Clean up garbage (unused memory) </span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">gc</span>()</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># In the case we need to remove specific variables</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>myvar <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>) <span class="co"># A variable</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(myvar) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 
 
 </section>

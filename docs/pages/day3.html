@@ -165,6 +165,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <a class="nav-link active" href="../pages/day3.html" aria-current="page">
  <span class="menu-text">Day 3</span></a>
   </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../pages/help.html">
+ <span class="menu-text">Help</span></a>
+  </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
@@ -500,7 +504,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </section>
 <section id="exploring-results" class="level3">
 <h3 class="anchored" data-anchor-id="exploring-results">Exploring Results</h3>
-<p>After having used the main <code>edgeR</code> function, we can actively explore the results of the analysis for the comparisons of our interest by using the <code>topTags()</code> function. For example we might want to check if any gene is <em>up-regulated</em> during the process of CD8+ T-cell exhaustion. We can later filter the results based adjusted <em>P</em>-value used to <strong>accept or reject the null hypothesis</strong> (<span class="math inline">\(H_{0}\)</span>) of a gene NOT being differentially expressed between the two conditions.</p>
+<p>After having used the main <code>edgeR</code> function, we can actively explore the results of the analysis for the comparisons of our interest. For example we might want to check if any gene is <em>up-regulated</em> during the process of CD8+ T-cell exhaustion. We can later filter the results based adjusted <em>P</em>-value used to <strong>accept or reject the null hypothesis</strong> (<span class="math inline">\(H_{0}\)</span>) of a gene NOT being differentially expressed between the two conditions.</p>
 <p>With the code below we can extract a table that we call <code>res</code> which contains the results for every single gene, stored in separate rows.</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the results</span></span>
@@ -695,7 +699,7 @@ Up                6923</code></pre>
 </div>
 </div>
 </div>
-<p>With the gray line we indicate a fold-change of +/- 1 which, if you recall, stands for an <strong>actual change magnitude of 2</strong>.</p>
+<p>With the gray line we indicate a fold-change of +/- 1 which, if you recall, stands for an <strong>actual magnitude of change of value 2</strong>.</p>
 </section>
 <section id="visualizing-results-with-volcano-plots" class="level3">
 <h3 class="anchored" data-anchor-id="visualizing-results-with-volcano-plots">Visualizing Results With Volcano Plots</h3>
@@ -1020,11 +1024,11 @@ Up                6923</code></pre>
 <tbody>
   <tr>
    <td style="text-align:left;"> GSE9650_EFFECTOR_VS_EXHAUSTED_CD8_TCELL_DN </td>
-   <td style="text-align:right;"> 0.0001063 </td>
-   <td style="text-align:right;"> 0.0001063 </td>
-   <td style="text-align:right;"> 0.5384341 </td>
+   <td style="text-align:right;"> 0.0002061 </td>
+   <td style="text-align:right;"> 0.0002061 </td>
+   <td style="text-align:right;"> 0.5188481 </td>
    <td style="text-align:right;"> -0.4233808 </td>
-   <td style="text-align:right;"> -1.740323 </td>
+   <td style="text-align:right;"> -1.763646 </td>
    <td style="text-align:right;"> 144 </td>
    <td style="text-align:left;"> ENSG00000205002, ENSG00000143333, ENSG00000115008, ENSG00000164251, ENSG00000151012, ENSG00000198369, ENSG00000100285, ENSG00000122877, ENSG00000186827, ENSG00000172301, ENSG00000168209, ENSG00000049249, ENSG00000134202, ENSG00000067208, ENSG00000122378, ENSG00000162692, ENSG00000144935, ENSG00000139318, ENSG00000022267, ENSG00000005189, ENSG00000183814, ENSG00000186187, ENSG00000153234, ENSG00000174500, ENSG00000178695, ENSG00000147383, ENSG00000120699, ENSG00000132326, ENSG00000126778, ENSG00000174307, ENSG00000142453, ENSG00000148834, ENSG00000111142, ENSG00000177425, ENSG00000162775, ENSG00000181019, ENSG00000174437, ENSG00000122140, ENSG00000000971, ENSG00000117595, ENSG00000106546, ENSG00000168298, ENSG00000132305, ENSG00000241468, ENSG00000196388, ENSG00000100473, ENSG00000128791 </td>
   </tr>
@@ -1046,7 +1050,7 @@ Up                6923</code></pre>
 </div>
 </div>
 </div>
-<p>From the GSEA results, we can see that <strong>the current gene set we used is mostly depleted in the differential genes we have in our CD8+ T<sub>tumor</sub> vs CD8+ T<sub>eff</sub> comparison</strong>. Given that the gene set comes from a study carried out in mice in a context of chronic viral infection, this might indicate that our current results reflect a different kind of CD8+ T-cell exhaustion observed in the tumor microenvironment of human tumors as opposed to the process happening during viral infection in mice.</p>
+<p>From the GSEA results, we can see that <strong>the current gene set we used is mostly depleted in the differential genes we have in our CD8+ T<sub>ex</sub> vs CD8+ T<sub>eff</sub> comparison</strong>. Given that the gene set comes from a study carried out in mice in a context of chronic viral infection, this might indicate that our current results reflect a different kind of CD8+ T-cell exhaustion observed in the tumor microenvironment of human tumors as opposed to the process happening during viral infection in mice.</p>
 <blockquote class="blockquote">
 <p>💡 <strong>Whenever we use gene sets when testing for enrichment, we have to be sure of <em>where</em> they were isolated in order to avoid misinterpreting results and/or getting to wrong conclusions, like it could have happened in this case!</strong></p>
 </blockquote>

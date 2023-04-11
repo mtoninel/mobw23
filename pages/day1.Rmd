@@ -127,7 +127,7 @@ BiocManager::install("clusterProfiler")
 gc()
 ```
 
-During the installation, you will see many messages being displayed on your _`R` console_, don't pay too much attention to them unless they are red and specify an error!
+During the installation, you will see many messages being displayed on your _`R` console_, don't pay too much attention to them unless they are <span style="color: red;">red and specify an error</span>!
 
 If you encounter any of these messages during installation, follow this procedure here:
 
@@ -196,7 +196,7 @@ This means that **strands are sequenced by re-building them** using the natural 
 </center>
 
 ## Raw Sequencing Output
-The **raw output** of any sequencing run consists of a series of sequences (called **_reads_**). These sequences can have varying length based on the run parameters set on the sequencing platform. Nevertheless, **they are made available to humans to read under a standardized file format known as FASTQ**. This is the universally accepted format used to encode sequences after sequencing. An example of real FASTQ file with only two **_reads_** is provided below.
+The **raw output** of any sequencing run consists of a series of sequences (called **_reads_**). These sequences can have varying length based on the run parameters set on the sequencing platform. Nevertheless, **they are made available for humans to read under a standardized file format known as FASTQ**. This is the universally accepted format used to encode sequences after sequencing. An example of real FASTQ file with only two **_reads_** is provided below.
 
 ```{r eval=FALSE}
 @Seq1
@@ -210,6 +210,9 @@ EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
 ```
 
 **FASTQ files are an intermediate file in the analysis** and are used to assess quality metrics for any given sequence. The **quality of each base call** is encoded in the line after the `+` following the standard [**Phred score**](https://en.wikipedia.org/wiki/Phred_quality_score) system.
+
+> 💡
+> **Since we now have an initial metric for each sequence, it is mandatory to conduct some standard quality control evaluation of our sequences to eventually spot technical defects in the sequencing run early on in the analysis.**
 
 ## Quality Metrics Inspection
 Computational tools like [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/) aid with the **visual inspection of per-sample quality metrics** from NGS experiments. Some of the QC metrics of interest to consider include the ones listed below, on the **left** are optimal metric profiles while on the **right** are sub-optimal ones:
@@ -290,10 +293,10 @@ After sequences have been aligned to their respective place on the genome, it is
 
 </center>
 
-There are many ways to achieve this task but among the most used is the `[featureCounts](https://subread.sourceforge.net/featureCounts.html)` tool.
+There are many ways to achieve this task but among the most used is the [`featureCounts`](https://subread.sourceforge.net/featureCounts.html) tool.
 In the end, for every sample, we will end up with a number for each gene (or transcripts), these are called **gene (transcript) counts**.  
 
-These are usually summarized in a table, called _gene expression table_, where each sample is a column and each row a different gene. We will now load one and take a closer look, this will be our starting point in the hands-on analysis of bulk RNA-seq data.
+These are usually summarized in a table, called _gene expression table_, where **each sample is a column and each row a different gene**. We will now load one and take a closer look, this will be our starting point in the hands-on analysis of bulk RNA-seq data.
 
 > 💡
 > **What is the difference between a _gene_ and a _transcript_?**
@@ -308,6 +311,7 @@ We will load a table of data from [this study](https://www.nature.com/articles/s
 
 - `samples_info.csv`: the table containing samples information, known as _metadata_, which tells us about the biological meaning of each sample
 
+Open the folder through your Google Drive (**this step is important**), check the presence of the files in the browser and then only AFTER having done this, run the code below.
 After having opened the Google Drive folder, follow the code chunk below where we are going to load the data and **create two new variables in our `R` session**, one for each table.
 
 > 🚨
@@ -319,7 +323,7 @@ library("dplyr")
 library("googledrive")
 
 # Load files
-files <- drive_ls("~/MOBW2023/Data")
+files <- drive_ls(path="MOBW2023")
 
 # File paths with URL
 counts <- files[files$name == "raw_counts.csv",] %>% drive_read_string() %>% read.csv(text = .) %>% as.data.frame()
@@ -359,12 +363,12 @@ We can also inspect the **metadata** from the samples which is stored in the `sa
 
 ```{r, eval=FALSE}
 # What does the table look like?
-head(samples, 10)
+samples
 ```
 
 ```{r, echo=FALSE}
 # What does the table look like?
-head(samples, 10) %>% kbl() %>% kable_styling()
+samples %>% kbl() %>% kable_styling()
 ```
 
 ```{r}
@@ -388,6 +392,6 @@ samples <- read.table("samples_table.csv", sep = ",")
 ```
 
 > 💡
-> We will also repeat this procedure with the results of the differential expression analysis in order to avoid repeating work we have already done in case of any trouble!
+> **We will also repeat this procedure with the results of the differential expression analysis in order to avoid repeating work we have already done in case of any trouble!**
 
 Now that we have our objects correctly loaded, we can dive into the actual RNA-seq analysis.

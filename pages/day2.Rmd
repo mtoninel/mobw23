@@ -110,7 +110,7 @@ The package **contains many _functions_** which are very helpful when dealing wi
 In the sections below, we will **follow the standard analysis workflow** suggested by the `edgeR` developers.
 
 ## Create a `DGEList` object
-In order for the package to _read_ and _understand_ our data and correctly perform the analysis, we need to **organize our data in a way that the functions of the package can handle**. This new object that we are going to create is called `DGEList` and there is a utility function to create one starting from the **ingredients** we currently have, (1) a **table of counts** (our `matrix`), (2) a **table with sample information** (our `coldata`). and (3) one last thing that we need to decide in order tell the package what comparisons we value the most, this is called a **design formula**.
+In order for the package to _read_ and _understand_ our data and correctly perform the analysis, we need to **organize our data in a way that the functions of the package can handle**. This new object that we are going to create is called `DGEList` and there is a utility function to create one starting from the **ingredients** we currently have, (1) a **table of counts** (our `counts` object), (2) a **table with sample information** (our `samples` object). and (3) one last thing that we need to decide in order tell the package what comparisons we value the most, this is called a **design formula**.
 
 ### Behind The Design Formula
 The design formula should **contain the name of a column of interest in our table of samples** which stores the information related to the **_levels_** (or _categories_) we want to contrast. Let's say that we have a dataset with two conditions (`condition_1` vs `condition_2`) that we want to compare. The samples table will look like this, with three replicates for each of the two conditions:
@@ -124,11 +124,11 @@ The design formula should **contain the name of a column of interest in our tabl
 | SA5 	| Pt2 	| Condition_2 	|
 | SA6 	| Pt3 	| Condition_2 	|
 
-#### Paired Analyses
-The optimal setting for the analysis (decided experimentally) is to have **_paired samples_**. This might be a somewhat difficult concept to grasp, but for our table above this means that **every `Patient` contributes equally to the two  categories in the `Condition` columns that we are interested in**. In this setting, we are fully capable of exploiting the statistics behind the tools we use for differential analysis by _correcting for the uninteresting differences arising between patients_. **This aspect greatly helps the analysis and improves the statistical validity of the results.**
-
-> 💡
-> **Remember, this is something achieved by deciding the experimental setting beforehand! Ideally this should be done through a collaborative effort between bioinformaticians/statisticians and bench scientists!**
+> #### Paired Analyses
+>The optimal setting for the analysis (decided experimentally) is to have **_paired samples_**. This might be a somewhat difficult concept to grasp, but for our table above this means that **every `Patient` contributes equally to the two categories in the `Condition` columns that we are interested in**. In this setting, we are fully capable of exploiting the statistics behind the tools we use for differential analysis by _correcting for the uninteresting differences arising between patients_. **This aspect greatly helps the analysis and improves the statistical validity of the results.**
+>
+>> 💡
+>> **Remember, this is something achieved by deciding the experimental setting beforehand! Ideally this should be done through a collaborative effort between bioinformaticians/statisticians and bench scientists!**
 
 If we are interested in performing a differential expression analysis comparing `condition_1` versus `condition_2`, then our design formula should specify the `Condition` column.
 
@@ -141,7 +141,7 @@ Now that we also understand the design formula, we can create the `DGEList` obje
 all(rownames(samples) == colnames(counts))
 ```
 
-Now we are sure about that we can actually build the object:
+Now that we are sure about this aspect we can actually build the object:
 
 ```{r}
 # Create a design formula
@@ -152,8 +152,11 @@ design <- model.matrix(~ donor + sample_group)
 
 # Create a `DGEList` object and call it dds
 dds <- DGEList(counts = counts, 
-                samples = samples, 
-                              )
+                samples = samples 
+                    )
+
+# Let's save the `design` in the dds object (remeber that `dds` is just a list in R which can be updated with different elements)
+dds$design <- design
 ```
 
 We can now remove the `counts` table from our `R` environment since that information is stored in our `DGEList` object now. This is useful to save on memory space!
@@ -176,6 +179,10 @@ head(dds$samples)
 head(dds$samples) %>% kbl() %>% kable_styling()
 ```
 
+We can see that **some new columns were added to the `samples` table present in our `DGEList` object** when we created it (the `group`, `lib.size`, `norm.factors` columns)! These will be used by `edgeR` later on for data normalization!
+
+We can also take a look at the table containing the counts, which is just another element of our `DGEList` object:
+
 ```{r, eval=FALSE}
 # Look at the table with count information
 head(dds$counts)
@@ -194,7 +201,7 @@ dim(dds$counts)
 ```
 
 > 💡
-> **In `R`, list elements are accessible with the `$` accessor. Our `dds` object is indeed a list made up of two elements, the `counts` table and the `samples` table, these are accessible using `$` like we did above.** 
+> **In `R`, list elements are accessible with the `$` accessor. Our `dds` object is indeed a list made up of three elements, the `counts` table, the `samples` table and the `design` table, these are accessible using `$` like we did above.** 
 
 Now we can **start removing some genes which are expressed at low levels**. This action is justified both from the biological and the statistical points of view. Biologically, lowly expressed genes are less interesting while statistically, they do not provide enough sampling power to confidently test them for differential expression. In the following chunk we filter our `dds` object by **keeping only genes (rows) which have at least 10 detected counts in each sample** using the `filterByExpr()` function in the `edgeR` package.
 

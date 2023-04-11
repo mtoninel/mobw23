@@ -164,6 +164,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <a class="nav-link" href="../pages/day3.html">
  <span class="menu-text">Day 3</span></a>
   </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../pages/help.html">
+ <span class="menu-text">Help</span></a>
+  </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
@@ -339,7 +343,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </section>
 <section id="create-a-dgelist-object" class="level2">
 <h2 class="anchored" data-anchor-id="create-a-dgelist-object">Create a <code>DGEList</code> object</h2>
-<p>In order for the package to <em>read</em> and <em>understand</em> our data and correctly perform the analysis, we need to <strong>organize our data in a way that the functions of the package can handle</strong>. This new object that we are going to create is called <code>DGEList</code> and there is a utility function to create one starting from the <strong>ingredients</strong> we currently have, (1) a <strong>table of counts</strong> (our <code>matrix</code>), (2) a <strong>table with sample information</strong> (our <code>coldata</code>). and (3) one last thing that we need to decide in order tell the package what comparisons we value the most, this is called a <strong>design formula</strong>.</p>
+<p>In order for the package to <em>read</em> and <em>understand</em> our data and correctly perform the analysis, we need to <strong>organize our data in a way that the functions of the package can handle</strong>. This new object that we are going to create is called <code>DGEList</code> and there is a utility function to create one starting from the <strong>ingredients</strong> we currently have, (1) a <strong>table of counts</strong> (our <code>counts</code> object), (2) a <strong>table with sample information</strong> (our <code>samples</code> object). and (3) one last thing that we need to decide in order tell the package what comparisons we value the most, this is called a <strong>design formula</strong>.</p>
 <section id="behind-the-design-formula" class="level3">
 <h3 class="anchored" data-anchor-id="behind-the-design-formula">Behind The Design Formula</h3>
 <p>The design formula should <strong>contain the name of a column of interest in our table of samples</strong> which stores the information related to the <strong><em>levels</em></strong> (or <em>categories</em>) we want to contrast. Let’s say that we have a dataset with two conditions (<code>condition_1</code> vs <code>condition_2</code>) that we want to compare. The samples table will look like this, with three replicates for each of the two conditions:</p>
@@ -384,11 +388,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </tr>
 </tbody>
 </table>
-<section id="paired-analyses" class="level4">
-<h4 class="anchored" data-anchor-id="paired-analyses">Paired Analyses</h4>
+<blockquote class="blockquote">
+<h4 id="paired-analyses" class="anchored">Paired Analyses</h4>
 <p>The optimal setting for the analysis (decided experimentally) is to have <strong><em>paired samples</em></strong>. This might be a somewhat difficult concept to grasp, but for our table above this means that <strong>every <code>Patient</code> contributes equally to the two categories in the <code>Condition</code> columns that we are interested in</strong>. In this setting, we are fully capable of exploiting the statistics behind the tools we use for differential analysis by <em>correcting for the uninteresting differences arising between patients</em>. <strong>This aspect greatly helps the analysis and improves the statistical validity of the results.</strong></p>
 <blockquote class="blockquote">
 <p>💡 <strong>Remember, this is something achieved by deciding the experimental setting beforehand! Ideally this should be done through a collaborative effort between bioinformaticians/statisticians and bench scientists!</strong></p>
+</blockquote>
 </blockquote>
 <p>If we are interested in performing a differential expression analysis comparing <code>condition_1</code> versus <code>condition_2</code>, then our design formula should specify the <code>Condition</code> column.</p>
 <blockquote class="blockquote">
@@ -401,7 +406,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code>[1] TRUE</code></pre>
 </div>
 </div>
-<p>Now we are sure about that we can actually build the object:</p>
+<p>Now that we are sure about this aspect we can actually build the object:</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a design formula</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>donor <span class="ot">&lt;-</span> samples<span class="sc">$</span>Donor</span>
@@ -411,8 +416,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a `DGEList` object and call it dds</span></span>
 <span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>dds <span class="ot">&lt;-</span> <span class="fu">DGEList</span>(<span class="at">counts =</span> counts, </span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>                <span class="at">samples =</span> samples, </span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>                              )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>                <span class="at">samples =</span> samples </span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>                    )</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Let's save the `design` in the dds object (remeber that `dds` is just a list in R which can be updated with different elements)</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>dds<span class="sc">$</span>design <span class="ot">&lt;-</span> design</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We can now remove the <code>counts</code> table from our <code>R</code> environment since that information is stored in our <code>DGEList</code> object now. This is useful to save on memory space!</p>
 <div class="cell" data-layout-align="center">
@@ -500,6 +508,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 </div>
 </div>
+<p>We can see that <strong>some new columns were added to the <code>samples</code> table present in our <code>DGEList</code> object</strong> when we created it (the <code>group</code>, <code>lib.size</code>, <code>norm.factors</code> columns)! These will be used by <code>edgeR</code> later on for data normalization!</p>
+<p>We can also take a look at the table containing the counts, which is just another element of our <code>DGEList</code> object:</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Look at the table with count information</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(dds<span class="sc">$</span>counts)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -651,7 +661,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </section>
 </section>
-</section>
 <section id="filtering-genes" class="level2">
 <h2 class="anchored" data-anchor-id="filtering-genes">Filtering genes</h2>
 <p>We can the <strong>inspect the size of our <code>dds</code> object to check how many genes and samples we have</strong>, you can see that this mirrors exactly the <code>counts</code> table that we had previously, before incorporating it into the object.</p>
@@ -662,7 +671,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 <blockquote class="blockquote">
-<p>💡 <strong>In <code>R</code>, list elements are accessible with the <code>$</code> accessor. Our <code>dds</code> object is indeed a list made up of two elements, the <code>counts</code> table and the <code>samples</code> table, these are accessible using <code>$</code> like we did above.</strong></p>
+<p>💡 <strong>In <code>R</code>, list elements are accessible with the <code>$</code> accessor. Our <code>dds</code> object is indeed a list made up of three elements, the <code>counts</code> table, the <code>samples</code> table and the <code>design</code> table, these are accessible using <code>$</code> like we did above.</strong></p>
 </blockquote>
 <p>Now we can <strong>start removing some genes which are expressed at low levels</strong>. This action is justified both from the biological and the statistical points of view. Biologically, lowly expressed genes are less interesting while statistically, they do not provide enough sampling power to confidently test them for differential expression. In the following chunk we filter our <code>dds</code> object by <strong>keeping only genes (rows) which have at least 10 detected counts in each sample</strong> using the <code>filterByExpr()</code> function in the <code>edgeR</code> package.</p>
 <div class="cell" data-layout-align="center">
