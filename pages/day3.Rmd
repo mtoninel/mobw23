@@ -489,3 +489,26 @@ dotplot(ego, showCategory=20) + ggtitle("Dotplot for GO enrichment")
 
 > 💡
 > **GO analyses might highlight very interesting patterns and generate hypotheses, but are many times quite hard to interpret depending also on the biological system we are studying.**
+
+### Take-home Messages 🏠
+Congratulations! You got the end of the course and now hopefully **know the main steps of a bulk RNA-seq data analysis workflow**!
+Some of the _key concepts_ that we have explored during the course can enable us to reach some distilled points of interest:
+
+- **Design your experiments carefully** with data analysis in mind!
+
+- **Data needs to be carefully explored** to avoid systematic errors in the analyses!
+
+- **Plot and Visualize** as much as possible!
+
+- Not all information is useful, remeber that **it all depends on the biological question**!
+
+- Omics outputs are immensely rich and **one experiment can be used to answer a plethora of questions**!
+
+
+<center>
+
+**And also remember that your computer is always right!**
+
+<div class="tenor-gif-embed" data-postid="15542044" data-share-method="host" data-aspect-ratio="1.44796" data-width="60%"><a href="https://tenor.com/view/thumbs-up-nod-okay-gif-15542044">Thumbs Up Nod GIF</a>from <a href="https://tenor.com/search/thumbs+up-gifs">Thumbs Up GIFs</a></div> <script type="text/javascript" async src="https://tenor.com/embed.js"></script>
+
+</center>
